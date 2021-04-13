@@ -1,0 +1,52 @@
+package com.sol.domain.space.entity;
+
+import com.rcore.domain.commons.entity.BaseEntity;
+import com.sol.domain.base.entity.Icon;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
+/**
+ * Space
+ */
+@EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
+@NoArgsConstructor
+@SuperBuilder
+@Data
+public class SpaceEntity extends BaseEntity<String> {
+
+    /************************************ Fields ************************************/
+
+    /**
+     * Идентификатор сущности
+     */
+    protected String id;
+
+    /**
+     * Title 
+     */
+    protected String title;
+    /**
+     * Icon 
+     */
+    protected Icon icon = new Icon();
+    /**
+     * Owner 
+     */
+    protected String ownerId;
+
+    /************************************ Constructors ************************************/
+
+    public SpaceEntity(String id) {
+
+        this.id = id;
+
+    }
+
+    /************************************ Methods ************************************/
+
+
+}
