@@ -2,12 +2,17 @@ package com.sol.domain.slot.usecases;
 
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
+import com.sol.domain.base.entity.ExternalId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import com.sol.domain.slot.entity.SlotEntity;
 import com.sol.domain.slot.exceptions.SlotNotFoundException;
 import com.sol.domain.slot.port.SlotRepository;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Обновление сущности
@@ -50,11 +55,11 @@ public class UpdateSlotUseCase extends UseCase<UpdateSlotUseCase.InputValues, Si
         protected String createdFromTaskId;
         protected String spaceId;
         protected String viewIds;
-        protected DateObject day;
-        protected TimeObject startTime;
-        protected TimeObject endTime;
+        protected LocalDate day;
+        protected LocalDateTime startTime;
+        protected LocalDateTime endTime;
         protected Long points;
-        protected List&lt;ExternalId&gt; externalIds;
+        protected List<ExternalId> externalIds;
     }
 
 }

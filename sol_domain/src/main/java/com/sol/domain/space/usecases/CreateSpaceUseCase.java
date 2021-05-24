@@ -3,6 +3,7 @@ package com.sol.domain.space.usecases;
 import com.rcore.domain.commons.usecase.AbstractCreateUseCase;
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
+import com.sol.domain.base.entity.Icon;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

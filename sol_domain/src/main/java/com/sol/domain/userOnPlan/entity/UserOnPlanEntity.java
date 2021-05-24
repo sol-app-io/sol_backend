@@ -1,10 +1,7 @@
 package com.sol.domain.userOnPlan.entity;
 
 import com.rcore.domain.commons.entity.BaseEntity;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
@@ -17,14 +14,9 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @SuperBuilder
 @Data
-public class UserOnPlanEntity extends BaseEntity {
+public class UserOnPlanEntity extends BaseEntity<String> {
 
     /************************************ Fields ************************************/
-
-    /**
-     * Идентификатор сущности
-     */
-    protected String id;
 
     /**
      * userId 

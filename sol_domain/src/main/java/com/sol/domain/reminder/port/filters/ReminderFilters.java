@@ -9,7 +9,6 @@ import lombok.experimental.SuperBuilder;
 import java.util.List;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @SuperBuilder
 @Data
 public class ReminderFilters extends SearchFilters {

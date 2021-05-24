@@ -9,6 +9,9 @@ import com.sol.domain.reminder.entity.ReminderEntity;
 import com.sol.domain.reminder.exceptions.ReminderNotFoundException;
 import com.sol.domain.reminder.port.ReminderRepository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 /**
  * Обновление сущности
  */
@@ -45,8 +48,8 @@ public class UpdateReminderUseCase extends UseCase<UpdateReminderUseCase.InputVa
         protected String ownerId;
         protected String taskId;
         protected String spaceId;
-        protected List&lt;String&gt; viewIds;
-        protected DateTime reminderTime;
+        protected List<String> viewIds;
+        protected LocalDateTime reminderTime;
     }
 
 }

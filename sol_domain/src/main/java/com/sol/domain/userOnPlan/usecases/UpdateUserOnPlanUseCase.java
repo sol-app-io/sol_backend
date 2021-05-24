@@ -9,6 +9,9 @@ import com.sol.domain.userOnPlan.entity.UserOnPlanEntity;
 import com.sol.domain.userOnPlan.exceptions.UserOnPlanNotFoundException;
 import com.sol.domain.userOnPlan.port.UserOnPlanRepository;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 /**
  * Обновление сущности
  */
@@ -43,8 +46,8 @@ public class UpdateUserOnPlanUseCase extends UseCase<UpdateUserOnPlanUseCase.Inp
         //указываются данные которые необходимо изменить
         protected String userId;
         protected String planId;
-        protected Date startDate;
-        protected Date endDate;
+        protected LocalDate startDate;
+        protected LocalDate endDate;
     }
 
 }

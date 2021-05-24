@@ -2,12 +2,15 @@ package com.sol.domain.repeatTaskConf.usecases;
 
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
+import com.sol.domain.repeatTaskConf.entity.RepeatType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import com.sol.domain.repeatTaskConf.entity.RepeatTaskConfEntity;
 import com.sol.domain.repeatTaskConf.exceptions.RepeatTaskConfNotFoundException;
 import com.sol.domain.repeatTaskConf.port.RepeatTaskConfRepository;
+
+import java.util.List;
 
 /**
  * Обновление сущности
@@ -48,11 +51,11 @@ public class UpdateRepeatTaskConfUseCase extends UseCase<UpdateRepeatTaskConfUse
         protected String ownerId;
         protected String createdFromTaskId;
         protected String spaceId;
-        protected List&lt;String&gt; viewIds;
+        protected List<String> viewIds;
         protected String lastTaskCreatedFromConfId;
         protected RepeatType repeatType;
         protected Long repeatValue;
-        protected List&lt;String&gt; tasksCreatedFromConf;
+        protected List<String> tasksCreatedFromConf;
     }
 
 }

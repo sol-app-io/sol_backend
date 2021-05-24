@@ -15,7 +15,7 @@
         <module>../sol_domain</module>
         <module>../sol_database</module>
         <module>../sol_client</module>
-        <module>../notification</module>
+<!--        <module>../notification</module>-->
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

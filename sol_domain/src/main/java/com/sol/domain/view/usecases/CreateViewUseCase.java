@@ -3,6 +3,7 @@ package com.sol.domain.view.usecases;
 import com.rcore.domain.commons.usecase.AbstractCreateUseCase;
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
+import com.sol.domain.base.entity.Icon;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -51,7 +52,6 @@ public class CreateViewUseCase extends AbstractCreateUseCase<ViewEntity, ViewIdG
         protected String spaceId;
         protected String title;
         protected Icon icon;
-        protected String spaceId;
         protected ViewType type;
 
     }

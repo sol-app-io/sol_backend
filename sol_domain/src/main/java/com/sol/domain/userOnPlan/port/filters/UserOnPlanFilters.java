@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @SuperBuilder
 @Data
 public class UserOnPlanFilters extends SearchFilters {

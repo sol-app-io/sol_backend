@@ -3,7 +3,6 @@ package com.github.rostislav_maslov.rcore.notification.domain.pushFeed.entity;
 import com.github.rostislav_maslov.rcore.notification.domain.base.Priority;
 import com.github.rostislav_maslov.rcore.notification.domain.base.ReadStatus;
 import com.github.rostislav_maslov.rcore.notification.domain.base.SendingStatus;
-import com.rcore.domain.commons.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -2,6 +2,8 @@ package com.sol.domain.view.usecases;
 
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
+import com.sol.domain.base.entity.Icon;
+import com.sol.domain.view.entity.ViewType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +49,6 @@ public class UpdateViewUseCase extends UseCase<UpdateViewUseCase.InputValues, Si
         protected String spaceId;
         protected String title;
         protected Icon icon;
-        protected String spaceId;
         protected ViewType type;
     }
 

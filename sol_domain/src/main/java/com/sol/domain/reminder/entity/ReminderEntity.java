@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class ReminderEntity extends BaseEntity<String> {
     /**
      * Reminder Time 
      */
-    protected LocalDate reminderTime;
+    protected LocalDateTime reminderTime;
 
     /************************************ Constructors ************************************/
 

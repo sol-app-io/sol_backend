@@ -11,6 +11,8 @@ import com.sol.domain.repeatTaskConf.entity.*;
 import com.sol.domain.repeatTaskConf.port.RepeatTaskConfIdGenerator;
 import com.sol.domain.repeatTaskConf.port.RepeatTaskConfRepository;
 
+import java.util.List;
+
 /**
  * Создание сущности
  */
@@ -52,11 +54,11 @@ public class CreateRepeatTaskConfUseCase extends AbstractCreateUseCase<RepeatTas
         protected String ownerId;
         protected String createdFromTaskId;
         protected String spaceId;
-        protected List&lt;String&gt; viewIds;
+        protected List<String> viewIds;
         protected String lastTaskCreatedFromConfId;
         protected RepeatType repeatType;
         protected Long repeatValue;
-        protected List&lt;String&gt; tasksCreatedFromConf;
+        protected List<String> tasksCreatedFromConf;
 
     }
 

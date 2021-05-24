@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,11 +48,11 @@ public class SlotEntity extends BaseEntity<String> {
     /**
      * start Time 
      */
-    protected LocalDate startTime;
+    protected LocalDateTime startTime;
     /**
      * End Time 
      */
-    protected LocalDate endTime;
+    protected LocalDateTime endTime;
     /**
      * Points 
      */

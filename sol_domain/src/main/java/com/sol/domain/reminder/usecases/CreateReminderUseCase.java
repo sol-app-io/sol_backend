@@ -11,6 +11,9 @@ import com.sol.domain.reminder.entity.*;
 import com.sol.domain.reminder.port.ReminderIdGenerator;
 import com.sol.domain.reminder.port.ReminderRepository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 /**
  * Создание сущности
  */
@@ -49,8 +52,8 @@ public class CreateReminderUseCase extends AbstractCreateUseCase<ReminderEntity,
         protected String ownerId;
         protected String taskId;
         protected String spaceId;
-        protected List&lt;String&gt; viewIds;
-        protected DateTime reminderTime;
+        protected List<String> viewIds;
+        protected LocalDateTime reminderTime;
 
     }
 
