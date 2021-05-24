@@ -165,7 +165,7 @@
                         <configuration>
                             <classifier>spring-boot</classifier>
                             <mainClass>
-                                com.datamanager.client.DataManagerClientApplication
+                                com.sol.client.SolClientApplication
                             </mainClass>
                         </configuration>
                     </execution>
