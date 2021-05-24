@@ -136,6 +136,12 @@
                 <spring.profiles.active>prod</spring.profiles.active>
             </properties>
         </profile>
+        <profile>
+            <id>none</id>
+            <properties>
+                <spring.profiles.active>none</spring.profiles.active>
+            </properties>
+        </profile>
     </profiles>
 
     <build>
