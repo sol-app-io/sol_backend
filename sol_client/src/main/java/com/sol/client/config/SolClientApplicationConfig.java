@@ -39,6 +39,9 @@ import com.rcore.rest.api.spring.security.jwt.access.JwtAccessTokenParser;
 import com.rcore.rest.api.spring.security.jwt.access.RSAJwtAccessTokenGenerator;
 import com.rcore.rest.api.spring.security.jwt.refresh.JwtRefreshTokenParser;
 import com.rcore.rest.api.spring.security.jwt.refresh.RSAJwtRefreshTokenGenerator;
+import com.sol.domain.solUser.config.SolUserConfig;
+import com.sol.domain.solUser.port.SolUserIdGenerator;
+import com.sol.domain.solUser.port.SolUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -185,6 +188,11 @@ public class SolClientApplicationConfig {
                 credentialRepository,
                 new PasswordCryptographerImpl()
         );
+    }
+
+    @Bean
+    public SolUserConfig solUserConfig(SolUserRepository solUserRepository, SolUserIdGenerator solUserIdGenerator, CredentialRepository credentialRepository, CredentialConfig credentialConfig, RoleConfig roleConfig){
+        return new SolUserConfig(solUserRepository, solUserIdGenerator, credentialRepository, credentialConfig.createCredentialUseCase(), roleConfig);
     }
 
 

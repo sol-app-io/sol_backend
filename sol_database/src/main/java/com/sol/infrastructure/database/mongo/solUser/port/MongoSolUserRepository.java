@@ -5,6 +5,7 @@ import com.rcore.database.mongo.commons.utils.CollectionNameUtils;
 import com.rcore.domain.commons.port.dto.SearchResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 import com.sol.infrastructure.database.mongo.solUser.mapper.SolUserMapper;
@@ -23,11 +24,11 @@ public class MongoSolUserRepository implements SolUserRepository {
     private static final String collectionName = CollectionNameUtils.getCollectionName(SolUserDoc.class);
 
     private final MongoTemplate mongoTemplate;
-    private final SolUserMapper mapper;
+//    private final SolUserMapper mapper;
 
     @Override
     public SolUserEntity save(SolUserEntity entity) {
-        return mapper.inverseMap(mongoTemplate.save(mapper.map(entity), collectionName));
+        return mongoTemplate.save(entity, collectionName);
     }
 
     @Override
@@ -39,7 +40,7 @@ public class MongoSolUserRepository implements SolUserRepository {
 
     @Override
     public Optional<SolUserEntity> findById(String s) {
-        return Optional.ofNullable(mongoTemplate.findById(s, SolUserDoc.class)).map(mapper::inverseMap);
+        return Optional.ofNullable(mongoTemplate.findById(s, SolUserDoc.class));
     }
 
     @Override
@@ -47,9 +48,16 @@ public class MongoSolUserRepository implements SolUserRepository {
         Query query = new FindWithFiltersQuery(filters).getQuery();
 
         return SearchResult.withItemsAndCount(
-                mongoTemplate.find(query, SolUserDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList()),
+                mongoTemplate.find(query, SolUserDoc.class).stream().collect(Collectors.toList()),
                 mongoTemplate.count(query.limit(0).skip(0), SolUserDoc.class)
         );
+    }
+
+    @Override
+    public Optional<SolUserEntity> findByCredential(String credentialId) {
+        Query query = Query.query(Criteria.where("credentials.credentialId").is(credentialId));
+        query.limit(1);
+        return Optional.ofNullable(mongoTemplate.findOne(query, SolUserDoc.class));
     }
 
     @Override

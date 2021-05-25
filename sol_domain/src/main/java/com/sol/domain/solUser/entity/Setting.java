@@ -6,5 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Setting {
-    private Long defaultPointWeight;
+    private Long defaultPointWeight = 25 * 60 * 1000L;
 }
