@@ -34,9 +34,12 @@ import com.rcore.domain.picture.port.PictureRepository;
 import com.rcore.domain.security.model.AccessTokenData;
 import com.rcore.domain.security.port.CredentialIdentityService;
 import com.rcore.domain.security.port.CredentialService;
+import com.rcore.domain.security.port.TokenGenerator;
 import com.rcore.domain.security.port.TokenParser;
+import com.rcore.rest.api.spring.security.jwt.access.JwtAccessTokenGenerator;
 import com.rcore.rest.api.spring.security.jwt.access.JwtAccessTokenParser;
 import com.rcore.rest.api.spring.security.jwt.access.RSAJwtAccessTokenGenerator;
+import com.rcore.rest.api.spring.security.jwt.refresh.JwtRefreshTokenGenerator;
 import com.rcore.rest.api.spring.security.jwt.refresh.JwtRefreshTokenParser;
 import com.rcore.rest.api.spring.security.jwt.refresh.RSAJwtRefreshTokenGenerator;
 import com.sol.domain.solUser.config.SolUserConfig;
@@ -115,13 +118,23 @@ public class SolClientApplicationConfig {
     }
 
     @Bean
-    public JwtRefreshTokenParser jwtRefreshTokenParser() {
-        return new JwtRefreshTokenParser(new ObjectMapper(), new RSAJwtRefreshTokenGenerator(jwtToken));
+    public JwtRefreshTokenParser jwtRefreshTokenParser(JwtRefreshTokenGenerator jwtRefreshTokenGenerator) {
+        return new JwtRefreshTokenParser(new ObjectMapper(), jwtRefreshTokenGenerator);
     }
 
     @Bean
-    public JwtAccessTokenParser jwtAccessTokenParser() {
-        return new JwtAccessTokenParser(new ObjectMapper(), new RSAJwtAccessTokenGenerator(jwtToken));
+    public JwtAccessTokenParser jwtAccessTokenParser(JwtAccessTokenGenerator tokenGenerator) {
+        return new JwtAccessTokenParser(new ObjectMapper(), tokenGenerator);
+    }
+
+    @Bean
+    public JwtAccessTokenGenerator jwtAccessTokenGenerator(ObjectMapper objectMapper){
+        return new JwtAccessTokenGenerator(objectMapper);
+    }
+
+    @Bean
+    public JwtRefreshTokenGenerator jwtRefreshTokenGenerator(ObjectMapper objectMapper){
+        return new JwtRefreshTokenGenerator(objectMapper);
     }
 
     @Bean

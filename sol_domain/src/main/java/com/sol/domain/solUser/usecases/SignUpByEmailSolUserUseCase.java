@@ -1,7 +1,10 @@
 package com.sol.domain.solUser.usecases;
 
+import com.rcore.domain.auth.authorization.config.AuthorizationConfig;
+import com.rcore.domain.auth.credential.config.CredentialConfig;
 import com.rcore.domain.auth.credential.entity.CredentialEntity;
 import com.rcore.domain.auth.credential.port.CredentialRepository;
+import com.rcore.domain.auth.credential.port.PasswordCryptographer;
 import com.rcore.domain.auth.credential.usecases.CreateCredentialUseCase;
 import com.rcore.domain.auth.role.config.RoleConfig;
 import com.rcore.domain.auth.role.entity.RoleEntity;
@@ -10,6 +13,7 @@ import com.rcore.domain.auth.role.usecases.FindRoleByNameUseCase;
 import com.rcore.domain.commons.usecase.AbstractCreateUseCase;
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
+import com.rcore.domain.security.exceptions.AuthenticationException;
 import com.sol.domain.solUser.entity.Credential;
 import com.sol.domain.solUser.entity.Setting;
 import com.sol.domain.solUser.entity.SolUserEntity;
@@ -33,6 +37,7 @@ public class SignUpByEmailSolUserUseCase extends UseCase<SignUpByEmailSolUserUse
     private final CredentialRepository credentialRepository;
     private final CreateCredentialUseCase createCredentialUseCase;
     private final RoleConfig roleConfig;
+    private final PasswordCryptographer passwordCryptographer;
 
     private final static String ROLE_SOL_EMAIL = "SOL_ROLE_EMAIL";
 
@@ -66,6 +71,11 @@ public class SignUpByEmailSolUserUseCase extends UseCase<SignUpByEmailSolUserUse
             if (solOptional.isPresent()) {
                 return SingletonEntityOutputValues.of(solOptional.get());
             }
+
+            if (passwordCryptographer.validate(inputValues.password, credentialEntity.getPassword(), credentialEntity.getId()) == false) {
+                throw new AuthenticationException();
+            }
+
             credentialEntity = ce;
         } else {
             List<CreateCredentialUseCase.InputValues.Role> roles = new ArrayList<>();
@@ -89,23 +99,29 @@ public class SignUpByEmailSolUserUseCase extends UseCase<SignUpByEmailSolUserUse
             ).getEntity();
         }
 
-        SolUserEntity solUserEntity = new SolUserEntity(idGenerator.generate());
+        Optional<SolUserEntity> solUserEntityOptional = repository.findByCredential(credentialEntity.getId());
+        SolUserEntity solUserEntity = null;
 
-        solUserEntity.setEmail(inputValues.email);
-        solUserEntity.setUsername(inputValues.email);
-        solUserEntity.setFirstName("");
-        solUserEntity.setLastName("");
-        solUserEntity.setUserPicId(null);
-        solUserEntity.setSetting(new Setting());
-        solUserEntity.getCredentials()
-                .add(
-                        Credential.builder()
-                                .type(Credential.Type.EMAIL)
-                                .credentialId(credentialEntity.getId())
-                                .build()
-                );
+        if (solUserEntityOptional.isPresent()) {
+            solUserEntity = solUserEntityOptional.get();
+        } else {
+            solUserEntity = new SolUserEntity(idGenerator.generate());
 
-        solUserEntity = repository.save(solUserEntity);
+            solUserEntity.setEmail(inputValues.email);
+            solUserEntity.setUsername(inputValues.email);
+            solUserEntity.setFirstName("");
+            solUserEntity.setLastName("");
+            solUserEntity.setUserPicId(null);
+            solUserEntity.setSetting(new Setting());
+            solUserEntity.getCredentials()
+                    .add(
+                            Credential.builder()
+                                    .type(Credential.Type.EMAIL)
+                                    .credentialId(credentialEntity.getId())
+                                    .build()
+                    );
+            solUserEntity = repository.save(solUserEntity);
+        }
 
         return SingletonEntityOutputValues.of(solUserEntity);
     }

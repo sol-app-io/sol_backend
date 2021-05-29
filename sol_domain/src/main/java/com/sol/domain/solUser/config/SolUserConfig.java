@@ -1,6 +1,8 @@
 package com.sol.domain.solUser.config;
 
 import com.rcore.domain.auth.credential.port.CredentialRepository;
+import com.rcore.domain.auth.credential.port.PasswordCryptographer;
+import com.rcore.domain.auth.credential.port.impl.PasswordCryptographerImpl;
 import com.rcore.domain.auth.credential.usecases.CreateCredentialUseCase;
 import com.rcore.domain.auth.role.config.RoleConfig;
 import com.sol.domain.solUser.port.SolUserIdGenerator;
@@ -20,6 +22,7 @@ public class SolUserConfig {
     private final FindSolUserByIdUseCase findSolUserByIdUseCase;
     private final UpdateSolUserUseCase updateSolUserUseCase;
 
+
     public SolUserConfig(
             SolUserRepository solUserRepository,
             SolUserIdGenerator<?> solUserIdGenerator,
@@ -27,7 +30,9 @@ public class SolUserConfig {
             CreateCredentialUseCase createCredentialUseCase,
             RoleConfig roleConfig
     ) {
-        this.signUpByEmailSolUserUseCase = new SignUpByEmailSolUserUseCase(solUserRepository, solUserIdGenerator, credentialRepository, createCredentialUseCase, roleConfig);
+        this.signUpByEmailSolUserUseCase = new SignUpByEmailSolUserUseCase(
+                solUserRepository, solUserIdGenerator, credentialRepository, createCredentialUseCase, roleConfig, new PasswordCryptographerImpl()
+        );
         this.deleteSolUserUseCase = new DeleteSolUserUseCase(solUserRepository);
         this.findSolUserByIdUseCase = new FindSolUserByIdUseCase(solUserRepository);
         this.updateSolUserUseCase = new UpdateSolUserUseCase(solUserRepository);

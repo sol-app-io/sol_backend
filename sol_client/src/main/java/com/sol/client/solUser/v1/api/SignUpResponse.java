@@ -9,4 +9,6 @@ import lombok.Setter;
 @Builder
 public class SignUpResponse {
     private String id;
+    private String accessToken;
+    private String refreshToken;
 }
