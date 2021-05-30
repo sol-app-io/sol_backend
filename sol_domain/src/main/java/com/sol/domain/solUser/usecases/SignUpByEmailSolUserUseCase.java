@@ -134,7 +134,6 @@ public class SignUpByEmailSolUserUseCase extends UseCase<SignUpByEmailSolUserUse
         // перечисление полей необходимых для создания сущности
         protected String email;
         protected String password;
-
     }
 
     /**

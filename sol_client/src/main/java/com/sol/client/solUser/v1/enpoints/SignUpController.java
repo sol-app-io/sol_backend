@@ -81,6 +81,7 @@ public class SignUpController {
 
         SignUpResponse signUpResponse = SignUpResponse.builder()
                 .id(solUserEntity.getId())
+                .username(solUserEntity.getUsername())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
