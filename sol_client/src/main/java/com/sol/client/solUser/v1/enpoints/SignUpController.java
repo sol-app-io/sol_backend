@@ -2,23 +2,18 @@ package com.sol.client.solUser.v1.enpoints;
 
 import com.rcore.domain.auth.authorization.config.AuthorizationConfig;
 import com.rcore.domain.auth.authorization.usecases.PasswordAuthorizationUseCase;
-import com.rcore.domain.auth.credential.config.CredentialConfig;
 import com.rcore.domain.auth.credential.entity.CredentialEntity;
-import com.rcore.domain.auth.credential.usecases.FindCredentialByIdUseCase;
 import com.rcore.domain.auth.token.config.TokenConfig;
 import com.rcore.domain.auth.token.entity.TokenPair;
 import com.rcore.domain.auth.token.usecases.RefreshAccessTokenUseCase;
-import com.rcore.domain.commons.usecase.model.IdInputValues;
 import com.rcore.domain.security.model.AccessTokenData;
 import com.rcore.domain.security.model.CredentialDetails;
 import com.rcore.domain.security.model.RefreshTokenData;
 import com.rcore.domain.security.port.TokenGenerator;
-import com.rcore.domain.security.port.TokenParser;
 import com.rcore.rest.api.commons.response.SuccessApiResponse;
 import com.sol.client.solUser.v1.api.SignUpEmailRequest;
 import com.sol.client.solUser.v1.api.SignUpResponse;
-import com.sol.client.solUser.v1.api.UpdateRefreshTokenResponse;
-import com.sol.client.solUser.v1.mapper.SolUserMapper;
+import com.sol.client.solUser.v1.api.UpdateRefreshTokenRequest;
 import com.sol.client.solUser.v1.routes.SignUpRoutes;
 import com.sol.domain.solUser.config.SolUserConfig;
 import com.sol.domain.solUser.entity.SolUserEntity;
@@ -94,9 +89,8 @@ public class SignUpController {
     }
 
     @PostMapping(value = SignUpRoutes.UPDATE_REFRESH_TOKEN)
-    public SuccessApiResponse<SignUpResponse> refreshToken(@RequestBody UpdateRefreshTokenResponse request) {
-//        RefreshTokenData refreshTokenData = refreshTokenDataParser.parseWithValidating(request.getRefreshToken());
-//
+    public SuccessApiResponse<SignUpResponse> refreshToken(@RequestBody UpdateRefreshTokenRequest request) {
+
         TokenPair tokenPair = tokenConfig.refreshAccessTokenUseCase().execute(RefreshAccessTokenUseCase.InputValues.of(request.getRefreshToken())).getTokenPair();
         CredentialEntity credentialEntity = tokenPair.getRefreshToken().getCredential();
 
@@ -141,5 +135,6 @@ public class SignUpController {
                 .refreshToken(refreshToken)
                 .build()
         );
+
     }
 }

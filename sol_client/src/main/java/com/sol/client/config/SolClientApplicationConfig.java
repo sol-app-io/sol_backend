@@ -1,6 +1,7 @@
 package com.sol.client.config;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rcore.domain.auth.authorization.config.AuthorizationConfig;
 import com.rcore.domain.auth.authorization.port.AuthorizationIdGenerator;
@@ -36,6 +37,8 @@ import com.rcore.domain.security.port.CredentialIdentityService;
 import com.rcore.domain.security.port.CredentialService;
 import com.rcore.domain.security.port.TokenGenerator;
 import com.rcore.domain.security.port.TokenParser;
+import com.rcore.rest.api.spring.commons.jackson.datetime.LocalDateTimeDeserializer;
+import com.rcore.rest.api.spring.commons.jackson.datetime.LocalDateTimeSerializer;
 import com.rcore.rest.api.spring.security.jwt.access.JwtAccessTokenGenerator;
 import com.rcore.rest.api.spring.security.jwt.access.JwtAccessTokenParser;
 import com.rcore.rest.api.spring.security.jwt.access.RSAJwtAccessTokenGenerator;
@@ -49,6 +52,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+
+import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Configuration
@@ -118,29 +124,28 @@ public class SolClientApplicationConfig {
     }
 
     @Bean
-    public JwtRefreshTokenParser jwtRefreshTokenParser(JwtRefreshTokenGenerator jwtRefreshTokenGenerator) {
-        return new JwtRefreshTokenParser(new ObjectMapper(), jwtRefreshTokenGenerator);
+    public TokenLifeCycleConfig tokenLifeCycleConfig() {
+        return new TokenLifeCycleConfig();
     }
 
     @Bean
-    public JwtAccessTokenParser jwtAccessTokenParser(JwtAccessTokenGenerator tokenGenerator) {
-        return new JwtAccessTokenParser(new ObjectMapper(), tokenGenerator);
+    public JwtRefreshTokenParser jwtRefreshTokenParser(ObjectMapper objectMapper, JwtRefreshTokenGenerator jwtRefreshTokenGenerator) {
+        return new JwtRefreshTokenParser(objectMapper, jwtRefreshTokenGenerator);
     }
 
     @Bean
-    public JwtAccessTokenGenerator jwtAccessTokenGenerator(ObjectMapper objectMapper){
-        return new JwtAccessTokenGenerator(objectMapper);
+    public JwtAccessTokenParser jwtAccessTokenParser(ObjectMapper objectMapper, JwtAccessTokenGenerator jwtAccessTokenGenerator) {
+        return new JwtAccessTokenParser(objectMapper, jwtAccessTokenGenerator);
     }
 
     @Bean
-    public JwtRefreshTokenGenerator jwtRefreshTokenGenerator(ObjectMapper objectMapper){
+    public JwtRefreshTokenGenerator jwtRefreshTokenGenerator(ObjectMapper objectMapper) {
         return new JwtRefreshTokenGenerator(objectMapper);
     }
 
     @Bean
-    public TokenLifeCycleConfig tokenLifeCycleConfig() {
-        TokenLifeCycleConfig tokenLifeCycleConfig = new TokenLifeCycleConfig();
-        return tokenLifeCycleConfig;
+    public JwtAccessTokenGenerator jwtAccessTokenGenerator(ObjectMapper objectMapper) {
+        return new JwtAccessTokenGenerator(objectMapper);
     }
 
     @Bean
@@ -154,6 +159,7 @@ public class SolClientApplicationConfig {
             TokenLifeCycleConfig tokenLifeCycleConfig
     ) {
         return new TokenConfig(
+
                 accessTokenRepository,
                 accessTokenIdGenerator,
                 refreshTokenRepository,
@@ -163,6 +169,15 @@ public class SolClientApplicationConfig {
                 credentialRepository,
                 tokenLifeCycleConfig
         );
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
+        builder.serializerByType(LocalDateTime.class, new LocalDateTimeSerializer());
+        builder.serializationInclusion(JsonInclude.Include.NON_NULL);
+        builder.deserializerByType(LocalDateTime.class, new LocalDateTimeDeserializer());
+        return builder.build();
     }
 
     @Bean
