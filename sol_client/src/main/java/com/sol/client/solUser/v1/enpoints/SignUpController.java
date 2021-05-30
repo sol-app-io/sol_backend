@@ -2,30 +2,33 @@ package com.sol.client.solUser.v1.enpoints;
 
 import com.rcore.domain.auth.authorization.config.AuthorizationConfig;
 import com.rcore.domain.auth.authorization.usecases.PasswordAuthorizationUseCase;
+import com.rcore.domain.auth.credential.config.CredentialConfig;
 import com.rcore.domain.auth.credential.entity.CredentialEntity;
+import com.rcore.domain.auth.credential.usecases.FindCredentialByIdUseCase;
+import com.rcore.domain.auth.token.config.TokenConfig;
 import com.rcore.domain.auth.token.entity.TokenPair;
+import com.rcore.domain.auth.token.usecases.RefreshAccessTokenUseCase;
+import com.rcore.domain.commons.usecase.model.IdInputValues;
 import com.rcore.domain.security.model.AccessTokenData;
 import com.rcore.domain.security.model.CredentialDetails;
 import com.rcore.domain.security.model.RefreshTokenData;
 import com.rcore.domain.security.port.TokenGenerator;
+import com.rcore.domain.security.port.TokenParser;
 import com.rcore.rest.api.commons.response.SuccessApiResponse;
-import com.rcore.rest.api.spring.security.jwt.access.JwtAccessTokenGenerator;
-import com.rcore.rest.api.spring.security.jwt.refresh.JwtRefreshTokenGenerator;
 import com.sol.client.solUser.v1.api.SignUpEmailRequest;
 import com.sol.client.solUser.v1.api.SignUpResponse;
+import com.sol.client.solUser.v1.api.UpdateRefreshTokenResponse;
 import com.sol.client.solUser.v1.mapper.SolUserMapper;
 import com.sol.client.solUser.v1.routes.SignUpRoutes;
 import com.sol.domain.solUser.config.SolUserConfig;
-import com.sol.domain.solUser.entity.Credential;
 import com.sol.domain.solUser.entity.SolUserEntity;
+import com.sol.domain.solUser.usecases.MeUseCase;
 import com.sol.domain.solUser.usecases.SignUpByEmailSolUserUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -34,9 +37,9 @@ public class SignUpController {
 
     private final SolUserConfig solUserConfig;
     private final AuthorizationConfig authorizationConfig;
-    private final SolUserMapper mapper = new SolUserMapper();
     private final TokenGenerator<AccessTokenData> accessTokenGenerator;
     private final TokenGenerator<RefreshTokenData> refreshTokenGenerator;
+    private final TokenConfig tokenConfig;
 
 
     @PostMapping(value = SignUpRoutes.EMAIL)
@@ -88,5 +91,55 @@ public class SignUpController {
 
 
         return SuccessApiResponse.of(signUpResponse);
+    }
+
+    @PostMapping(value = SignUpRoutes.UPDATE_REFRESH_TOKEN)
+    public SuccessApiResponse<SignUpResponse> refreshToken(@RequestBody UpdateRefreshTokenResponse request) {
+//        RefreshTokenData refreshTokenData = refreshTokenDataParser.parseWithValidating(request.getRefreshToken());
+//
+        TokenPair tokenPair = tokenConfig.refreshAccessTokenUseCase().execute(RefreshAccessTokenUseCase.InputValues.of(request.getRefreshToken())).getTokenPair();
+        CredentialEntity credentialEntity = tokenPair.getRefreshToken().getCredential();
+
+        SolUserEntity solUserEntity = solUserConfig
+                .meUseCase()
+                .execute(
+                        MeUseCase.InputValues.builder()
+                                .credentialId(credentialEntity.getId())
+                                .build()
+                ).getEntity();
+
+        String accessToken = accessTokenGenerator.generate(
+                AccessTokenData.builder()
+                        .id(tokenPair.getAccessToken().getId())
+                        .credentialId(tokenPair.getAccessToken().getCredential().getId())
+                        .roles(tokenPair.getAccessToken().getCredential().getRoles().stream().map((CredentialEntity.Role role) -> {
+                            return new CredentialDetails.Role(role.getRole().getName());
+                        }).collect(Collectors.toList()))
+                        .createdAt(tokenPair.getAccessToken().getCreatedAt())
+                        .expiredAt(tokenPair.getAccessToken().getExpireAt())
+                        .build()
+        );
+
+        String refreshToken = refreshTokenGenerator.generate(
+                RefreshTokenData.builder()
+                        .id(tokenPair.getRefreshToken().getId())
+                        .credentialId(tokenPair.getRefreshToken().getCredential().getId())
+                        .roles(tokenPair.getRefreshToken().getCredential().getRoles().stream().map(
+                                (CredentialEntity.Role role) -> {
+                                    return new CredentialDetails.Role(role.getRole().getName());
+                                }
+                        ).collect(Collectors.toList()))
+                        .createdAt(tokenPair.getRefreshToken().getCreatedAt())
+                        .expiredAt(tokenPair.getRefreshToken().getExpireAt())
+                        .build()
+        );
+
+        return SuccessApiResponse.of(SignUpResponse.builder()
+                .id(solUserEntity.getId())
+                .username(solUserEntity.getUsername())
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build()
+        );
     }
 }

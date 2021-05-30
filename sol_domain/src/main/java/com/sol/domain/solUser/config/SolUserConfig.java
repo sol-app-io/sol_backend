@@ -7,10 +7,7 @@ import com.rcore.domain.auth.credential.usecases.CreateCredentialUseCase;
 import com.rcore.domain.auth.role.config.RoleConfig;
 import com.sol.domain.solUser.port.SolUserIdGenerator;
 import com.sol.domain.solUser.port.SolUserRepository;
-import com.sol.domain.solUser.usecases.SignUpByEmailSolUserUseCase;
-import com.sol.domain.solUser.usecases.DeleteSolUserUseCase;
-import com.sol.domain.solUser.usecases.FindSolUserByIdUseCase;
-import com.sol.domain.solUser.usecases.UpdateSolUserUseCase;
+import com.sol.domain.solUser.usecases.*;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -21,6 +18,7 @@ public class SolUserConfig {
     private final DeleteSolUserUseCase deleteSolUserUseCase;
     private final FindSolUserByIdUseCase findSolUserByIdUseCase;
     private final UpdateSolUserUseCase updateSolUserUseCase;
+    private final MeUseCase meUseCase;
 
 
     public SolUserConfig(
@@ -36,5 +34,6 @@ public class SolUserConfig {
         this.deleteSolUserUseCase = new DeleteSolUserUseCase(solUserRepository);
         this.findSolUserByIdUseCase = new FindSolUserByIdUseCase(solUserRepository);
         this.updateSolUserUseCase = new UpdateSolUserUseCase(solUserRepository);
+        this.meUseCase = new MeUseCase(solUserRepository);
     }
 }
