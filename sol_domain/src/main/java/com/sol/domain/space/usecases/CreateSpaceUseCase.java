@@ -24,19 +24,24 @@ public class CreateSpaceUseCase extends AbstractCreateUseCase<SpaceEntity, Space
 
     @Override
     public SingletonEntityOutputValues<SpaceEntity> execute(InputValues inputValues) {
+        try {
+            validate(inputValues);
 
-        validate(inputValues);
+            SpaceEntity spaceEntity = new SpaceEntity(idGenerator.generate());
 
-        SpaceEntity spaceEntity = new SpaceEntity(idGenerator.generate());
-       
-        // Происходит заполнение всех полей 
-        spaceEntity.setTitle(inputValues.title);
-        spaceEntity.setIcon(inputValues.icon);
-        spaceEntity.setOwnerId(inputValues.ownerId);
+            // Происходит заполнение всех полей
+            spaceEntity.setTitle(inputValues.title);
+            spaceEntity.setIcon(inputValues.icon);
+            spaceEntity.setOwnerId(inputValues.ownerId);
+            spaceEntity.setSortNum(repository.countSpaces(inputValues.getOwnerId()).intValue());
+            spaceEntity.setType(inputValues.type);
+            spaceEntity = repository.save(spaceEntity);
 
-        spaceEntity = repository.save(spaceEntity);
-
-        return SingletonEntityOutputValues.of(spaceEntity);
+            return SingletonEntityOutputValues.of(spaceEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     @AllArgsConstructor
@@ -48,11 +53,12 @@ public class CreateSpaceUseCase extends AbstractCreateUseCase<SpaceEntity, Space
         protected String title;
         protected Icon icon;
         protected String ownerId;
-
+        protected SpaceEntity.Type type;
     }
 
     /**
      * Валидация входящий данных
+     *
      * @param inputValues
      */
     private void validate(InputValues inputValues) {

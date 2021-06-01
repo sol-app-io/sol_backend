@@ -4,7 +4,9 @@ import com.rcore.database.mongo.commons.query.FindByIdQuery;
 import com.rcore.database.mongo.commons.utils.CollectionNameUtils;
 import com.rcore.domain.commons.port.dto.SearchResult;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 import com.sol.infrastructure.database.mongo.space.mapper.SpaceMapper;
@@ -14,6 +16,7 @@ import com.sol.domain.space.entity.SpaceEntity;
 import com.sol.domain.space.port.SpaceRepository;
 import com.sol.domain.space.port.filters.SpaceFilters;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -27,7 +30,7 @@ public class MongoSpaceRepository implements SpaceRepository {
 
     @Override
     public SpaceEntity save(SpaceEntity entity) {
-        return mapper.inverseMap(mongoTemplate.save(mapper.map(entity), collectionName));
+        return mongoTemplate.save(entity, collectionName);
     }
 
     @Override
@@ -55,5 +58,36 @@ public class MongoSpaceRepository implements SpaceRepository {
     @Override
     public Long count() {
         return mongoTemplate.count(new Query(), SpaceDoc.class);
+    }
+
+    @Override
+    public Long countSpaces(String ownerId) {
+        try {
+            Criteria criteria = Criteria.where("ownerId").is(ownerId);
+            Query query = new Query(criteria);
+            return mongoTemplate.count(query, SpaceDoc.class);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @Override
+    public List<SpaceEntity> findByOwner(String ownerId) {
+        try {
+            Criteria criteria = Criteria.where("ownerId").is(ownerId);
+            Query query = new Query(criteria);
+
+            query.with(Sort.by(Sort.Direction.ASC, "sortNum"));
+
+            List<SpaceDoc> result = mongoTemplate
+                    .find(query, SpaceDoc.class);
+            return result.stream()
+                    .map(mapper::inverseMap)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 }

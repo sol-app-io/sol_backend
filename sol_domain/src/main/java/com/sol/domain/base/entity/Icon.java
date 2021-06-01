@@ -10,6 +10,13 @@ public class Icon {
         EMOJI
     }
 
+    public static Icon of(String data){
+        Icon icon = new Icon();
+        icon.setData(data);
+        icon.setType(Type.EMOJI);
+        return icon;
+    }
+
     private String data;
     private Type type = Type.EMOJI;
 }

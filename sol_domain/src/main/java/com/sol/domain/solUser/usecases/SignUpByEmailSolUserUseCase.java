@@ -14,11 +14,15 @@ import com.rcore.domain.commons.usecase.AbstractCreateUseCase;
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
 import com.rcore.domain.security.exceptions.AuthenticationException;
+import com.sol.domain.base.entity.Icon;
 import com.sol.domain.solUser.entity.Credential;
 import com.sol.domain.solUser.entity.Setting;
 import com.sol.domain.solUser.entity.SolUserEntity;
 import com.sol.domain.solUser.port.SolUserIdGenerator;
 import com.sol.domain.solUser.port.SolUserRepository;
+import com.sol.domain.space.config.SpaceConfig;
+import com.sol.domain.space.entity.SpaceEntity;
+import com.sol.domain.space.usecases.CreateSpaceUseCase;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -38,6 +42,7 @@ public class SignUpByEmailSolUserUseCase extends UseCase<SignUpByEmailSolUserUse
     private final CreateCredentialUseCase createCredentialUseCase;
     private final RoleConfig roleConfig;
     private final PasswordCryptographer passwordCryptographer;
+    private final CreateSpaceUseCase createSpaceUseCase;
 
     private final static String ROLE_SOL_EMAIL = "SOL_ROLE_EMAIL";
 
@@ -121,6 +126,14 @@ public class SignUpByEmailSolUserUseCase extends UseCase<SignUpByEmailSolUserUse
                                     .build()
                     );
             solUserEntity = repository.save(solUserEntity);
+
+            createSpaceUseCase.execute(CreateSpaceUseCase.InputValues.builder()
+                    .title("Inbox")
+                    .ownerId(solUserEntity.getId())
+                    .icon(Icon.of("\uD83D\uDCE5"))
+                    .type(SpaceEntity.Type.INBOX)
+                    .build()
+            );
         }
 
         return SingletonEntityOutputValues.of(solUserEntity);

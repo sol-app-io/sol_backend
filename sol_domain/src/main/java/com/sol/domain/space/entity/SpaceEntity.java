@@ -18,12 +18,11 @@ import lombok.experimental.SuperBuilder;
 @Data
 public class SpaceEntity extends BaseEntity<String> {
 
-    /************************************ Fields ************************************/
+    public enum Type{
+        DEFAULT, INBOX;
+    }
 
-    /**
-     * Идентификатор сущности
-     */
-    protected String id;
+    /************************************ Fields ************************************/
 
     /**
      * Title 
@@ -37,6 +36,10 @@ public class SpaceEntity extends BaseEntity<String> {
      * Owner 
      */
     protected String ownerId;
+
+    protected Integer sortNum;
+
+    protected Type type = Type.DEFAULT;
 
     /************************************ Constructors ************************************/
 

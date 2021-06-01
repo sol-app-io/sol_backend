@@ -48,6 +48,9 @@ import com.rcore.rest.api.spring.security.jwt.refresh.RSAJwtRefreshTokenGenerato
 import com.sol.domain.solUser.config.SolUserConfig;
 import com.sol.domain.solUser.port.SolUserIdGenerator;
 import com.sol.domain.solUser.port.SolUserRepository;
+import com.sol.domain.space.config.SpaceConfig;
+import com.sol.domain.space.port.SpaceIdGenerator;
+import com.sol.domain.space.port.SpaceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -219,8 +222,13 @@ public class SolClientApplicationConfig {
     }
 
     @Bean
-    public SolUserConfig solUserConfig(SolUserRepository solUserRepository, SolUserIdGenerator solUserIdGenerator, CredentialRepository credentialRepository, CredentialConfig credentialConfig, RoleConfig roleConfig){
-        return new SolUserConfig(solUserRepository, solUserIdGenerator, credentialRepository, credentialConfig.createCredentialUseCase(), roleConfig);
+    public SolUserConfig solUserConfig(SolUserRepository solUserRepository, SolUserIdGenerator solUserIdGenerator, CredentialRepository credentialRepository, CredentialConfig credentialConfig, RoleConfig roleConfig, SpaceConfig spaceConfig){
+        return new SolUserConfig(solUserRepository, solUserIdGenerator, credentialRepository, credentialConfig.createCredentialUseCase(), roleConfig, spaceConfig);
+    }
+
+    @Bean
+    public SpaceConfig spaceConfig(SpaceRepository spaceRepository, SpaceIdGenerator<?> spaceIdGenerator){
+        return new SpaceConfig(spaceRepository, spaceIdGenerator);
     }
 
 

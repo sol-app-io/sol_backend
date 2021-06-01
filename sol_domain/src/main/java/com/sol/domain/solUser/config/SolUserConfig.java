@@ -8,6 +8,7 @@ import com.rcore.domain.auth.role.config.RoleConfig;
 import com.sol.domain.solUser.port.SolUserIdGenerator;
 import com.sol.domain.solUser.port.SolUserRepository;
 import com.sol.domain.solUser.usecases.*;
+import com.sol.domain.space.config.SpaceConfig;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -26,10 +27,11 @@ public class SolUserConfig {
             SolUserIdGenerator<?> solUserIdGenerator,
             CredentialRepository credentialRepository,
             CreateCredentialUseCase createCredentialUseCase,
-            RoleConfig roleConfig
+            RoleConfig roleConfig,
+            SpaceConfig spaceConfig
     ) {
         this.signUpByEmailSolUserUseCase = new SignUpByEmailSolUserUseCase(
-                solUserRepository, solUserIdGenerator, credentialRepository, createCredentialUseCase, roleConfig, new PasswordCryptographerImpl()
+                solUserRepository, solUserIdGenerator, credentialRepository, createCredentialUseCase, roleConfig, new PasswordCryptographerImpl(), spaceConfig.createSpaceUseCase()
         );
         this.deleteSolUserUseCase = new DeleteSolUserUseCase(solUserRepository);
         this.findSolUserByIdUseCase = new FindSolUserByIdUseCase(solUserRepository);
