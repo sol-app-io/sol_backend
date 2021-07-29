@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.sol</groupId>
+    <artifactId>sol-backend</artifactId>
+    <packaging>pom</packaging>
+    <version>${revision}</version>
+    <modules>
+        <module>sol-domain</module>
+        <module>sol-database</module>
+        <module>sol-infrastructure</module>
+        <module>sol-client</module>
+    </modules>
+
+    <properties>
+        <rcore.version>1.0.8</rcore.version>
+        <revision>1.0.0</revision>
+        <auth-lib.version>2.0.9</auth-lib.version>
+        <ftl_additional_base_entities_lib.version>1.0.0</ftl_additional_base_entities_lib.version>
+        <api-error-handling.version>1.3</api-error-handling.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <snippetsDirectory>${project.build.directory}/generated-snippets</snippetsDirectory>
+    </properties>
+
+    <repositories>
+<!--        <repository>-->
+<!--            <id>rcore-snapshots</id>-->
+<!--            <url>http://nexus.foodtech-lab.ru/repository/rcore-snapshots/</url>-->
+<!--        </repository>-->
+        <repository>
+            <id>ftl-maven-libs-group</id>
+            <url>http://nexus.foodtech-lab.ru/repository/ftl-maven-libs-group/</url>
+        </repository>
+
+    </repositories>
+</project>

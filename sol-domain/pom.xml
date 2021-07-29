@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.sol</groupId>
+        <artifactId>sol-backend</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>domain</artifactId>
+    <name>sol domain</name>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>ru.foodtechlab</groupId>
+            <artifactId>ftl-additional-base-entities-lib</artifactId>
+            <version>${ftl_additional_base_entities_lib.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.rostislav-maslov.rcore</groupId>
+            <artifactId>rcore-domain-commons</artifactId>
+            <version>${rcore.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.20</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.rostislav-maslov.rcore</groupId>
+            <artifactId>rcore-domain-security</artifactId>
+            <version>${rcore.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ru.foodtechlab.lib</groupId>
+            <artifactId>auth-integration-core-commons</artifactId>
+            <version>${auth-lib.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.foodtechlab.lib</groupId>
+            <artifactId>auth-integration-core-role</artifactId>
+            <version>${auth-lib.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
