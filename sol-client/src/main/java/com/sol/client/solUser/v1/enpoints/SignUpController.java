@@ -30,11 +30,6 @@ import java.util.stream.Collectors;
 public class SignUpController {
 
     private final SolUserConfig solUserConfig;
-    private final AuthorizationConfig authorizationConfig;
-    private final TokenGenerator<AccessTokenData> accessTokenGenerator;
-    private final TokenGenerator<RefreshTokenData> refreshTokenGenerator;
-    private final TokenConfig tokenConfig;
-
 
     @PostMapping(value = SignUpRoutes.EMAIL)
     public SuccessApiResponse<SignUpResponse> email(@RequestBody SignUpEmailRequest request) {

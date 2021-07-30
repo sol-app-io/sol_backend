@@ -1,6 +1,5 @@
 package com.sol.domain.solUser.usecases;
 
-import com.rcore.commons.utils.PasswordCryptographer;
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
 import com.sol.domain.base.entity.Icon;
@@ -10,11 +9,13 @@ import com.sol.domain.solUser.entity.SolUserEntity;
 import com.sol.domain.solUser.exceptions.SolUserExistException;
 import com.sol.domain.solUser.port.SolUserIdGenerator;
 import com.sol.domain.solUser.port.SolUserRepository;
-import com.sol.domain.space.config.SpaceConfig;
 import com.sol.domain.space.entity.SpaceEntity;
 import com.sol.domain.space.usecases.CreateSpaceUseCase;
-import lombok.*;
-import ru.foodtechlab.lib.auth.integration.core.authorization.AuthorizationServiceFacade;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import ru.foodtechlab.lib.auth.integration.core.credential.exception.CredentialNotFoundException;
 import ru.foodtechlab.lib.auth.integration.core.credential.request.CreateCredentialRequest;
 import ru.foodtechlab.lib.auth.integration.core.credential.response.CredentialResponse;
 import ru.foodtechlab.lib.auth.integration.core.role.response.RoleResponse;
@@ -41,8 +42,13 @@ public class SignUpByEmailSolUserUseCase extends UseCase<SignUpByEmailSolUserUse
 
     private ru.foodtechlab.lib.auth.integration.core.role.response.RoleResponse solRolePassword() {
 
-        Optional<ru.foodtechlab.lib.auth.integration.core.role.response.RoleResponse> role = roleServiceFacade.findByName(SOL_USER_ROLE);
-        if (role.isPresent()) return role.get();
+        Optional<ru.foodtechlab.lib.auth.integration.core.role.response.RoleResponse> role = null;
+        try{
+            role = roleServiceFacade.findByName(SOL_USER_ROLE);
+        }catch(Exception e){
+        }
+
+        if (role != null && role.isPresent()) return role.get();
 
         List<RoleResponse.AuthType> authTypes = new ArrayList<>();
         authTypes.add(RoleResponse.AuthType.PASSWORD);
@@ -59,11 +65,18 @@ public class SignUpByEmailSolUserUseCase extends UseCase<SignUpByEmailSolUserUse
     @Override
     public SingletonEntityOutputValues<SolUserEntity> execute(InputValues inputValues) {
         validate(inputValues);
+        Optional<CredentialResponse> credentialResponseOptional = null;
 
-        Optional<CredentialResponse> credentialResponseOptional = credentialServiceFacade.findByName(inputValues.email.toLowerCase(Locale.ROOT));
+        try {
+            credentialResponseOptional = credentialServiceFacade
+                    .findByName(
+                            inputValues.email.toLowerCase(Locale.ROOT)
+                    );
+        }catch (CredentialNotFoundException e){
+        }
         CredentialResponse credentialResponse = null;
 
-        if (credentialResponseOptional.isPresent()) {
+        if (credentialResponseOptional != null && credentialResponseOptional.isPresent()) {
             throw new SolUserExistException();
         } else {
             List<CreateCredentialRequest.Role> roles = new ArrayList<>();
