@@ -137,7 +137,8 @@
                             <goal>repackage</goal>
                         </goals>
                         <configuration>
-                            <classifier>spring-boot</classifier>
+                            <executable>true</executable>
+                            <finalName>sol-app</finalName>
                             <mainClass>
                                 com.sol.client.SolClientApplication
                             </mainClass>
