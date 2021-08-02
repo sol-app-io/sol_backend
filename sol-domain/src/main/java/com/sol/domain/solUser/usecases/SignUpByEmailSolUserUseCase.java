@@ -77,7 +77,9 @@ public class SignUpByEmailSolUserUseCase extends UseCase<SignUpByEmailSolUserUse
         CredentialResponse credentialResponse = null;
 
         if (credentialResponseOptional != null && credentialResponseOptional.isPresent()) {
-            throw new SolUserExistException();
+            credentialResponse = credentialResponseOptional.get();
+            // TODO delete or add auth
+            //throw new SolUserExistException();
         } else {
             List<CreateCredentialRequest.Role> roles = new ArrayList<>();
             RoleResponse roleResponse = solRolePassword();

@@ -46,6 +46,12 @@
             <artifactId>auth-integration-core-role</artifactId>
             <version>${auth-lib.version}</version>
         </dependency>
+        <dependency>
+            <groupId>ru.foodtechlab.lib</groupId>
+            <artifactId>auth-domain</artifactId>
+            <version>2.0.9</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>

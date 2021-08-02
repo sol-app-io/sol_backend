@@ -3,9 +3,9 @@ package com.sol.domain.solUser.usecases;
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
 import com.sol.domain.solUser.entity.SolUserEntity;
-import com.sol.domain.solUser.exceptions.BadCredentialsException;
 import com.sol.domain.solUser.port.SolUserRepository;
 import lombok.*;
+import ru.foodtechlab.lib.auth.service.domain.authorization.exceptions.BadCredentialsException;
 
 import java.util.Optional;
 
