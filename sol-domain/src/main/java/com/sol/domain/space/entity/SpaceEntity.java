@@ -18,22 +18,22 @@ import lombok.experimental.SuperBuilder;
 @Data
 public class SpaceEntity extends BaseEntity<String> {
 
-    public enum Type{
+    public enum Type {
         DEFAULT, INBOX;
     }
 
     /************************************ Fields ************************************/
 
     /**
-     * Title 
+     * Title
      */
     protected String title;
     /**
-     * Icon 
+     * Icon
      */
     protected Icon icon = new Icon();
     /**
-     * Owner 
+     * Owner
      */
     protected String ownerId;
 
@@ -51,5 +51,8 @@ public class SpaceEntity extends BaseEntity<String> {
 
     /************************************ Methods ************************************/
 
-
+    public Boolean checkAccess(String solUserId) {
+        if(this.ownerId.equals(solUserId)) return true;
+        return false;
+    }
 }

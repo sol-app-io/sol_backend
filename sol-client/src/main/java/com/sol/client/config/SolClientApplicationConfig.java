@@ -18,6 +18,9 @@ import com.sol.domain.solUser.port.SolUserRepository;
 import com.sol.domain.space.config.SpaceConfig;
 import com.sol.domain.space.port.SpaceIdGenerator;
 import com.sol.domain.space.port.SpaceRepository;
+import com.sol.domain.task.config.TaskConfig;
+import com.sol.domain.task.port.TaskIdGenerator;
+import com.sol.domain.task.port.TaskRepository;
 import feign.RequestInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -113,5 +116,9 @@ public class SolClientApplicationConfig {
         return new SpaceConfig(spaceRepository, spaceIdGenerator);
     }
 
+    @Bean
+    public TaskConfig taskConfig(TaskRepository taskRepository, TaskIdGenerator<?> taskIdGenerator, SolUserConfig solUserConfig, SpaceConfig spaceConfig){
+        return new TaskConfig(taskRepository, taskIdGenerator, solUserConfig.meUseCase(), spaceConfig.findSpaceByIdUseCase());
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.sol.client.config;
 
 import io.swagger.models.auth.In;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -22,7 +23,7 @@ import java.util.List;
 @Configuration
 public class SwaggerConfig {
 
-
+    @Bean
     public Docket apiV1() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(new ApiInfoBuilder()

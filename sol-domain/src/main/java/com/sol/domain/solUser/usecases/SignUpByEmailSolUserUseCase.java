@@ -6,7 +6,6 @@ import com.sol.domain.base.entity.Icon;
 import com.sol.domain.solUser.entity.Credential;
 import com.sol.domain.solUser.entity.Setting;
 import com.sol.domain.solUser.entity.SolUserEntity;
-import com.sol.domain.solUser.exceptions.SolUserExistException;
 import com.sol.domain.solUser.port.SolUserIdGenerator;
 import com.sol.domain.solUser.port.SolUserRepository;
 import com.sol.domain.space.entity.SpaceEntity;
