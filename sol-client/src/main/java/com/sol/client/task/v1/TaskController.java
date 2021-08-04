@@ -1,27 +1,15 @@
 package com.sol.client.task.v1;
 
 import com.rcore.domain.commons.usecase.UseCaseExecutor;
-import com.rcore.domain.commons.usecase.model.FiltersInputValues;
 import com.rcore.domain.commons.usecase.model.IdInputValues;
-import com.rcore.rest.api.commons.response.OkApiResponse;
-import com.rcore.rest.api.commons.response.SearchApiResponse;
 import com.rcore.rest.api.commons.response.SuccessApiResponse;
 import com.rcore.rest.api.spring.security.CredentialPrincipal;
-import com.rcore.rest.api.spring.security.CurrentCredential;
-import com.sol.domain.task.usecases.FindTaskByIdUseCase;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-
-import com.sol.client.task.v1.request.CreateTaskRequest;
-import com.sol.client.task.v1.request.UpdateTaskRequest;
-import com.sol.client.task.v1.request.SearchTaskRequest;
 import com.sol.client.task.v1.mappers.TaskResponseMapper;
+import com.sol.client.task.v1.request.CreateTaskRequest;
 import com.sol.client.task.v1.response.TaskResponse;
 import com.sol.domain.task.config.TaskConfig;
-import com.sol.domain.task.exceptions.TaskNotFoundException;
-import springfox.documentation.annotations.ApiIgnore;
-
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component("taskControllerV1")
