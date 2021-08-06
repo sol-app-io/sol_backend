@@ -10,9 +10,9 @@ public class Icon {
         EMOJI
     }
 
-    public static Icon of(String data){
+    public static Icon of(String emoji){
         Icon icon = new Icon();
-        icon.setData(data);
+        icon.setData(emoji);
         icon.setType(Type.EMOJI);
         return icon;
     }

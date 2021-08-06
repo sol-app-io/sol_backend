@@ -5,6 +5,7 @@ import com.rcore.rest.api.commons.response.SuccessApiResponse;
 import com.rcore.rest.api.spring.security.CredentialPrincipal;
 import com.rcore.rest.api.spring.security.CurrentCredential;
 import com.sol.client.base.controller.BaseApiController;
+import com.sol.client.space.v1.api.request.SpaceEditRequest;
 import com.sol.client.space.v1.api.request.SpaceRequest;
 import com.sol.client.space.v1.api.response.SpaceResponse;
 import com.sol.client.space.v1.mapper.SpaceApiMapper;
@@ -21,6 +22,7 @@ import com.sol.domain.space.exceptions.HasNoAccessToSpaceException;
 import com.sol.domain.space.usecases.CreateSpaceUseCase;
 import com.sol.domain.space.usecases.FindSpaceByIdUseCase;
 import com.sol.domain.space.usecases.FindSpaceByOwnerIdUseCase;
+import com.sol.domain.space.usecases.UpdateSpaceUseCase;
 import com.sol.domain.task.config.TaskConfig;
 import com.sol.domain.task.entity.TaskEntity;
 import com.sol.domain.task.usecases.FindTaskBySpaceIdUseCase;
@@ -104,6 +106,32 @@ public class SpaceController extends BaseApiController {
         spaceResponse.setTasks(taskEntities);
 
         return SuccessApiResponse.of(spaceResponse);
+    }
+
+    @PatchMapping(value = SpaceRoute.SINGLETON)
+    public SuccessApiResponse<SpaceResponse> singleton(
+            @PathVariable String id,
+            @RequestBody SpaceEditRequest request,
+            @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal) {
+
+        SolUserEntity solUserEntity = solUserConfig
+                .meUseCase().execute(
+                        MeUseCase.InputValues
+                                .builder()
+                                .credentialId(credentialPrincipal.getId())
+                                .build()).getEntity();
+
+        SpaceEntity spaceEntity = spaceConfig
+                .updateSpaceUseCase()
+                .execute(
+                        UpdateSpaceUseCase.InputValues.of(
+                                id,
+                                request.getTitle(),
+                                Icon.of(request.getIcon()),
+                                solUserEntity.getId()))
+                .getEntity();
+
+        return SuccessApiResponse.of(mapper.mapper(spaceEntity));
     }
 
 

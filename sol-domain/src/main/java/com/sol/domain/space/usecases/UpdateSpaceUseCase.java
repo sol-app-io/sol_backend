@@ -3,6 +3,7 @@ package com.sol.domain.space.usecases;
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
 import com.sol.domain.base.entity.Icon;
+import com.sol.domain.space.exceptions.HasNoAccessToSpaceException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +22,18 @@ public class UpdateSpaceUseCase extends UseCase<UpdateSpaceUseCase.InputValues, 
     @Override
     public SingletonEntityOutputValues<SpaceEntity> execute(InputValues inputValues) {
 
-        SpaceEntity spaceEntity = spaceRepository.findById(inputValues.getId())
-                .orElseThrow(SpaceNotFoundException::new);
+        SpaceEntity spaceEntity =
+                spaceRepository
+                        .findById(inputValues.getId())
+                        .orElseThrow(SpaceNotFoundException::new);
+
+        if(spaceEntity.checkAccess(inputValues.currentUserId) == false){
+            throw new HasNoAccessToSpaceException();
+        }
 
         // Тут изменение данных
         spaceEntity.setTitle(inputValues.title);
         spaceEntity.setIcon(inputValues.icon);
-        spaceEntity.setOwnerId(inputValues.ownerId);
-        
         spaceEntity = spaceRepository.save(spaceEntity);
 
         return SingletonEntityOutputValues.of(spaceEntity);
@@ -43,7 +48,7 @@ public class UpdateSpaceUseCase extends UseCase<UpdateSpaceUseCase.InputValues, 
         //указываются данные которые необходимо изменить
         protected String title;
         protected Icon icon;
-        protected String ownerId;
+        protected String currentUserId;
     }
 
 }
