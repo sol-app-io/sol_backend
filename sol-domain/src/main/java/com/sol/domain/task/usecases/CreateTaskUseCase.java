@@ -9,6 +9,8 @@ import com.sol.domain.solUser.entity.SolUserEntity;
 import com.sol.domain.solUser.usecases.MeUseCase;
 import com.sol.domain.space.entity.SpaceEntity;
 import com.sol.domain.space.exceptions.HasNoAccessToSpaceException;
+import com.sol.domain.space.exceptions.SpaceNotFoundException;
+import com.sol.domain.space.usecases.FindInboxSpaceByOwnerIdUseCase;
 import com.sol.domain.space.usecases.FindSpaceByIdUseCase;
 import com.sol.domain.task.exceptions.HasNoAccessToTaskException;
 import lombok.AllArgsConstructor;
@@ -22,6 +24,7 @@ import com.sol.domain.task.port.TaskRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Создание сущности
@@ -31,38 +34,44 @@ public class CreateTaskUseCase extends AbstractCreateUseCase<TaskEntity, TaskIdG
     private final MeUseCase meUseCase;
     private final FindSpaceByIdUseCase findSpaceByIdUseCase;
     private final FindTaskByIdUseCase findTaskByIdUseCase;
+    private final FindInboxSpaceByOwnerIdUseCase findInboxSpaceByOwnerIdUseCase;
 
     public CreateTaskUseCase(
             TaskRepository repository,
             TaskIdGenerator idGenerator,
             MeUseCase meUseCase,
             FindSpaceByIdUseCase findSpaceByIdUseCase,
-            FindTaskByIdUseCase findTaskByIdUseCase) {
+            FindTaskByIdUseCase findTaskByIdUseCase,
+            FindInboxSpaceByOwnerIdUseCase findInboxSpaceByOwnerIdUseCase) {
         super(repository, idGenerator);
         this.meUseCase = meUseCase;
         this.findSpaceByIdUseCase = findSpaceByIdUseCase;
         this.findTaskByIdUseCase = findTaskByIdUseCase;
+        this.findInboxSpaceByOwnerIdUseCase = findInboxSpaceByOwnerIdUseCase;
     }
 
-    private SolUserEntity solUserEntity(String credentialId){
-        return  meUseCase.execute(
+    private SolUserEntity solUserEntity(String credentialId) {
+        return meUseCase.execute(
                 MeUseCase.InputValues
                         .builder()
                         .credentialId(credentialId).build())
                 .getEntity();
     }
 
-    private SpaceEntity spaceEntity(String spaceId){
-        return findSpaceByIdUseCase.execute(
-                IdInputValues.of(spaceId)).getEntity().get();
+    private Optional<SpaceEntity> spaceEntity(String spaceId, String solUserId) {
+        if (spaceId == null) {
+            return Optional.ofNullable(
+                    findInboxSpaceByOwnerIdUseCase.execute(
+                            FindInboxSpaceByOwnerIdUseCase.InputValues.of(solUserId)).getEntity());
+        }
+        return findSpaceByIdUseCase.execute(IdInputValues.of(spaceId)).getEntity();
     }
 
-    private TaskEntity parentTask(String parentTaskId){
-        try{
+    private TaskEntity parentTask(String parentTaskId) {
+        try {
             TaskEntity parentTask = findTaskByIdUseCase.execute(IdInputValues.of(parentTaskId)).getEntity().get();
             return parentTask;
-        }catch (Exception e){
-
+        } catch (Exception e) {
         }
         return null;
     }
@@ -71,18 +80,22 @@ public class CreateTaskUseCase extends AbstractCreateUseCase<TaskEntity, TaskIdG
     public SingletonEntityOutputValues<TaskEntity> execute(InputValues inputValues) {
 
         SolUserEntity solUserEntity = solUserEntity(inputValues.getCredentialId());
-        SpaceEntity spaceEntity = spaceEntity(inputValues.getSpaceId());
-        if(spaceEntity.checkAccess(solUserEntity.getId()) == false){
+        Optional<SpaceEntity> spaceEntityOptional = spaceEntity(inputValues.getSpaceId(), solUserEntity.getId());
+        if (spaceEntityOptional.isEmpty()) throw new SpaceNotFoundException();
+
+        SpaceEntity spaceEntity = spaceEntityOptional.get();
+
+        if (spaceEntity.checkAccess(solUserEntity.getId()) == false) {
             throw new HasNoAccessToSpaceException();
         }
 
-        TaskEntity parentTask =  parentTask(inputValues.getParentTaskId());
-        if(parentTask != null){
-            if(parentTask.checkAccessSpace(spaceEntity.getId()) == false){
+        TaskEntity parentTask = parentTask(inputValues.getParentTaskId());
+        if (parentTask != null) {
+            if (parentTask.checkAccessSpace(spaceEntity.getId()) == false) {
                 throw new HasNoAccessToTaskException();
             }
 
-            if(parentTask.checkAccess(solUserEntity.getId()) == false){
+            if (parentTask.checkAccess(solUserEntity.getId()) == false) {
                 throw new HasNoAccessToTaskException();
             }
         }
@@ -94,10 +107,10 @@ public class CreateTaskUseCase extends AbstractCreateUseCase<TaskEntity, TaskIdG
         taskEntity.setSpaceId(inputValues.spaceId);
         taskEntity.setTitle(inputValues.title);
         taskEntity.setIcon(inputValues.icon);
-        taskEntity.setViewIds(inputValues.viewIds);
-        taskEntity.setPlanningPoints(inputValues.planningPoints);
-        taskEntity.setDeadline(inputValues.deadline);
-        taskEntity.setRepeatTaskConfId(inputValues.repeatTaskConfId);
+        taskEntity.setViewIds(new ArrayList<>());
+        taskEntity.setPlanningPoints(new ArrayList<>());
+        taskEntity.setDeadline(null);
+        taskEntity.setRepeatTaskConfId(null);
         taskEntity.setCreatedFromRepeatTaskId(null);
         taskEntity.setPics(new ArrayList<>());
         taskEntity.setFiles(new ArrayList<>());
@@ -117,42 +130,25 @@ public class CreateTaskUseCase extends AbstractCreateUseCase<TaskEntity, TaskIdG
     @Data
     public static class InputValues implements UseCase.InputValues {
         /**
-        * ownerId 
-        */
+         * ownerId
+         */
         protected String credentialId;
         /**
-        * parentTaskId 
-        */
+         * parentTaskId
+         */
         protected String parentTaskId;
         /**
-        * spaceId 
-        */
+         * spaceId
+         */
         protected String spaceId;
         /**
-        * Заголовок 
-        */
+         * Заголовок
+         */
         protected String title;
         /**
-        * icon 
-        */
+         * icon
+         */
         protected Icon icon;
-        /**
-        * viewIds 
-        */
-        protected List<String> viewIds;
-        /**
-        * planningPoints 
-        */
-        protected List<String> planningPoints;
-        /**
-        * deadline 
-        */
-        protected LocalDateTime deadline;
-        /**
-        * repeatTaskConfId 
-        */
-        protected String repeatTaskConfId;
-
 
     }
 }

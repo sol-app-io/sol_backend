@@ -1,6 +1,7 @@
 package com.sol.domain.task.config;
 
 import com.sol.domain.solUser.usecases.MeUseCase;
+import com.sol.domain.space.usecases.FindInboxSpaceByOwnerIdUseCase;
 import com.sol.domain.space.usecases.FindSpaceByIdUseCase;
 import com.sol.domain.task.usecases.*;
 import lombok.Getter;
@@ -22,9 +23,10 @@ public class TaskConfig {
             TaskRepository taskRepository,
             TaskIdGenerator<?> taskIdGenerator,
             MeUseCase meUseCase,
-            FindSpaceByIdUseCase findSpaceByIdUseCase) {
+            FindSpaceByIdUseCase findSpaceByIdUseCase,
+            FindInboxSpaceByOwnerIdUseCase findInboxSpaceByOwnerIdUseCase) {
         this.findTaskByIdUseCase = new FindTaskByIdUseCase(taskRepository);
-        this.createTaskUseCase = new CreateTaskUseCase(taskRepository, taskIdGenerator, meUseCase, findSpaceByIdUseCase, findTaskByIdUseCase);
+        this.createTaskUseCase = new CreateTaskUseCase(taskRepository, taskIdGenerator, meUseCase, findSpaceByIdUseCase, findTaskByIdUseCase, findInboxSpaceByOwnerIdUseCase);
         this.deleteTaskUseCase = new DeleteTaskUseCase(taskRepository);
         this.updateTaskUseCase = new UpdateTaskUseCase(taskRepository);
         this.findTaskUseCase = new FindTaskUseCase(taskRepository);

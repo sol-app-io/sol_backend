@@ -15,6 +15,7 @@ public class SpaceConfig {
     private final FindSpaceByIdUseCase findSpaceByIdUseCase;
     private final UpdateSpaceUseCase updateSpaceUseCase;
     private final FindSpaceByOwnerIdUseCase findSpaceByOwnerIdUseCase;
+    private final FindInboxSpaceByOwnerIdUseCase findInboxSpaceByOwnerIdUseCase;
 
     public SpaceConfig(SpaceRepository spaceRepository, SpaceIdGenerator<?> spaceIdGenerator) {
         this.createSpaceUseCase = new CreateSpaceUseCase(spaceRepository, spaceIdGenerator);
@@ -22,5 +23,6 @@ public class SpaceConfig {
         this.findSpaceByIdUseCase = new FindSpaceByIdUseCase(spaceRepository);
         this.updateSpaceUseCase = new UpdateSpaceUseCase(spaceRepository);
         this.findSpaceByOwnerIdUseCase = new FindSpaceByOwnerIdUseCase(spaceRepository);
+        this.findInboxSpaceByOwnerIdUseCase = new FindInboxSpaceByOwnerIdUseCase(spaceRepository);
     }
 }

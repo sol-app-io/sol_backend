@@ -26,14 +26,14 @@ public class CreateTaskRequest {
     protected String title;
     @ApiModelProperty("icon")
     protected Icon icon;
-    @ApiModelProperty("viewIds")
-    protected List<String> viewIds;
-    @ApiModelProperty("planningPoints")
-    protected List<String> planningPoints;
-    @ApiModelProperty("deadline")
-    protected LocalDateTime deadline;
-    @ApiModelProperty("repeatTaskConfId")
-    protected String repeatTaskConfId;
+//    @ApiModelProperty("viewIds")
+//    protected List<String> viewIds;
+//    @ApiModelProperty("planningPoints")
+//    protected List<String> planningPoints;
+//    @ApiModelProperty("deadline")
+//    protected LocalDateTime deadline;
+//    @ApiModelProperty("repeatTaskConfId")
+//    protected String repeatTaskConfId;
 
     public CreateTaskUseCase.InputValues toInputValues(String credentialId) {
         return CreateTaskUseCase.InputValues
@@ -43,10 +43,10 @@ public class CreateTaskRequest {
                 .spaceId(spaceId)
                 .title(title)
                 .icon(icon)
-                .viewIds(viewIds)
-                .planningPoints(planningPoints)
-                .deadline(deadline)
-                .repeatTaskConfId(repeatTaskConfId)
+                //.viewIds(viewIds)
+                //.planningPoints(planningPoints)
+                //.deadline(deadline)
+                //.repeatTaskConfId(repeatTaskConfId)
                 .build();
     }
 
