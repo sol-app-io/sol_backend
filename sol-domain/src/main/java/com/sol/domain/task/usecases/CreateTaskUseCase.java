@@ -103,8 +103,8 @@ public class CreateTaskUseCase extends AbstractCreateUseCase<TaskEntity, TaskIdG
         TaskEntity taskEntity = new TaskEntity(idGenerator.generate());
 
         taskEntity.setOwnerId(solUserEntity.getId());
-        taskEntity.setParentTaskId(inputValues.parentTaskId);
-        taskEntity.setSpaceId(inputValues.spaceId);
+        taskEntity.setParentTaskId(parentTask.getId());
+        taskEntity.setSpaceId(spaceEntity.getId());
         taskEntity.setTitle(inputValues.title);
         taskEntity.setIcon(inputValues.icon);
         taskEntity.setViewIds(new ArrayList<>());
