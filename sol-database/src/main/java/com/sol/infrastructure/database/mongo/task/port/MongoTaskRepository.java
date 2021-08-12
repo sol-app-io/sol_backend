@@ -66,4 +66,11 @@ public class MongoTaskRepository implements TaskRepository {
         Query query = new Query(criteria);
         return mongoTemplate.find(query, TaskDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList());
     }
+
+    @Override
+    public List<TaskEntity> findByParentId(String parentId) {
+        Criteria criteria = Criteria.where("parentTaskId").is(ObjectIdHelper.mapOrDie(parentId));
+        Query query = new Query(criteria);
+        return mongoTemplate.find(query, TaskDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList());
+    }
 }
