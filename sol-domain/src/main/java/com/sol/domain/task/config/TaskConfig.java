@@ -19,6 +19,8 @@ public class TaskConfig {
     private final FindTaskUseCase findTaskUseCase;
     private final FindTaskBySpaceIdUseCase findTaskBySpaceIdUseCase;
     private final FindTaskByParentUseCase findTaskByParentUseCase;
+    private final MakeTaskDoneUseCase makeTaskDoneUseCase;
+    private final MakeTaskOpenUseCase makeTaskOpenUseCase;
 
     public TaskConfig(
             TaskRepository taskRepository,
@@ -33,5 +35,7 @@ public class TaskConfig {
         this.findTaskUseCase = new FindTaskUseCase(taskRepository);
         this.findTaskBySpaceIdUseCase = new FindTaskBySpaceIdUseCase(taskRepository);
         this.findTaskByParentUseCase = new FindTaskByParentUseCase(taskRepository);
+        this.makeTaskDoneUseCase = new MakeTaskDoneUseCase(taskRepository);
+        this.makeTaskOpenUseCase = new MakeTaskOpenUseCase(taskRepository);
     }
 }

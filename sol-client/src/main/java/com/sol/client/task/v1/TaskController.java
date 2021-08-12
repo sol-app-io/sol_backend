@@ -13,6 +13,8 @@ import com.sol.domain.solUser.usecases.MeUseCase;
 import com.sol.domain.task.config.TaskConfig;
 import com.sol.domain.task.entity.TaskEntity;
 import com.sol.domain.task.usecases.FindTaskByParentUseCase;
+import com.sol.domain.task.usecases.MakeTaskDoneUseCase;
+import com.sol.domain.task.usecases.MakeTaskOpenUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -53,6 +55,32 @@ public class TaskController implements TaskResource {
         );
 
         taskResponse.setChild(taskEntities);
+        return SuccessApiResponse.of(taskResponse);
+    }
+
+    @Override
+    public SuccessApiResponse<TaskResponse> done(String id, CredentialPrincipal credentialPrincipal) {
+        SolUserEntity solUserEntity = solUserConfig.meUseCase().execute(MeUseCase.InputValues.builder().credentialId(credentialPrincipal.getId()).build()).getEntity();
+
+        TaskResponse taskResponse = useCaseExecutor.execute(
+                taskConfig.makeTaskDoneUseCase(),
+                MakeTaskDoneUseCase.InputValues.of(id, solUserEntity.getId()),
+                output -> TaskResponseMapper.map(output.getEntity())
+        );
+
+        return SuccessApiResponse.of(taskResponse);
+    }
+
+    @Override
+    public SuccessApiResponse<TaskResponse> open(String id, CredentialPrincipal credentialPrincipal) {
+        SolUserEntity solUserEntity = solUserConfig.meUseCase().execute(MeUseCase.InputValues.builder().credentialId(credentialPrincipal.getId()).build()).getEntity();
+
+        TaskResponse taskResponse = useCaseExecutor.execute(
+                taskConfig.makeTaskOpenUseCase(),
+                MakeTaskOpenUseCase.InputValues.of(id, solUserEntity.getId()),
+                output -> TaskResponseMapper.map(output.getEntity())
+        );
+
         return SuccessApiResponse.of(taskResponse);
     }
 
