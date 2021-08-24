@@ -6,12 +6,14 @@ import com.rcore.rest.api.commons.response.SuccessApiResponse;
 import com.rcore.rest.api.spring.security.CredentialPrincipal;
 import com.sol.client.task.v1.mappers.TaskResponseMapper;
 import com.sol.client.task.v1.request.CreateTaskRequest;
+import com.sol.client.task.v1.request.TaskEditTitleRequest;
 import com.sol.client.task.v1.response.TaskResponse;
 import com.sol.domain.solUser.config.SolUserConfig;
 import com.sol.domain.solUser.entity.SolUserEntity;
 import com.sol.domain.solUser.usecases.MeUseCase;
 import com.sol.domain.task.config.TaskConfig;
 import com.sol.domain.task.entity.TaskEntity;
+import com.sol.domain.task.usecases.EditTitleIconTaskUseCase;
 import com.sol.domain.task.usecases.FindTaskByParentUseCase;
 import com.sol.domain.task.usecases.MakeTaskDoneUseCase;
 import com.sol.domain.task.usecases.MakeTaskOpenUseCase;
@@ -78,6 +80,21 @@ public class TaskController implements TaskResource {
         TaskResponse taskResponse = useCaseExecutor.execute(
                 taskConfig.makeTaskOpenUseCase(),
                 MakeTaskOpenUseCase.InputValues.of(id, solUserEntity.getId()),
+                output -> TaskResponseMapper.map(output.getEntity())
+        );
+
+        return SuccessApiResponse.of(taskResponse);
+    }
+
+    @Override
+    public SuccessApiResponse<TaskResponse> editHeader(String id, TaskEditTitleRequest request, CredentialPrincipal credentialPrincipal) {
+        SolUserEntity solUserEntity = solUserConfig.meUseCase().execute(
+                MeUseCase.InputValues.builder().credentialId(credentialPrincipal.getId()).build()
+        ).getEntity();
+
+        TaskResponse taskResponse = useCaseExecutor.execute(
+                taskConfig.editTitleIconTaskUseCase(),
+                EditTitleIconTaskUseCase.InputValues.of(id, request.getTitle(), request.getIcon(), solUserEntity.getId()),
                 output -> TaskResponseMapper.map(output.getEntity())
         );
 

@@ -5,6 +5,7 @@ import com.rcore.rest.api.commons.response.SearchApiResponse;
 import com.rcore.rest.api.commons.response.SuccessApiResponse;
 import com.rcore.rest.api.spring.security.CredentialPrincipal;
 import com.rcore.rest.api.spring.security.CurrentCredential;
+import com.sol.client.task.v1.request.TaskEditTitleRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
@@ -21,7 +22,7 @@ public interface TaskResource {
 
     @ApiOperation("Создание нового документа в ресурсе")
     @PostMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
-    SuccessApiResponse<TaskResponse> create(@RequestBody CreateTaskRequest request,@ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    SuccessApiResponse<TaskResponse> create(@RequestBody CreateTaskRequest request, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
 
 //    @ApiOperation("Обновление документа в ресурсе")
 //    @PutMapping(value = Routes.SINGLETON, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -36,14 +37,21 @@ public interface TaskResource {
 //    SuccessApiResponse<SearchApiResponse<TaskResponse>> collection(SearchTaskRequest request,@ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
 
     @ApiOperation("Получение продукта по ID")
-    @GetMapping(value =  Routes.SINGLETON, produces = MediaType.APPLICATION_JSON_VALUE)
-    SuccessApiResponse<TaskResponse>  singleton(@PathVariable("id") String id,@ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    @GetMapping(value = Routes.SINGLETON, produces = MediaType.APPLICATION_JSON_VALUE)
+    SuccessApiResponse<TaskResponse> singleton(@PathVariable("id") String id, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
 
     @ApiOperation("Make task done")
-    @PostMapping(value =  Routes.DONE, produces = MediaType.APPLICATION_JSON_VALUE)
-    SuccessApiResponse<TaskResponse>  done(@PathVariable("id") String id,@ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    @PostMapping(value = Routes.DONE, produces = MediaType.APPLICATION_JSON_VALUE)
+    SuccessApiResponse<TaskResponse> done(@PathVariable("id") String id, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
 
     @ApiOperation("Make task open")
-    @PostMapping(value =  Routes.OPEN, produces = MediaType.APPLICATION_JSON_VALUE)
-    SuccessApiResponse<TaskResponse>  open(@PathVariable("id") String id,@ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    @PostMapping(value = Routes.OPEN, produces = MediaType.APPLICATION_JSON_VALUE)
+    SuccessApiResponse<TaskResponse> open(@PathVariable("id") String id, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+
+    @ApiOperation("Edit title & icon")
+    @PatchMapping(value = Routes.SINGLETON, produces = MediaType.APPLICATION_JSON_VALUE)
+    SuccessApiResponse<TaskResponse> editHeader(
+            @PathVariable("id") String id,
+            @RequestBody TaskEditTitleRequest request,
+            @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
 }

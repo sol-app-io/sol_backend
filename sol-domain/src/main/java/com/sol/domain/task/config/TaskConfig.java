@@ -16,6 +16,7 @@ public class TaskConfig {
     private final DeleteTaskUseCase deleteTaskUseCase;
     private final FindTaskByIdUseCase findTaskByIdUseCase;
     private final UpdateTaskUseCase updateTaskUseCase;
+    private final EditTitleIconTaskUseCase editTitleIconTaskUseCase;
     private final FindTaskUseCase findTaskUseCase;
     private final FindTaskBySpaceIdUseCase findTaskBySpaceIdUseCase;
     private final FindTaskByParentUseCase findTaskByParentUseCase;
@@ -32,6 +33,7 @@ public class TaskConfig {
         this.createTaskUseCase = new CreateTaskUseCase(taskRepository, taskIdGenerator, meUseCase, findSpaceByIdUseCase, findTaskByIdUseCase, findInboxSpaceByOwnerIdUseCase);
         this.deleteTaskUseCase = new DeleteTaskUseCase(taskRepository);
         this.updateTaskUseCase = new UpdateTaskUseCase(taskRepository);
+        this.editTitleIconTaskUseCase = new EditTitleIconTaskUseCase(taskRepository);
         this.findTaskUseCase = new FindTaskUseCase(taskRepository);
         this.findTaskBySpaceIdUseCase = new FindTaskBySpaceIdUseCase(taskRepository);
         this.findTaskByParentUseCase = new FindTaskByParentUseCase(taskRepository);
