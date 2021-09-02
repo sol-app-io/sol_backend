@@ -5,6 +5,7 @@ import com.rcore.rest.api.commons.response.SuccessApiResponse;
 import com.rcore.rest.api.spring.security.CredentialPrincipal;
 import com.rcore.rest.api.spring.security.CurrentCredential;
 import com.sol.client.base.controller.BaseApiController;
+import com.sol.client.space.v1.api.request.ChangeSortSpaceRequest;
 import com.sol.client.space.v1.api.request.SpaceEditRequest;
 import com.sol.client.space.v1.api.request.SpaceRequest;
 import com.sol.client.space.v1.api.response.SpaceResponse;
@@ -19,10 +20,7 @@ import com.sol.domain.solUser.usecases.MeUseCase;
 import com.sol.domain.space.config.SpaceConfig;
 import com.sol.domain.space.entity.SpaceEntity;
 import com.sol.domain.space.exceptions.HasNoAccessToSpaceException;
-import com.sol.domain.space.usecases.CreateSpaceUseCase;
-import com.sol.domain.space.usecases.FindSpaceByIdUseCase;
-import com.sol.domain.space.usecases.FindSpaceByOwnerIdUseCase;
-import com.sol.domain.space.usecases.UpdateSpaceUseCase;
+import com.sol.domain.space.usecases.*;
 import com.sol.domain.task.config.TaskConfig;
 import com.sol.domain.task.entity.TaskEntity;
 import com.sol.domain.task.usecases.FindTaskBySpaceIdUseCase;
@@ -94,7 +92,7 @@ public class SpaceController extends BaseApiController {
                                 .credentialId(credentialPrincipal.getId())
                                 .build()).getEntity();
 
-        if(spaceEntity.checkAccess(solUserEntity.getId()) == false) throw new HasNoAccessToSpaceException();
+        if (spaceEntity.checkAccess(solUserEntity.getId()) == false) throw new HasNoAccessToSpaceException();
 
         SpaceResponse spaceResponse = mapper.mapper(spaceEntity);
 
@@ -134,5 +132,23 @@ public class SpaceController extends BaseApiController {
         return SuccessApiResponse.of(mapper.mapper(spaceEntity));
     }
 
+    @PostMapping(value = SpaceRoute.SORT_CHANGE)
+    public SuccessApiResponse<List<SpaceResponse>> changeSort(
+            @RequestBody ChangeSortSpaceRequest request,
+            @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal
+    ) {
+        SolUserEntity solUserEntity = solUserConfig.meUseCase().execute(
+                MeUseCase.InputValues
+                        .builder()
+                        .credentialId(credentialPrincipal.getId())
+                        .build()
+        ).getEntity();
+
+        List<SpaceEntity> spaceEntities = spaceConfig.changeSpaceSortUseCase().execute(
+                ChangeSpaceSortUseCase.InputValues.of(request.getSpaces(), solUserEntity.getId())
+        ).getEntity();
+
+        return SuccessApiResponse.of(spaceEntities.stream().map(mapper::mapper).collect(Collectors.toList()));
+    }
 
 }

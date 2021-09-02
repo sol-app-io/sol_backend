@@ -44,9 +44,7 @@ public class SpaceEntity extends BaseEntity<String> {
     /************************************ Constructors ************************************/
 
     public SpaceEntity(String id) {
-
         this.id = id;
-
     }
 
     /************************************ Methods ************************************/
