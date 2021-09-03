@@ -8,5 +8,10 @@ import java.util.List;
 
 public interface TaskRepository extends CRUDRepository<String, TaskEntity, TaskFilters> {
     List<TaskEntity> findBySpaceId(String spaceId);
+
     List<TaskEntity> findByParentId(String parentId);
+
+    Long countBySpaceId(String spaceId);
+
+    Long countByParentId(String parentId);
 }

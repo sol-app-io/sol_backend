@@ -5,6 +5,7 @@ import com.rcore.database.mongo.commons.utils.CollectionNameUtils;
 import com.rcore.domain.commons.port.dto.SearchResult;
 import com.sol.infrastructure.database.mongo.base.ObjectIdHelper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -64,6 +65,7 @@ public class MongoTaskRepository implements TaskRepository {
     public List<TaskEntity> findBySpaceId(String spaceId) {
         Criteria criteria = Criteria.where("spaceId").is(ObjectIdHelper.mapOrDie(spaceId)).and("parentTaskId").exists(false);
         Query query = new Query(criteria);
+        query = query.with(Sort.by(Sort.Direction.ASC, "sortNum"));
         return mongoTemplate.find(query, TaskDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList());
     }
 
@@ -71,6 +73,21 @@ public class MongoTaskRepository implements TaskRepository {
     public List<TaskEntity> findByParentId(String parentId) {
         Criteria criteria = Criteria.where("parentTaskId").is(ObjectIdHelper.mapOrDie(parentId));
         Query query = new Query(criteria);
+        query = query.with(Sort.by(Sort.Direction.ASC, "sortNum"));
         return mongoTemplate.find(query, TaskDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList());
+    }
+
+    @Override
+    public Long countBySpaceId(String spaceId) {
+        Criteria criteria = Criteria.where("spaceId").is(ObjectIdHelper.mapOrDie(spaceId)).and("parentTaskId").exists(false);
+        Query query = new Query(criteria);
+        return mongoTemplate.count(query, TaskDoc.class);
+    }
+
+    @Override
+    public Long countByParentId(String parentId) {
+        Criteria criteria = Criteria.where("parentTaskId").is(ObjectIdHelper.mapOrDie(parentId));
+        Query query = new Query(criteria);
+        return mongoTemplate.count(query, TaskDoc.class);
     }
 }

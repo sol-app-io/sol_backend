@@ -119,6 +119,12 @@ public class CreateTaskUseCase extends AbstractCreateUseCase<TaskEntity, TaskIdG
         taskEntity.setPointWeight(0);
         taskEntity.setStatus(TaskStatus.OPEN);
 
+        if(inputValues.parentTaskId == null){
+            taskEntity.setSortNum(repository.countBySpaceId(inputValues.spaceId).intValue());
+        }else{
+            taskEntity.setSortNum(repository.countByParentId(inputValues.parentTaskId).intValue());
+        }
+
         taskEntity = repository.save(taskEntity);
 
         return SingletonEntityOutputValues.of(taskEntity);
