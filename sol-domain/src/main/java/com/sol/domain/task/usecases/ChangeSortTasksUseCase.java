@@ -30,6 +30,9 @@ public class ChangeSortTasksUseCase extends UseCase<ChangeSortTasksUseCase.Input
         for (String taskId : inputValues.tasks) {
             TaskEntity task = taskRepository.findById(taskId).orElseThrow(TaskNotFoundException::new);
             if (task.checkAccess(inputValues.currentSolUserId)) {
+                System.out.println("task - " + task.getId());
+                System.out.println("user - " + inputValues.currentSolUserId);
+                System.out.println("----" );
                 throw new HasNoAccessToTaskException();
             }
             tasks.add(task);
