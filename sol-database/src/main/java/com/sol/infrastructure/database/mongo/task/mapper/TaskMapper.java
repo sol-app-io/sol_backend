@@ -39,6 +39,7 @@ public class TaskMapper implements ExampleDataMapper<TaskEntity, TaskDoc> {
                 .externalIds(entity.getExternalIds())
                 .pointWeight(entity.getPointWeight())
                 .status(entity.getStatus())
+                .sortNum(entity.getSortNum())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
@@ -65,6 +66,7 @@ public class TaskMapper implements ExampleDataMapper<TaskEntity, TaskDoc> {
                 .externalIds(doc.getExternalIds())
                 .pointWeight(doc.getPointWeight())
                 .status(doc.getStatus())
+                .sortNum(doc.getSortNum())
                 .createdAt(doc.getCreatedAt())
                 .updatedAt(doc.getUpdatedAt())
                 .build();

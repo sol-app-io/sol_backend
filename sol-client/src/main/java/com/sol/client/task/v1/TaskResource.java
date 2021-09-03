@@ -5,16 +5,15 @@ import com.rcore.rest.api.commons.response.SearchApiResponse;
 import com.rcore.rest.api.commons.response.SuccessApiResponse;
 import com.rcore.rest.api.spring.security.CredentialPrincipal;
 import com.rcore.rest.api.spring.security.CurrentCredential;
-import com.sol.client.task.v1.request.TaskEditTitleRequest;
+import com.sol.client.task.v1.request.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import com.sol.client.task.v1.request.CreateTaskRequest;
-import com.sol.client.task.v1.request.UpdateTaskRequest;
-import com.sol.client.task.v1.request.SearchTaskRequest;
 import com.sol.client.task.v1.response.TaskResponse;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.List;
 
 //@Api(tags = "Task API", description = "Task docs")
 @RestController
@@ -54,4 +53,9 @@ public interface TaskResource {
             @PathVariable("id") String id,
             @RequestBody TaskEditTitleRequest request,
             @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+
+    @ApiOperation("Tasks")
+    @PostMapping(value = Routes.SORT_NUM, produces = MediaType.APPLICATION_JSON_VALUE)
+    SuccessApiResponse<List<TaskResponse>> sortNum(@RequestBody ChangeSortOfTasksRequest request, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+
 }

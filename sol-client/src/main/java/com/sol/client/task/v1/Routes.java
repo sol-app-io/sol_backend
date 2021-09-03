@@ -9,4 +9,5 @@ public class Routes {
     public static final String OPEN = SINGLETON + "/open";
     public static final String PARENT = ROOT + "/parent";
     public static final String SPACE = ROOT + "/space";
+    public static final String SORT_NUM = ROOT + "/sort";
 }

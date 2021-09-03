@@ -22,6 +22,7 @@ public class TaskConfig {
     private final FindTaskByParentUseCase findTaskByParentUseCase;
     private final MakeTaskDoneUseCase makeTaskDoneUseCase;
     private final MakeTaskOpenUseCase makeTaskOpenUseCase;
+    private final ChangeSortTasksUseCase changeSortTasksUseCase;
 
     public TaskConfig(
             TaskRepository taskRepository,
@@ -39,5 +40,6 @@ public class TaskConfig {
         this.findTaskByParentUseCase = new FindTaskByParentUseCase(taskRepository);
         this.makeTaskDoneUseCase = new MakeTaskDoneUseCase(taskRepository);
         this.makeTaskOpenUseCase = new MakeTaskOpenUseCase(taskRepository);
+        this.changeSortTasksUseCase = new ChangeSortTasksUseCase(taskRepository);
     }
 }

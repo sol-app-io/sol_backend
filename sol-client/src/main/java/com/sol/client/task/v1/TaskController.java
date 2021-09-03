@@ -4,7 +4,9 @@ import com.rcore.domain.commons.usecase.UseCaseExecutor;
 import com.rcore.domain.commons.usecase.model.IdInputValues;
 import com.rcore.rest.api.commons.response.SuccessApiResponse;
 import com.rcore.rest.api.spring.security.CredentialPrincipal;
+import com.rcore.rest.api.spring.security.CurrentCredential;
 import com.sol.client.task.v1.mappers.TaskResponseMapper;
+import com.sol.client.task.v1.request.ChangeSortOfTasksRequest;
 import com.sol.client.task.v1.request.CreateTaskRequest;
 import com.sol.client.task.v1.request.TaskEditTitleRequest;
 import com.sol.client.task.v1.response.TaskResponse;
@@ -13,12 +15,14 @@ import com.sol.domain.solUser.entity.SolUserEntity;
 import com.sol.domain.solUser.usecases.MeUseCase;
 import com.sol.domain.task.config.TaskConfig;
 import com.sol.domain.task.entity.TaskEntity;
-import com.sol.domain.task.usecases.EditTitleIconTaskUseCase;
-import com.sol.domain.task.usecases.FindTaskByParentUseCase;
-import com.sol.domain.task.usecases.MakeTaskDoneUseCase;
-import com.sol.domain.task.usecases.MakeTaskOpenUseCase;
+import com.sol.domain.task.usecases.*;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -99,6 +103,21 @@ public class TaskController implements TaskResource {
         );
 
         return SuccessApiResponse.of(taskResponse);
+    }
+
+    @Override
+    public SuccessApiResponse<List<TaskResponse>> sortNum(ChangeSortOfTasksRequest request, CredentialPrincipal credentialPrincipal){
+        SolUserEntity solUserEntity = solUserConfig.meUseCase().execute(
+                MeUseCase.InputValues.builder().credentialId(credentialPrincipal.getId()).build()
+        ).getEntity();
+
+        List<TaskResponse> tasks = useCaseExecutor.execute(
+                taskConfig.changeSortTasksUseCase(),
+                ChangeSortTasksUseCase.InputValues.of(request.getTasks(), solUserEntity.getId()),
+                output -> output.getEntity().stream().map(TaskResponseMapper::map).collect(Collectors.toList())
+        );
+
+        return SuccessApiResponse.of(tasks);
     }
 
     //    @Override

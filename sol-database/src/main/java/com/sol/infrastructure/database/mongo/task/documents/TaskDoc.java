@@ -81,6 +81,10 @@ public class TaskDoc extends BaseDocument {
      * status 
      */
     protected TaskStatus status;
+    /**
+     * sortNum
+     */
+    protected Integer sortNum;
 
  
 }

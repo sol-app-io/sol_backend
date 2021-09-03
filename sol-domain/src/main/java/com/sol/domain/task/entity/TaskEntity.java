@@ -83,6 +83,8 @@ public class TaskEntity extends BaseEntity<String> {
      */
     protected TaskStatus status = TaskStatus.OPEN;
 
+    protected Integer sortNum = 0;
+
 
     public TaskEntity(String id) {
         this.id = id;
