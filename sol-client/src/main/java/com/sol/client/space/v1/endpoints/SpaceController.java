@@ -99,7 +99,14 @@ public class SpaceController extends BaseApiController {
         List<TaskResponse> taskEntities = taskConfig
                 .findTaskBySpaceIdUseCase().execute(
                         FindTaskBySpaceIdUseCase.InputValues
-                                .builder().spaceId(id).build()).getEntity().stream().map(TaskResponseMapper::map).collect(Collectors.toList());
+                                .builder()
+                                .spaceId(id)
+                                .currentSolUserId(solUserEntity.getId())
+                                .build())
+                .getEntity()
+                .stream()
+                .map(TaskResponseMapper::map)
+                .collect(Collectors.toList());
 
         spaceResponse.setTasks(taskEntities);
 

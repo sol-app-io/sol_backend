@@ -90,12 +90,48 @@ public class TaskEntity extends BaseEntity<String> {
         this.id = id;
     }
 
-    public Boolean checkAccessSpace(String spaceId){
+    public Boolean checkAccessSpace(String spaceId) {
         return spaceId.equals(spaceId);
     }
 
-    public Boolean checkAccess(String solUserId){
+    public Boolean checkAccess(String solUserId) {
         return ownerId.equals(solUserId);
+    }
+
+    @EqualsAndHashCode(callSuper = false)
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @SuperBuilder
+    @Data
+    public static class TaskWithChildEntity extends TaskEntity {
+        protected List<TaskWithChildEntity> child = new ArrayList<>();
+
+        public static TaskWithChildEntity of(TaskEntity taskEntity) {
+            return TaskWithChildEntity.builder()
+                    .id(taskEntity.id)
+                    .createdAt(taskEntity.createdAt)
+                    .updatedAt(taskEntity.updatedAt)
+                    .ownerId(taskEntity.ownerId)
+                    .parentTaskId(taskEntity.parentTaskId)
+                    .spaceId(taskEntity.spaceId)
+                    .title(taskEntity.title)
+                    .icon(taskEntity.icon)
+                    .viewIds(taskEntity.viewIds)
+                    .planningPoints(taskEntity.planningPoints)
+                    .deadline(taskEntity.deadline)
+                    .repeatTaskConfId(taskEntity.repeatTaskConfId)
+                    .createdFromRepeatTaskId(taskEntity.createdFromRepeatTaskId)
+                    .pics(taskEntity.pics)
+                    .files(taskEntity.files)
+                    .description(taskEntity.description)
+                    .externalIds(taskEntity.externalIds)
+                    .pointWeight(taskEntity.pointWeight)
+                    .status(taskEntity.status)
+                    .sortNum(taskEntity.sortNum)
+                    .child(new ArrayList<>())
+                    .build();
+
+        }
     }
 
 }
