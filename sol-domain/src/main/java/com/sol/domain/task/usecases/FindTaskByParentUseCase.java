@@ -24,7 +24,7 @@ public class FindTaskByParentUseCase extends UseCase<FindTaskByParentUseCase.Inp
 
     @Override
     public SingletonEntityOutputValues<List<TaskEntity>> execute(InputValues inputValues) {
-        List<TaskEntity> taskEntities = taskRepository.findByParentId(inputValues.getParentId());
+        List<TaskEntity> taskEntities = taskRepository.findByParentId(inputValues.getParentId(), TaskStatus.open());
         if(taskEntities.size() > 0) {
             if(taskEntities.get(0).checkAccess(inputValues.solUserId) == false) {
                 throw new HasNoAccessToTaskException();

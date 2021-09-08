@@ -3,6 +3,7 @@ package com.sol.infrastructure.database.mongo.task.port;
 import com.rcore.database.mongo.commons.query.FindByIdQuery;
 import com.rcore.database.mongo.commons.utils.CollectionNameUtils;
 import com.rcore.domain.commons.port.dto.SearchResult;
+import com.sol.domain.task.entity.TaskStatus;
 import com.sol.infrastructure.database.mongo.base.ObjectIdHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
@@ -62,31 +63,41 @@ public class MongoTaskRepository implements TaskRepository {
     }
 
     @Override
-    public List<TaskEntity> findBySpaceId(String spaceId) {
-        Criteria criteria = Criteria.where("spaceId").is(ObjectIdHelper.mapOrDie(spaceId)).and("parentTaskId").exists(false);
+    public List<TaskEntity> findBySpaceId(String spaceId, List<TaskStatus> statuses) {
+        Criteria criteria = Criteria
+                .where("spaceId").is(ObjectIdHelper.mapOrDie(spaceId))
+                .and("parentTaskId").exists(false)
+                .and("status").in(statuses);
         Query query = new Query(criteria);
         query = query.with(Sort.by(Sort.Direction.ASC, "sortNum"));
         return mongoTemplate.find(query, TaskDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList());
     }
 
     @Override
-    public List<TaskEntity> findByParentId(String parentId) {
-        Criteria criteria = Criteria.where("parentTaskId").is(ObjectIdHelper.mapOrDie(parentId));
+    public List<TaskEntity> findByParentId(String parentId, List<TaskStatus> statuses) {
+        Criteria criteria = Criteria
+                .where("parentTaskId").is(ObjectIdHelper.mapOrDie(parentId))
+                .and("status").in(statuses);;
         Query query = new Query(criteria);
         query = query.with(Sort.by(Sort.Direction.ASC, "sortNum"));
         return mongoTemplate.find(query, TaskDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList());
     }
 
     @Override
-    public Long countBySpaceId(String spaceId) {
-        Criteria criteria = Criteria.where("spaceId").is(ObjectIdHelper.mapOrDie(spaceId)).and("parentTaskId").exists(false);
+    public Long countBySpaceId(String spaceId, List<TaskStatus> statuses) {
+        Criteria criteria = Criteria
+                .where("spaceId").is(ObjectIdHelper.mapOrDie(spaceId))
+                .and("parentTaskId").exists(false)
+                .and("status").in(statuses);;
         Query query = new Query(criteria);
         return mongoTemplate.count(query, TaskDoc.class);
     }
 
     @Override
-    public Long countByParentId(String parentId) {
-        Criteria criteria = Criteria.where("parentTaskId").is(ObjectIdHelper.mapOrDie(parentId));
+    public Long countByParentId(String parentId, List<TaskStatus> statuses) {
+        Criteria criteria = Criteria
+                .where("parentTaskId").is(ObjectIdHelper.mapOrDie(parentId))
+                .and("status").in(statuses);;
         Query query = new Query(criteria);
         return mongoTemplate.count(query, TaskDoc.class);
     }

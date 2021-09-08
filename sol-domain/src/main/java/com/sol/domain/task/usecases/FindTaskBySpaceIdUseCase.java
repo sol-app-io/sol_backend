@@ -27,13 +27,13 @@ public class FindTaskBySpaceIdUseCase extends UseCase<FindTaskBySpaceIdUseCase.I
 
     @Override
     public SingletonEntityOutputValues<List<TaskEntity.TaskWithChildEntity>> execute(InputValues inputValues) {
-        List<TaskEntity> taskEntities = taskRepository.findBySpaceId(inputValues.spaceId);
+        List<TaskEntity> taskEntities = taskRepository.findBySpaceId(inputValues.spaceId, TaskStatus.open());
         List<TaskEntity.TaskWithChildEntity> response = new ArrayList<>();
         for (TaskEntity taskEntity : taskEntities) {
             if(taskEntity.checkAccess(inputValues.currentSolUserId) == false) throw new HasNoAccessToTaskException();
 
             TaskEntity.TaskWithChildEntity task = TaskEntity.TaskWithChildEntity.of(taskEntity);
-            task.setChild(taskRepository.findByParentId(task.getId()).stream().map(o -> TaskEntity.TaskWithChildEntity.of(o)).collect(Collectors.toList()));
+            task.setChild(taskRepository.findByParentId(task.getId(), TaskStatus.open()).stream().map(o -> TaskEntity.TaskWithChildEntity.of(o)).collect(Collectors.toList()));
             response.add(task);
         }
         return SingletonEntityOutputValues.of(response);

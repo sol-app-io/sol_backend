@@ -36,7 +36,7 @@ public class MakeTaskDoneUseCase extends UseCase<MakeTaskDoneUseCase.InputValues
         taskEntity.setStatus(TaskStatus.DONE);
         taskEntity = taskRepository.save(taskEntity);
 
-        List<TaskEntity> taskEntities = taskRepository.findByParentId(taskEntity.getId());
+        List<TaskEntity> taskEntities = taskRepository.findByParentId(taskEntity.getId(), TaskStatus.open());
         for (TaskEntity child : taskEntities) {
             execute(InputValues.of(child.getId(), inputValues.solUserId));
         }
