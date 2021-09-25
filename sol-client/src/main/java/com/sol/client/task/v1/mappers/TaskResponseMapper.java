@@ -3,6 +3,7 @@ package com.sol.client.task.v1.mappers;
 import com.sol.client.task.v1.response.TaskResponse;
 import com.sol.domain.task.entity.TaskEntity;
 
+import java.time.ZoneOffset;
 import java.util.stream.Collectors;
 
 public class TaskResponseMapper {
@@ -16,7 +17,9 @@ public class TaskResponseMapper {
                 .icon(entity.getIcon())
                 .viewIds(entity.getViewIds())
                 .planningPoints(entity.getPlanningPoints())
-                .deadline(entity.getDeadline())
+                .deadline(entity.getDeadline().toInstant(ZoneOffset.UTC).toEpochMilli())
+                .deadlineType(entity.getDeadlineType())
+                .timezone(entity.getTimezone())
                 .repeatTaskConfId(entity.getRepeatTaskConfId())
                 .createdFromRepeatTaskId(entity.getCreatedFromRepeatTaskId())
                 .pics(entity.getPics())
@@ -38,7 +41,9 @@ public class TaskResponseMapper {
                 .icon(entity.getIcon())
                 .viewIds(entity.getViewIds())
                 .planningPoints(entity.getPlanningPoints())
-                .deadline(entity.getDeadline())
+                .deadline(entity.getDeadline().toInstant(ZoneOffset.UTC).toEpochMilli())
+                .deadlineType(entity.getDeadlineType())
+                .timezone(entity.getTimezone())
                 .repeatTaskConfId(entity.getRepeatTaskConfId())
                 .createdFromRepeatTaskId(entity.getCreatedFromRepeatTaskId())
                 .pics(entity.getPics())

@@ -21,7 +21,10 @@ import com.sol.domain.task.entity.*;
 import com.sol.domain.task.port.TaskIdGenerator;
 import com.sol.domain.task.port.TaskRepository;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -109,7 +112,15 @@ public class CreateTaskUseCase extends AbstractCreateUseCase<TaskEntity, TaskIdG
         taskEntity.setIcon(inputValues.icon);
         taskEntity.setViewIds(new ArrayList<>());
         taskEntity.setPlanningPoints(new ArrayList<>());
-        taskEntity.setDeadline(null);
+        if(inputValues.getDeadline() != null && inputValues.getDeadlineType() != null){
+            taskEntity.setDeadlineType(inputValues.deadlineType);
+            taskEntity.setDeadline(
+                    LocalDateTime.ofInstant(
+                            Instant.ofEpochMilli(inputValues.deadline),
+                            ZoneId.ofOffset("UTC", ZoneOffset.ofHours(0)))
+            );
+        }
+        taskEntity.setTimezone(inputValues.timezone);
         taskEntity.setRepeatTaskConfId(null);
         taskEntity.setCreatedFromRepeatTaskId(null);
         taskEntity.setPics(new ArrayList<>());
@@ -155,6 +166,10 @@ public class CreateTaskUseCase extends AbstractCreateUseCase<TaskEntity, TaskIdG
          * icon
          */
         protected Icon icon;
+
+        protected Long deadline;
+        protected DeadlineType deadlineType;
+        protected Integer timezone;
 
     }
 }

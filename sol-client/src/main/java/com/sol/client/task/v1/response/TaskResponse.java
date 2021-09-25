@@ -1,6 +1,7 @@
 package com.sol.client.task.v1.response;
 
 import com.sol.domain.base.entity.Icon;
+import com.sol.domain.task.entity.DeadlineType;
 import com.sol.domain.task.entity.TaskStatus;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -35,7 +36,11 @@ public class TaskResponse {
     @ApiModelProperty("planningPoints")
     protected List<String> planningPoints;
     @ApiModelProperty("deadline")
-    protected LocalDateTime deadline;
+    protected Long deadline;
+    @ApiModelProperty("deadlineType")
+    protected DeadlineType deadlineType;
+    @ApiModelProperty("timezone")
+    protected Integer timezone;
     @ApiModelProperty("repeatTaskConfId")
     protected String repeatTaskConfId;
     @ApiModelProperty("createdFromRepeatTaskId")

@@ -51,6 +51,14 @@ public class TaskEntity extends BaseEntity<String> {
      */
     protected LocalDateTime deadline;
     /**
+     * deadline type
+     */
+    protected DeadlineType deadlineType;
+    /**
+     * timezone
+     */
+    protected Integer timezone;
+    /**
      * repeatTaskConfId
      */
     protected String repeatTaskConfId;
