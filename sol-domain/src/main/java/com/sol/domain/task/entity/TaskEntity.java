@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,6 +105,12 @@ public class TaskEntity extends BaseEntity<String> {
 
     public Boolean checkAccess(String solUserId) {
         return ownerId.equals(solUserId);
+    }
+
+    public Long getDeadlineMill(){
+        return getDeadline() != null && getTimezone() != null ?
+                getDeadline().toInstant(ZoneOffset.ofHours(getTimezone())).toEpochMilli() :
+                null;
     }
 
     @EqualsAndHashCode(callSuper = false)

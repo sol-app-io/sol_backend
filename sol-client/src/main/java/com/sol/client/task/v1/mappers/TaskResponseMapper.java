@@ -18,9 +18,7 @@ public class TaskResponseMapper {
                 .icon(entity.getIcon())
                 .viewIds(entity.getViewIds())
                 .planningPoints(entity.getPlanningPoints())
-                .deadline(entity.getDeadline() != null ?
-                        entity.getDeadline().toInstant(ZoneOffset.UTC).toEpochMilli() :
-                        null)
+                .deadline(entity.getDeadlineMill())
                 .deadlineType(entity.getDeadlineType())
                 .timezone(entity.getTimezone())
                 .repeatTaskConfId(entity.getRepeatTaskConfId())
@@ -44,9 +42,7 @@ public class TaskResponseMapper {
                 .icon(entity.getIcon())
                 .viewIds(entity.getViewIds())
                 .planningPoints(entity.getPlanningPoints())
-                .deadline(entity.getDeadline() != null ?
-                        entity.getDeadline().toInstant(ZoneOffset.UTC).toEpochMilli() :
-                        null)
+                .deadline(entity.getDeadlineMill())
                 .deadlineType(entity.getDeadlineType())
                 .timezone(entity.getTimezone())
                 .repeatTaskConfId(entity.getRepeatTaskConfId())
