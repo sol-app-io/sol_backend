@@ -115,6 +115,7 @@ public class CreateTaskUseCase extends AbstractCreateUseCase<TaskEntity, TaskIdG
         if(inputValues.getDeadline() != null && inputValues.getDeadlineType() != null){
             taskEntity.setDeadlineType(inputValues.deadlineType);
             taskEntity.setDeadline(
+                    
                     LocalDateTime.ofInstant(
                             Instant.ofEpochMilli(inputValues.deadline),
                             ZoneId.ofOffset("UTC", ZoneOffset.ofHours(0)))
