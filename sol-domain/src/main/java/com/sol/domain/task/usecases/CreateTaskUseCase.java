@@ -21,10 +21,7 @@ import com.sol.domain.task.entity.*;
 import com.sol.domain.task.port.TaskIdGenerator;
 import com.sol.domain.task.port.TaskRepository;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -112,13 +109,13 @@ public class CreateTaskUseCase extends AbstractCreateUseCase<TaskEntity, TaskIdG
         taskEntity.setIcon(inputValues.icon);
         taskEntity.setViewIds(new ArrayList<>());
         taskEntity.setPlanningPoints(new ArrayList<>());
-        if(inputValues.getDeadline() != null && inputValues.getDeadlineType() != null){
+        if(inputValues.getDeadline() != null && inputValues.getDeadlineType() != null && inputValues.getTimezone() != null){
             taskEntity.setDeadlineType(inputValues.deadlineType);
             taskEntity.setDeadline(
-                    
                     LocalDateTime.ofInstant(
                             Instant.ofEpochMilli(inputValues.deadline),
-                            ZoneId.ofOffset("UTC", ZoneOffset.ofHours(0)))
+                            ZoneId.ofOffset("UTC", ZoneOffset.ofHours(inputValues.timezone))
+                    )
             );
         }
         taskEntity.setTimezone(inputValues.timezone);
