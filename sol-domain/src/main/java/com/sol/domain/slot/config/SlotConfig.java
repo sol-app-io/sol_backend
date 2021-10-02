@@ -1,13 +1,11 @@
 package com.sol.domain.slot.config;
 
+import com.sol.domain.slot.usecases.*;
+import com.sol.domain.task.usecases.RecalcSlotsTimeForTaskUseCase;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import com.sol.domain.slot.port.SlotIdGenerator;
 import com.sol.domain.slot.port.SlotRepository;
-import com.sol.domain.slot.usecases.CreateSlotUseCase;
-import com.sol.domain.slot.usecases.DeleteSlotUseCase;
-import com.sol.domain.slot.usecases.FindSlotByIdUseCase;
-import com.sol.domain.slot.usecases.UpdateSlotUseCase;
 
 @Accessors(fluent = true)
 @Getter
@@ -16,11 +14,15 @@ public class SlotConfig {
     private final DeleteSlotUseCase deleteSlotUseCase;
     private final FindSlotByIdUseCase findSlotByIdUseCase;
     private final UpdateSlotUseCase updateSlotUseCase;
+    private final FindByDateSlotUseCase findByDateSlotUseCase;
+    private final FindByTaskSlotUseCase findByTaskSlotUseCase;
 
-    public SlotConfig(SlotRepository slotRepository, SlotIdGenerator<?> slotIdGenerator) {
-        this.createSlotUseCase = new CreateSlotUseCase(slotRepository, slotIdGenerator);
+    public SlotConfig(SlotRepository slotRepository, SlotIdGenerator<?> slotIdGenerator, RecalcSlotsTimeForTaskUseCase recalcSlotsTimeForTaskUseCase) {
+        this.createSlotUseCase = new CreateSlotUseCase(slotRepository, slotIdGenerator, recalcSlotsTimeForTaskUseCase);
         this.deleteSlotUseCase = new DeleteSlotUseCase(slotRepository);
         this.findSlotByIdUseCase = new FindSlotByIdUseCase(slotRepository);
-        this.updateSlotUseCase = new UpdateSlotUseCase(slotRepository);
+        this.updateSlotUseCase = new UpdateSlotUseCase(slotRepository, recalcSlotsTimeForTaskUseCase);
+        this.findByDateSlotUseCase = new FindByDateSlotUseCase(slotRepository);
+        this.findByTaskSlotUseCase = new FindByTaskSlotUseCase(slotRepository);
     }
 }

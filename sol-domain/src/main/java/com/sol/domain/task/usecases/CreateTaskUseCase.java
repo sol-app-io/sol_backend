@@ -5,6 +5,7 @@ import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.IdInputValues;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
 import com.sol.domain.base.entity.Icon;
+import com.sol.domain.base.utils.DateUtils;
 import com.sol.domain.solUser.entity.SolUserEntity;
 import com.sol.domain.solUser.usecases.MeUseCase;
 import com.sol.domain.space.entity.SpaceEntity;
@@ -108,16 +109,8 @@ public class CreateTaskUseCase extends AbstractCreateUseCase<TaskEntity, TaskIdG
         taskEntity.setTitle(inputValues.title);
         taskEntity.setIcon(inputValues.icon);
         taskEntity.setViewIds(new ArrayList<>());
-        taskEntity.setPlanningPoints(new ArrayList<>());
-        if(inputValues.getDeadline() != null && inputValues.getDeadlineType() != null && inputValues.getTimezone() != null){
-            taskEntity.setDeadlineType(inputValues.deadlineType);
-            taskEntity.setDeadline(
-                    LocalDateTime.ofInstant(
-                            Instant.ofEpochMilli(inputValues.deadline),
-                            ZoneId.ofOffset("UTC", ZoneOffset.ofHours(inputValues.timezone))
-                    )
-            );
-        }
+        taskEntity.setDeadlineType(inputValues.deadlineType);
+        taskEntity.setDeadline(DateUtils.convert(inputValues.deadline, inputValues.timezone));
         taskEntity.setTimezone(inputValues.timezone);
         taskEntity.setRepeatTaskConfId(null);
         taskEntity.setCreatedFromRepeatTaskId(null);
@@ -125,7 +118,7 @@ public class CreateTaskUseCase extends AbstractCreateUseCase<TaskEntity, TaskIdG
         taskEntity.setFiles(new ArrayList<>());
         taskEntity.setDescription("");
         taskEntity.setExternalIds(new ArrayList<>());
-        taskEntity.setPointWeight(0);
+        taskEntity.setSlotsMilliseconds(0l);
         taskEntity.setStatus(TaskStatus.OPEN);
 
         if(inputValues.parentTaskId == null){

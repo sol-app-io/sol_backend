@@ -18,4 +18,19 @@ public class ObjectIdHelper {
         }
         return result;
     }
+
+    public static String toString(ObjectId id) {
+        if (id != null) return id.toString();
+        return null;
+    }
+
+    public static List<String> toString(List<ObjectId> ids) {
+        if(ids == null) return new ArrayList<>();
+
+        List<String> result = new ArrayList<>();
+        for (ObjectId id : ids) {
+            if (id != null) result.add(id.toString());
+        }
+        return result;
+    }
 }

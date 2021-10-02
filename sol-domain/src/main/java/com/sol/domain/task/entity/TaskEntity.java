@@ -2,6 +2,7 @@ package com.sol.domain.task.entity;
 
 import com.rcore.domain.commons.entity.BaseEntity;
 import com.sol.domain.base.entity.Icon;
+import com.sol.domain.base.utils.DateUtils;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -44,10 +45,6 @@ public class TaskEntity extends BaseEntity<String> {
      */
     protected List<String> viewIds = new ArrayList<>();
     /**
-     * planningPoints
-     */
-    protected List<String> planningPoints = new ArrayList<>();
-    /**
      * deadline
      */
     protected LocalDateTime deadline;
@@ -84,9 +81,9 @@ public class TaskEntity extends BaseEntity<String> {
      */
     protected List<String> externalIds = new ArrayList<>();
     /**
-     * pointWeight
+     * slotsMilliseconds
      */
-    protected Integer pointWeight = 0;
+    protected Long slotsMilliseconds = 0l;
     /**
      * status
      */
@@ -108,9 +105,14 @@ public class TaskEntity extends BaseEntity<String> {
     }
 
     public Long getDeadlineMill(){
-        return getDeadline() != null && getTimezone() != null ?
-                getDeadline().toInstant(ZoneOffset.ofHours(getTimezone())).toEpochMilli() :
-                null;
+        return DateUtils.convert(getDeadline(), getTimezone());
+    }
+
+    public String getFullTime(){
+        return (
+                (this.icon != null && this.icon.getData() != null) ?
+                        (this.icon.getData() + " ") : ""
+                ) + title;
     }
 
     @EqualsAndHashCode(callSuper = false)
@@ -132,7 +134,6 @@ public class TaskEntity extends BaseEntity<String> {
                     .title(taskEntity.title)
                     .icon(taskEntity.icon)
                     .viewIds(taskEntity.viewIds)
-                    .planningPoints(taskEntity.planningPoints)
                     .deadline(taskEntity.deadline)
                     .repeatTaskConfId(taskEntity.repeatTaskConfId)
                     .createdFromRepeatTaskId(taskEntity.createdFromRepeatTaskId)
@@ -140,7 +141,7 @@ public class TaskEntity extends BaseEntity<String> {
                     .files(taskEntity.files)
                     .description(taskEntity.description)
                     .externalIds(taskEntity.externalIds)
-                    .pointWeight(taskEntity.pointWeight)
+                    .slotsMilliseconds(taskEntity.slotsMilliseconds)
                     .status(taskEntity.status)
                     .sortNum(taskEntity.sortNum)
                     .child(new ArrayList<>())

@@ -17,7 +17,6 @@ public class TaskResponseMapper {
                 .title(entity.getTitle())
                 .icon(entity.getIcon())
                 .viewIds(entity.getViewIds())
-                .planningPoints(entity.getPlanningPoints())
                 .deadline(entity.getDeadlineMill())
                 .deadlineType(entity.getDeadlineType())
                 .timezone(entity.getTimezone())
@@ -27,7 +26,7 @@ public class TaskResponseMapper {
                 .files(entity.getFiles())
                 .description(entity.getDescription())
                 .externalIds(entity.getExternalIds())
-                .pointWeight(entity.getPointWeight())
+                .slotsMilliseconds(entity.getSlotsMilliseconds())
                 .status(entity.getStatus())
                 .build();
     }
@@ -41,7 +40,6 @@ public class TaskResponseMapper {
                 .title(entity.getTitle())
                 .icon(entity.getIcon())
                 .viewIds(entity.getViewIds())
-                .planningPoints(entity.getPlanningPoints())
                 .deadline(entity.getDeadlineMill())
                 .deadlineType(entity.getDeadlineType())
                 .timezone(entity.getTimezone())
@@ -51,7 +49,7 @@ public class TaskResponseMapper {
                 .files(entity.getFiles())
                 .description(entity.getDescription())
                 .externalIds(entity.getExternalIds())
-                .pointWeight(entity.getPointWeight())
+                .slotsMilliseconds(entity.getSlotsMilliseconds())
                 .status(entity.getStatus())
                 .hasChild(entity.getChild().size() > 0)
                 .child(entity.getChild() != null ?

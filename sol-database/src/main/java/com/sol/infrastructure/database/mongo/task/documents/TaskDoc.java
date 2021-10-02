@@ -83,9 +83,9 @@ public class TaskDoc extends BaseDocument {
      */
     protected List<String> externalIds;
     /**
-     * pointWeight 
+     * slotsMilliseconds
      */
-    protected Integer pointWeight;
+    protected Long slotsMilliseconds;
     /**
      * status 
      */

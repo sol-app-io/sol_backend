@@ -12,6 +12,10 @@ import com.rcore.rest.api.spring.security.jwt.access.JwtAccessTokenGenerator;
 import com.rcore.rest.api.spring.security.jwt.access.JwtAccessTokenParser;
 import com.rcore.rest.api.spring.security.jwt.refresh.JwtRefreshTokenGenerator;
 import com.rcore.rest.api.spring.security.jwt.refresh.JwtRefreshTokenParser;
+import com.sol.client.slot.v1.response.SlotResponse;
+import com.sol.domain.slot.config.SlotConfig;
+import com.sol.domain.slot.port.SlotIdGenerator;
+import com.sol.domain.slot.port.SlotRepository;
 import com.sol.domain.solUser.config.SolUserConfig;
 import com.sol.domain.solUser.port.SolUserIdGenerator;
 import com.sol.domain.solUser.port.SolUserRepository;
@@ -117,8 +121,12 @@ public class SolClientApplicationConfig {
     }
 
     @Bean
-    public TaskConfig taskConfig(TaskRepository taskRepository, TaskIdGenerator<?> taskIdGenerator, SolUserConfig solUserConfig, SpaceConfig spaceConfig){
-        return new TaskConfig(taskRepository, taskIdGenerator, solUserConfig.meUseCase(), spaceConfig.findSpaceByIdUseCase(), spaceConfig.findInboxSpaceByOwnerIdUseCase());
+    public TaskConfig taskConfig(TaskRepository taskRepository, TaskIdGenerator<?> taskIdGenerator, SolUserConfig solUserConfig, SpaceConfig spaceConfig, SlotRepository slotRepository){
+        return new TaskConfig(taskRepository, taskIdGenerator, solUserConfig.meUseCase(), spaceConfig.findSpaceByIdUseCase(), spaceConfig.findInboxSpaceByOwnerIdUseCase(), slotRepository);
     }
 
+    @Bean
+    public SlotConfig slotConfig(SlotRepository slotRepository, SlotIdGenerator slotIdGenerator, TaskConfig taskConfig){
+        return new SlotConfig(slotRepository, slotIdGenerator, taskConfig.recalcSlotsTimeForTaskUseCase());
+    }
 }

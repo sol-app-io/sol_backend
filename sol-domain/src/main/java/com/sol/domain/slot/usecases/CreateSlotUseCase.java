@@ -4,6 +4,10 @@ import com.rcore.domain.commons.usecase.AbstractCreateUseCase;
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
 import com.sol.domain.base.entity.ExternalId;
+import com.sol.domain.base.utils.DateUtils;
+import com.sol.domain.task.entity.DeadlineType;
+import com.sol.domain.task.entity.TaskEntity;
+import com.sol.domain.task.usecases.RecalcSlotsTimeForTaskUseCase;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +16,7 @@ import com.sol.domain.slot.entity.*;
 import com.sol.domain.slot.port.SlotIdGenerator;
 import com.sol.domain.slot.port.SlotRepository;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.util.List;
 
 /**
@@ -21,9 +24,11 @@ import java.util.List;
  */
 public class CreateSlotUseCase extends AbstractCreateUseCase<SlotEntity, SlotIdGenerator, SlotRepository, CreateSlotUseCase.InputValues> {
 
+    private final RecalcSlotsTimeForTaskUseCase recalcSlotsTimeForTaskUseCase;
 
-    public CreateSlotUseCase(SlotRepository repository, SlotIdGenerator idGenerator) {
+    public CreateSlotUseCase(SlotRepository repository, SlotIdGenerator idGenerator, RecalcSlotsTimeForTaskUseCase recalcSlotsTimeForTaskUseCase) {
         super(repository, idGenerator);
+        this.recalcSlotsTimeForTaskUseCase = recalcSlotsTimeForTaskUseCase;
     }
 
     @Override
@@ -35,16 +40,18 @@ public class CreateSlotUseCase extends AbstractCreateUseCase<SlotEntity, SlotIdG
        
         // Происходит заполнение всех полей 
         slotEntity.setOwnerId(inputValues.ownerId);
-        slotEntity.setCreatedFromTaskId(inputValues.createdFromTaskId);
-        slotEntity.setSpaceId(inputValues.spaceId);
-        slotEntity.setViewIds(inputValues.viewIds);
-        slotEntity.setDay(inputValues.day);
-        slotEntity.setStartTime(inputValues.startTime);
-        slotEntity.setEndTime(inputValues.endTime);
-        slotEntity.setPoints(inputValues.points);
-        slotEntity.setExternalIds(inputValues.externalIds);
+        slotEntity.setTitle(inputValues.createdFromTask.getTitle());
+        slotEntity.setCreatedFromTaskId(inputValues.createdFromTask.getId());
+        slotEntity.setSpaceId(inputValues.createdFromTask.getSpaceId());
+        slotEntity.setViewIds(inputValues.createdFromTask.getViewIds());
+        slotEntity.setStartTime(DateUtils.convert(inputValues.startTime, inputValues.timezone));
+        slotEntity.setEndTime(DateUtils.convert(inputValues.endTime, inputValues.timezone));
+        slotEntity.setTimezone(inputValues.timezone);
+        slotEntity.setSlotsMilliseconds(DateUtils.range(inputValues.startTime, inputValues.endTime));
 
         slotEntity = repository.save(slotEntity);
+
+        recalcSlotsTimeForTaskUseCase.execute(RecalcSlotsTimeForTaskUseCase.InputValues.of(inputValues.createdFromTask.getId(), inputValues.ownerId ));
 
         return SingletonEntityOutputValues.of(slotEntity);
     }
@@ -56,15 +63,10 @@ public class CreateSlotUseCase extends AbstractCreateUseCase<SlotEntity, SlotIdG
     public static class InputValues implements UseCase.InputValues {
         // перечисление полей необходимых для создания сущности
         protected String ownerId;
-        protected String createdFromTaskId;
-        protected String spaceId;
-        protected String viewIds;
-        protected LocalDate day;
-        protected LocalDateTime startTime;
-        protected LocalDateTime endTime;
-        protected Long points;
-        protected List<ExternalId> externalIds;
-
+        protected TaskEntity createdFromTask;
+        protected Long startTime;
+        protected Long endTime;
+        protected Integer timezone;
     }
 
     /**

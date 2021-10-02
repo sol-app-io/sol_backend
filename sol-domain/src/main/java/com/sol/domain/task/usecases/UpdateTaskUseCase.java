@@ -32,7 +32,6 @@ public class UpdateTaskUseCase extends UseCase<UpdateTaskUseCase.InputValues, Si
         taskEntity.setTitle(inputValues.title);
         taskEntity.setIcon(inputValues.icon);
         taskEntity.setViewIds(inputValues.viewIds);
-        taskEntity.setPlanningPoints(inputValues.planningPoints);
         taskEntity.setDeadline(inputValues.deadline);
         taskEntity.setRepeatTaskConfId(inputValues.repeatTaskConfId);
         taskEntity.setCreatedFromRepeatTaskId(inputValues.createdFromRepeatTaskId);
@@ -40,7 +39,6 @@ public class UpdateTaskUseCase extends UseCase<UpdateTaskUseCase.InputValues, Si
         taskEntity.setFiles(inputValues.files);
         taskEntity.setDescription(inputValues.description);
         taskEntity.setExternalIds(inputValues.externalIds);
-        taskEntity.setPointWeight(inputValues.pointWeight);
         taskEntity.setStatus(inputValues.status);
         
         taskEntity = taskRepository.save(taskEntity);
@@ -56,7 +54,7 @@ public class UpdateTaskUseCase extends UseCase<UpdateTaskUseCase.InputValues, Si
         @NotBlank
         protected String id;
         /**
-        * ownerId 
+        * ownerId
         */
         protected String ownerId;
         /**
@@ -111,10 +109,6 @@ public class UpdateTaskUseCase extends UseCase<UpdateTaskUseCase.InputValues, Si
         * externalIds 
         */
         protected List<String> externalIds;
-        /**
-        * pointWeight 
-        */
-        protected Integer pointWeight;
         /**
         * status 
         */

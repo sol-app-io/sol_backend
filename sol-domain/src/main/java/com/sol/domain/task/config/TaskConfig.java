@@ -1,5 +1,6 @@
 package com.sol.domain.task.config;
 
+import com.sol.domain.slot.port.SlotRepository;
 import com.sol.domain.solUser.usecases.MeUseCase;
 import com.sol.domain.space.usecases.FindInboxSpaceByOwnerIdUseCase;
 import com.sol.domain.space.usecases.FindSpaceByIdUseCase;
@@ -23,13 +24,15 @@ public class TaskConfig {
     private final MakeTaskDoneUseCase makeTaskDoneUseCase;
     private final MakeTaskOpenUseCase makeTaskOpenUseCase;
     private final ChangeSortTasksUseCase changeSortTasksUseCase;
+    private final RecalcSlotsTimeForTaskUseCase recalcSlotsTimeForTaskUseCase;
 
     public TaskConfig(
             TaskRepository taskRepository,
             TaskIdGenerator<?> taskIdGenerator,
             MeUseCase meUseCase,
             FindSpaceByIdUseCase findSpaceByIdUseCase,
-            FindInboxSpaceByOwnerIdUseCase findInboxSpaceByOwnerIdUseCase) {
+            FindInboxSpaceByOwnerIdUseCase findInboxSpaceByOwnerIdUseCase,
+            SlotRepository slotRepository) {
         this.findTaskByIdUseCase = new FindTaskByIdUseCase(taskRepository);
         this.createTaskUseCase = new CreateTaskUseCase(taskRepository, taskIdGenerator, meUseCase, findSpaceByIdUseCase, findTaskByIdUseCase, findInboxSpaceByOwnerIdUseCase);
         this.deleteTaskUseCase = new DeleteTaskUseCase(taskRepository);
@@ -41,5 +44,6 @@ public class TaskConfig {
         this.makeTaskDoneUseCase = new MakeTaskDoneUseCase(taskRepository);
         this.makeTaskOpenUseCase = new MakeTaskOpenUseCase(taskRepository);
         this.changeSortTasksUseCase = new ChangeSortTasksUseCase(taskRepository);
+        this.recalcSlotsTimeForTaskUseCase = new RecalcSlotsTimeForTaskUseCase(taskRepository,slotRepository);
     }
 }

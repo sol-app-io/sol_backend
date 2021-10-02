@@ -8,6 +8,7 @@ import com.sol.domain.solUser.entity.SolUserEntity;
 import com.sol.domain.solUser.exceptions.SolUserNotFoundException;
 import com.sol.domain.solUser.port.SolUserRepository;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -44,6 +45,7 @@ public class UpdateSolUserUseCase extends UseCase<UpdateSolUserUseCase.InputValu
 
     @AllArgsConstructor(staticName = "of")
     @Getter
+    @Builder
     public static class InputValues implements UseCase.InputValues {
         //Сущность которую требуется обновить
         protected String id;

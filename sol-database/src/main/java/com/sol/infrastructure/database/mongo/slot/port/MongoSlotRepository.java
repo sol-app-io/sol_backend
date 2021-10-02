@@ -3,8 +3,11 @@ package com.sol.infrastructure.database.mongo.slot.port;
 import com.rcore.database.mongo.commons.query.FindByIdQuery;
 import com.rcore.database.mongo.commons.utils.CollectionNameUtils;
 import com.rcore.domain.commons.port.dto.SearchResult;
+import com.sol.infrastructure.database.mongo.base.ObjectIdHelper;
+import com.sol.infrastructure.database.mongo.task.documents.TaskDoc;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 import com.sol.infrastructure.database.mongo.slot.mapper.SlotMapper;
@@ -14,6 +17,8 @@ import com.sol.domain.slot.entity.SlotEntity;
 import com.sol.domain.slot.port.SlotRepository;
 import com.sol.domain.slot.port.filters.SlotFilters;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -55,5 +60,34 @@ public class MongoSlotRepository implements SlotRepository {
     @Override
     public Long count() {
         return mongoTemplate.count(new Query(), SlotDoc.class);
+    }
+
+    @Override
+    public List<SlotEntity> findByTaskId(String taskId, String ownerId) {
+        Criteria criteria = Criteria
+                .where("createdFromTaskId").is(ObjectIdHelper.mapOrDie(taskId))
+                .and("ownerId").is(ObjectIdHelper.mapOrDie(ownerId));;
+        Query query = new Query(criteria);
+        return mongoTemplate.find(query, SlotDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SlotEntity> findByTaskId(String taskId) {
+        Criteria criteria = Criteria
+                .where("createdFromTaskId").is(ObjectIdHelper.mapOrDie(taskId));
+        Query query = new Query(criteria);
+        return mongoTemplate.find(query, SlotDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SlotEntity> findByTime(LocalDateTime start, LocalDateTime end, String ownerId) {
+        Criteria criteria = new Criteria().andOperator(
+                Criteria.where("ownerId").is(ObjectIdHelper.mapOrDie(ownerId)),
+                Criteria.where("startTime").gte(start),
+                Criteria.where("endTime").lte(end)
+        );
+
+        Query query = new Query(criteria);
+        return mongoTemplate.find(query, SlotDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList());
     }
 }

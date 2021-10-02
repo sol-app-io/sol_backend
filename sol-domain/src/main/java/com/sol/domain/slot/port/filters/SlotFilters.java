@@ -12,5 +12,7 @@ import java.util.List;
 @SuperBuilder
 @Data
 public class SlotFilters extends SearchFilters {
-   
+    private String taskId;
+    private Long date;
+    private Integer timezone;
 }

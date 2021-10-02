@@ -26,6 +26,10 @@ public class SlotEntity extends BaseEntity<String> {
     /************************************ Fields ************************************/
 
     /**
+     * title
+     */
+    protected String title;
+    /**
      * owner 
      */
     protected String ownerId;
@@ -40,11 +44,7 @@ public class SlotEntity extends BaseEntity<String> {
     /**
      * viewIds 
      */
-    protected String viewIds;
-    /**
-     * day 
-     */
-    protected LocalDate day;
+    protected List<String> viewIds;
     /**
      * start Time 
      */
@@ -54,13 +54,14 @@ public class SlotEntity extends BaseEntity<String> {
      */
     protected LocalDateTime endTime;
     /**
-     * Points 
+     * slotsMilliseconds;
      */
-    protected Long points;
+    protected Long slotsMilliseconds = 0l;
     /**
      * External IDs 
      */
     protected List<ExternalId> externalIds = new ArrayList<>();
+    protected Integer timezone = 0;
 
     /************************************ Constructors ************************************/
 

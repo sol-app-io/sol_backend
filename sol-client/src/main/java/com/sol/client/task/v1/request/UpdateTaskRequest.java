@@ -46,8 +46,8 @@ public class UpdateTaskRequest {
     protected String description;
     @ApiModelProperty("externalIds")
     protected List<String> externalIds;
-    @ApiModelProperty("pointWeight")
-    protected Integer pointWeight;
+    @ApiModelProperty("slotsMilliseconds")
+    protected Long slotsMilliseconds;
     @ApiModelProperty("status")
     protected TaskStatus status;
 
@@ -71,7 +71,6 @@ public class UpdateTaskRequest {
                 .files(files)
                 .description(description)
                 .externalIds(externalIds)
-                .pointWeight(pointWeight)
                 .status(status)
                 .build();
     }

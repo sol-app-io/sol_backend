@@ -53,8 +53,8 @@ public class TaskResponse {
     protected String description;
     @ApiModelProperty("externalIds")
     protected List<String> externalIds;
-    @ApiModelProperty("pointWeight")
-    protected Integer pointWeight;
+    @ApiModelProperty("slotsMilliseconds")
+    protected Long slotsMilliseconds;
     @ApiModelProperty("status")
     protected TaskStatus status;
     @ApiModelProperty("hasChild")
