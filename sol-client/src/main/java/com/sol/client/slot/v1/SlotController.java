@@ -13,6 +13,7 @@ import com.sol.client.slot.v1.response.SlotResponse;
 import com.sol.domain.slot.config.SlotConfig;
 import com.sol.domain.slot.entity.SlotEntity;
 import com.sol.domain.slot.exceptions.HasNoAccessToSlotException;
+import com.sol.domain.slot.usecases.DeleteSlotUseCase;
 import com.sol.domain.solUser.config.SolUserConfig;
 import com.sol.domain.solUser.entity.SolUserEntity;
 import com.sol.domain.solUser.usecases.MeUseCase;
@@ -87,7 +88,7 @@ public class SlotController implements SlotResource {
 
         return useCaseExecutor.execute(
                 solConfig.deleteSlotUseCase(),
-                IdInputValues.of(credentialPrincipal.getId()),
+                DeleteSlotUseCase.InputValues.of(credentialPrincipal.getId(), solUserEntity.getId()),
                 output -> SuccessApiResponse.of(HttpStatus.OK.toString())
         );
     }

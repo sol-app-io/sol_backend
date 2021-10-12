@@ -19,7 +19,7 @@ public class SlotConfig {
 
     public SlotConfig(SlotRepository slotRepository, SlotIdGenerator<?> slotIdGenerator, RecalcSlotsTimeForTaskUseCase recalcSlotsTimeForTaskUseCase) {
         this.createSlotUseCase = new CreateSlotUseCase(slotRepository, slotIdGenerator, recalcSlotsTimeForTaskUseCase);
-        this.deleteSlotUseCase = new DeleteSlotUseCase(slotRepository);
+        this.deleteSlotUseCase = new DeleteSlotUseCase(slotRepository, recalcSlotsTimeForTaskUseCase);
         this.findSlotByIdUseCase = new FindSlotByIdUseCase(slotRepository);
         this.updateSlotUseCase = new UpdateSlotUseCase(slotRepository, recalcSlotsTimeForTaskUseCase);
         this.findByDateSlotUseCase = new FindByDateSlotUseCase(slotRepository);
