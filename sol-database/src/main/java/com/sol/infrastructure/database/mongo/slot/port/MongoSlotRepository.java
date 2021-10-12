@@ -44,7 +44,7 @@ public class MongoSlotRepository implements SlotRepository {
 
     @Override
     public Optional<SlotEntity> findById(String s) {
-        return Optional.ofNullable(mongoTemplate.findById(ObjectIdHelper.mapOrDie(s), SlotDoc.class)).map(mapper::inverseMap);
+        return Optional.ofNullable(mongoTemplate.findById(s, SlotDoc.class)).map(mapper::inverseMap);
     }
 
     @Override
