@@ -37,7 +37,7 @@ public class MongoSlotRepository implements SlotRepository {
 
     @Override
     public Boolean delete(String id) {
-        long deleteCount = mongoTemplate.remove(FindByIdQuery.of(ObjectIdHelper.mapOrDie(id)).getQuery(), collectionName).getDeletedCount();
+        long deleteCount = mongoTemplate.remove(FindByIdQuery.of(id).getQuery(), collectionName).getDeletedCount();
 
         return deleteCount > 0;
     }
