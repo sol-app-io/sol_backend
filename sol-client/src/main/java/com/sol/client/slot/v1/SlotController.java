@@ -88,7 +88,7 @@ public class SlotController implements SlotResource {
 
         return useCaseExecutor.execute(
                 solConfig.deleteSlotUseCase(),
-                DeleteSlotUseCase.InputValues.of(credentialPrincipal.getId(), solUserEntity.getId()),
+                DeleteSlotUseCase.InputValues.of(id, solUserEntity.getId()),
                 output -> SuccessApiResponse.of(HttpStatus.OK.toString())
         );
     }
