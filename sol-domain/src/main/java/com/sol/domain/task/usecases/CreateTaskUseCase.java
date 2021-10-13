@@ -35,7 +35,7 @@ public class CreateTaskUseCase extends AbstractCreateUseCase<TaskEntity, TaskIdG
     private final FindSpaceByIdUseCase findSpaceByIdUseCase;
     private final FindTaskByIdUseCase findTaskByIdUseCase;
     private final FindInboxSpaceByOwnerIdUseCase findInboxSpaceByOwnerIdUseCase;
-    private final UpdateTaskCountInSpaceUseCase updateTaskCountInSlotUseCase;
+    private final UpdateTaskCountInSpaceUseCase updateTaskCountInSpaceUseCase;
 
     public CreateTaskUseCase(
             TaskRepository repository,
@@ -44,13 +44,13 @@ public class CreateTaskUseCase extends AbstractCreateUseCase<TaskEntity, TaskIdG
             FindSpaceByIdUseCase findSpaceByIdUseCase,
             FindTaskByIdUseCase findTaskByIdUseCase,
             FindInboxSpaceByOwnerIdUseCase findInboxSpaceByOwnerIdUseCase,
-            UpdateTaskCountInSpaceUseCase updateTaskCountInSlotUseCase) {
+            UpdateTaskCountInSpaceUseCase updateTaskCountInSpaceUseCase) {
         super(repository, idGenerator);
         this.meUseCase = meUseCase;
         this.findSpaceByIdUseCase = findSpaceByIdUseCase;
         this.findTaskByIdUseCase = findTaskByIdUseCase;
         this.findInboxSpaceByOwnerIdUseCase = findInboxSpaceByOwnerIdUseCase;
-        this.updateTaskCountInSlotUseCase = updateTaskCountInSlotUseCase;
+        this.updateTaskCountInSpaceUseCase = updateTaskCountInSpaceUseCase;
     }
 
     private SolUserEntity solUserEntity(String credentialId) {
@@ -131,7 +131,7 @@ public class CreateTaskUseCase extends AbstractCreateUseCase<TaskEntity, TaskIdG
 
         taskEntity = repository.save(taskEntity);
 
-        updateTaskCountInSlotUseCase.execute(UpdateTaskCountInSpaceUseCase.InputValues.of(spaceEntity.getOwnerId()));
+        updateTaskCountInSpaceUseCase.execute(UpdateTaskCountInSpaceUseCase.InputValues.of(spaceEntity.getId()));
 
         return SingletonEntityOutputValues.of(taskEntity);
     }
