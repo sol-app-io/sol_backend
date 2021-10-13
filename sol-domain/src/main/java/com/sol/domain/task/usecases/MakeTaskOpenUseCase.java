@@ -2,6 +2,7 @@ package com.sol.domain.task.usecases;
 
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
+import com.sol.domain.space.usecases.UpdateTaskCountInSpaceUseCase;
 import com.sol.domain.task.entity.TaskEntity;
 import com.sol.domain.task.entity.TaskStatus;
 import com.sol.domain.task.exceptions.HasNoAccessToTaskException;
@@ -10,7 +11,6 @@ import com.sol.domain.task.port.TaskRepository;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
-import java.util.List;
 
 /**
  * Обновление сущности
@@ -19,6 +19,7 @@ import java.util.List;
 public class MakeTaskOpenUseCase extends UseCase<MakeTaskOpenUseCase.InputValues, SingletonEntityOutputValues<TaskEntity>> {
 
     private final TaskRepository taskRepository;
+    private final UpdateTaskCountInSpaceUseCase updateTaskCountInSlotUseCase;
 
     @Override
     public SingletonEntityOutputValues<TaskEntity> execute(InputValues inputValues) {
@@ -31,6 +32,8 @@ public class MakeTaskOpenUseCase extends UseCase<MakeTaskOpenUseCase.InputValues
 
         taskEntity.setStatus(TaskStatus.OPEN);
         taskEntity = taskRepository.save(taskEntity);
+
+        updateTaskCountInSlotUseCase.execute(UpdateTaskCountInSpaceUseCase.InputValues.of(taskEntity.getSpaceId()));
 
         return SingletonEntityOutputValues.of(taskEntity);
     }

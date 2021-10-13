@@ -2,7 +2,7 @@ package com.sol.domain.task.usecases;
 
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
-import com.sol.domain.base.entity.Icon;
+import com.sol.domain.space.usecases.UpdateTaskCountInSpaceUseCase;
 import com.sol.domain.task.entity.TaskEntity;
 import com.sol.domain.task.entity.TaskStatus;
 import com.sol.domain.task.exceptions.HasNoAccessToTaskException;
@@ -11,7 +11,6 @@ import com.sol.domain.task.port.TaskRepository;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -21,6 +20,7 @@ import java.util.List;
 public class MakeTaskDoneUseCase extends UseCase<MakeTaskDoneUseCase.InputValues, SingletonEntityOutputValues<TaskEntity>> {
 
     private final TaskRepository taskRepository;
+    private final UpdateTaskCountInSpaceUseCase updateTaskCountInSlotUseCase;
 
     @Override
     public SingletonEntityOutputValues<TaskEntity> execute(InputValues inputValues) {
@@ -40,7 +40,7 @@ public class MakeTaskDoneUseCase extends UseCase<MakeTaskDoneUseCase.InputValues
         for (TaskEntity child : taskEntities) {
             execute(InputValues.of(child.getId(), inputValues.solUserId));
         }
-
+        updateTaskCountInSlotUseCase.execute(UpdateTaskCountInSpaceUseCase.InputValues.of(taskEntity.getSpaceId()));
         return SingletonEntityOutputValues.of(taskEntity);
     }
 

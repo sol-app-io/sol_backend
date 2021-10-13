@@ -39,6 +39,12 @@ public class SpaceEntity extends BaseEntity<String> {
 
     protected Integer sortNum;
 
+    /**
+     * countTask
+     */
+    protected Long countTask = 0l;
+
+
     protected Type type = Type.DEFAULT;
 
     /************************************ Constructors ************************************/

@@ -1,6 +1,7 @@
 package com.sol.domain.slot.config;
 
 import com.sol.domain.slot.usecases.*;
+import com.sol.domain.task.port.TaskRepository;
 import com.sol.domain.task.usecases.RecalcSlotsTimeForTaskUseCase;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -17,7 +18,7 @@ public class SlotConfig {
     private final FindByDateSlotUseCase findByDateSlotUseCase;
     private final FindByTaskSlotUseCase findByTaskSlotUseCase;
 
-    public SlotConfig(SlotRepository slotRepository, SlotIdGenerator<?> slotIdGenerator, RecalcSlotsTimeForTaskUseCase recalcSlotsTimeForTaskUseCase) {
+    public SlotConfig(SlotRepository slotRepository, SlotIdGenerator<?> slotIdGenerator, RecalcSlotsTimeForTaskUseCase recalcSlotsTimeForTaskUseCase, TaskRepository taskRepository) {
         this.createSlotUseCase = new CreateSlotUseCase(slotRepository, slotIdGenerator, recalcSlotsTimeForTaskUseCase);
         this.deleteSlotUseCase = new DeleteSlotUseCase(slotRepository, recalcSlotsTimeForTaskUseCase);
         this.findSlotByIdUseCase = new FindSlotByIdUseCase(slotRepository);

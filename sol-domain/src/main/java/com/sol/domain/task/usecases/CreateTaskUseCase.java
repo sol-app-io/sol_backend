@@ -6,6 +6,7 @@ import com.rcore.domain.commons.usecase.model.IdInputValues;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
 import com.sol.domain.base.entity.Icon;
 import com.sol.domain.base.utils.DateUtils;
+import com.sol.domain.space.usecases.UpdateTaskCountInSpaceUseCase;
 import com.sol.domain.solUser.entity.SolUserEntity;
 import com.sol.domain.solUser.usecases.MeUseCase;
 import com.sol.domain.space.entity.SpaceEntity;
@@ -22,9 +23,7 @@ import com.sol.domain.task.entity.*;
 import com.sol.domain.task.port.TaskIdGenerator;
 import com.sol.domain.task.port.TaskRepository;
 
-import java.time.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -36,6 +35,7 @@ public class CreateTaskUseCase extends AbstractCreateUseCase<TaskEntity, TaskIdG
     private final FindSpaceByIdUseCase findSpaceByIdUseCase;
     private final FindTaskByIdUseCase findTaskByIdUseCase;
     private final FindInboxSpaceByOwnerIdUseCase findInboxSpaceByOwnerIdUseCase;
+    private final UpdateTaskCountInSpaceUseCase updateTaskCountInSlotUseCase;
 
     public CreateTaskUseCase(
             TaskRepository repository,
@@ -43,12 +43,14 @@ public class CreateTaskUseCase extends AbstractCreateUseCase<TaskEntity, TaskIdG
             MeUseCase meUseCase,
             FindSpaceByIdUseCase findSpaceByIdUseCase,
             FindTaskByIdUseCase findTaskByIdUseCase,
-            FindInboxSpaceByOwnerIdUseCase findInboxSpaceByOwnerIdUseCase) {
+            FindInboxSpaceByOwnerIdUseCase findInboxSpaceByOwnerIdUseCase,
+            UpdateTaskCountInSpaceUseCase updateTaskCountInSlotUseCase) {
         super(repository, idGenerator);
         this.meUseCase = meUseCase;
         this.findSpaceByIdUseCase = findSpaceByIdUseCase;
         this.findTaskByIdUseCase = findTaskByIdUseCase;
         this.findInboxSpaceByOwnerIdUseCase = findInboxSpaceByOwnerIdUseCase;
+        this.updateTaskCountInSlotUseCase = updateTaskCountInSlotUseCase;
     }
 
     private SolUserEntity solUserEntity(String credentialId) {
@@ -128,6 +130,8 @@ public class CreateTaskUseCase extends AbstractCreateUseCase<TaskEntity, TaskIdG
         }
 
         taskEntity = repository.save(taskEntity);
+
+        updateTaskCountInSlotUseCase.execute(UpdateTaskCountInSpaceUseCase.InputValues.of(spaceEntity.getOwnerId()));
 
         return SingletonEntityOutputValues.of(taskEntity);
     }

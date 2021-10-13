@@ -50,6 +50,7 @@ public class SlotDoc extends BaseDocument {
      * slotsMilliseconds;
      */
     protected Long slotsMilliseconds = 0l;
+
     /**
      * External IDs
      */

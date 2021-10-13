@@ -14,6 +14,7 @@ public class SpaceApiMapper {
                 .icon(spaceEntity.getIcon())
                 .title(spaceEntity.getTitle())
                 .sortNum(spaceEntity.getSortNum())
+                .countTask(spaceEntity.getCountTask())
                 .tasks(new ArrayList<>())
                 .build();
     }

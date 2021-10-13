@@ -17,7 +17,7 @@ public class SpaceResponse {
     private String title;
     private Icon icon = new Icon();
     private Integer sortNum;
-    private Integer countTask = 0;
+    private Long countTask = 0l;
 
     private List<TaskResponse> tasks = new ArrayList<>();
 }
