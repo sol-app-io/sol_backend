@@ -5,14 +5,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rcore.domain.commons.usecase.UseCaseExecutor;
 import com.rcore.domain.commons.usecase.impl.UseCaseExecutorImpl;
+import com.rcore.domain.security.port.AccessChecker;
 import com.rcore.domain.security.port.CredentialIdentityService;
+import com.rcore.event.driven.EventDispatcher;
+import com.rcore.rest.api.spring.commons.jackson.datetime.InstantDeserializer;
+import com.rcore.rest.api.spring.commons.jackson.datetime.InstantSerializer;
 import com.rcore.rest.api.spring.commons.jackson.datetime.LocalDateTimeDeserializer;
 import com.rcore.rest.api.spring.commons.jackson.datetime.LocalDateTimeSerializer;
 import com.rcore.rest.api.spring.security.jwt.access.JwtAccessTokenGenerator;
 import com.rcore.rest.api.spring.security.jwt.access.JwtAccessTokenParser;
 import com.rcore.rest.api.spring.security.jwt.refresh.JwtRefreshTokenGenerator;
 import com.rcore.rest.api.spring.security.jwt.refresh.JwtRefreshTokenParser;
-import com.sol.client.slot.v1.response.SlotResponse;
 import com.sol.domain.slot.config.SlotConfig;
 import com.sol.domain.slot.port.SlotIdGenerator;
 import com.sol.domain.slot.port.SlotRepository;
@@ -32,12 +35,26 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import ru.foodtechlab.lib.auth.integration.core.authorization.impl.CredentialIdentityServiceViaAuthService;
-import ru.foodtechlab.lib.auth.integration.core.commons.AccessTokenService;
+import ru.foodtechlab.lib.auth.integration.core.AccessTokenService;
+import ru.foodtechlab.lib.auth.integration.core.authorizartion.impl.AccessCheckerViaAuthService;
+import ru.foodtechlab.lib.auth.integration.core.authorizartion.impl.CredentialIdentityServiceViaAuthService;
+import ru.foodtechlab.lib.auth.integration.core.credential.CredentialServiceFacade;
+import ru.foodtechlab.lib.auth.integration.core.roleAccess.CheckAccessServiceFacade;
+import ru.foodtechlab.lib.auth.integration.core.roleAccess.RoleAccessServiceFacade;
 import ru.foodtechlab.lib.auth.integration.restapi.feign.authorization.impl.FeignHTTPCredentialServiceFacade;
 import ru.foodtechlab.lib.auth.integration.restapi.feign.commons.AuthorizationRequestInterceptor;
+import ru.foodtechlab.lib.auth.integration.restapi.feign.credential.FeignCredentialServiceClient;
+import ru.foodtechlab.lib.auth.integration.restapi.feign.credential.impl.FeignHTTPCredentialFacade;
+import ru.foodtechlab.lib.auth.integration.restapi.feign.role.access.FeignRoleAccessServiceClient;
+import ru.foodtechlab.lib.auth.integration.restapi.feign.role.access.impl.FeignHTTPRoleAccessFacade;
+import ru.foodtechlab.lib.auth.service.domain.role.port.RoleRepository;
+import ru.foodtechlab.lib.auth.service.domain.roleAccess.config.RoleAccessConfig;
+import ru.foodtechlab.lib.auth.service.domain.roleAccess.port.RoleAccessIdGenerator;
+import ru.foodtechlab.lib.auth.service.domain.roleAccess.port.RoleAccessRepository;
+import ru.foodtechlab.lib.auth.service.domain.roleAccess.port.impl.AccessCheckerImpl;
 import ru.foodtechlab.lib.auth.service.domain.token.config.TokenLifeCycleConfig;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
@@ -102,6 +119,8 @@ public class SolClientApplicationConfig {
         builder.serializerByType(LocalDateTime.class, new LocalDateTimeSerializer());
         builder.serializationInclusion(JsonInclude.Include.NON_NULL);
         builder.deserializerByType(LocalDateTime.class, new LocalDateTimeDeserializer());
+        builder.serializerByType(Instant.class, new InstantSerializer());
+        builder.deserializerByType(Instant.class, new InstantDeserializer());
         return builder.build();
     }
 
@@ -129,5 +148,20 @@ public class SolClientApplicationConfig {
     @Bean
     public SlotConfig slotConfig(SlotRepository slotRepository, SlotIdGenerator slotIdGenerator, TaskConfig taskConfig, TaskRepository taskRepository){
         return new SlotConfig(slotRepository, slotIdGenerator, taskConfig.recalcSlotsTimeForTaskUseCase(), taskRepository);
+    }
+
+    @Bean
+    public RoleAccessServiceFacade roleAccessServiceFacade(FeignRoleAccessServiceClient feignRoleAccessServiceClient){
+        return new FeignHTTPRoleAccessFacade(feignRoleAccessServiceClient);
+    }
+
+    @Bean
+    public CredentialServiceFacade credentialServiceFacade(FeignCredentialServiceClient feignCredentialServiceClient){
+        return new FeignHTTPCredentialFacade(feignCredentialServiceClient);
+    }
+
+    @Bean
+    public AccessChecker accessChecker(CheckAccessServiceFacade checkAccessServiceFacade) {
+        return new AccessCheckerViaAuthService(checkAccessServiceFacade);
     }
 }

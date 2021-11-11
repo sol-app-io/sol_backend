@@ -42,20 +42,19 @@ public class SignUpByEmailSolUserUseCase extends UseCase<SignUpByEmailSolUserUse
     private ru.foodtechlab.lib.auth.integration.core.role.response.RoleResponse solRolePassword() {
 
         Optional<ru.foodtechlab.lib.auth.integration.core.role.response.RoleResponse> role = null;
-        try{
-            role = roleServiceFacade.findByName(SOL_USER_ROLE);
-        }catch(Exception e){
+        try {
+            role = roleServiceFacade.findByCode(SOL_USER_ROLE);
+        } catch (Exception e) {
         }
 
         if (role != null && role.isPresent()) return role.get();
 
-        List<RoleResponse.AuthType> authTypes = new ArrayList<>();
-        authTypes.add(RoleResponse.AuthType.PASSWORD);
         RoleResponse roleResponse = roleServiceFacade.create(ru.foodtechlab.lib.auth.integration.core.role.request.CreateRoleRequest.builder()
                 .name(SOL_USER_ROLE)
-                .accesses(new ArrayList<>())
-                .hasBoundlessAccess(false)
-                .availableAuthTypes(authTypes).build()
+                .code(SOL_USER_ROLE)
+                .accessIds(new ArrayList<>())
+                .isRegistrationAllowed(false)
+                .build()
         );
 
         return roleResponse;
@@ -71,7 +70,8 @@ public class SignUpByEmailSolUserUseCase extends UseCase<SignUpByEmailSolUserUse
                     .findByName(
                             inputValues.email.toLowerCase(Locale.ROOT)
                     );
-        }catch (CredentialNotFoundException e){
+        } catch (CredentialNotFoundException e) {
+            e.printStackTrace();
         }
         CredentialResponse credentialResponse = null;
 
@@ -83,21 +83,26 @@ public class SignUpByEmailSolUserUseCase extends UseCase<SignUpByEmailSolUserUse
             List<CreateCredentialRequest.Role> roles = new ArrayList<>();
             RoleResponse roleResponse = solRolePassword();
             CreateCredentialRequest.Role role = CreateCredentialRequest.Role.builder()
-                    .name(roleResponse.getName())
+                    .name(roleResponse.getCode())
                     .roleId(roleResponse.getId())
                     .isBlocked(false)
                     .build();
             roles.add(role);
 
             credentialResponse = credentialServiceFacade.create(
-                    new CreateCredentialRequest(
-                            inputValues.email.toLowerCase(Locale.ROOT),
-                            inputValues.password,
-                            "",
-                            inputValues.email,
-                            roles,
-                            CredentialResponse.Status.ACTIVE
-                    )
+                    CreateCredentialRequest.builder()
+                            .email(new CredentialResponse.Email(
+                                    inputValues.email.toLowerCase(Locale.ROOT),
+                                    false
+                            ))
+                            .username(inputValues.email.toLowerCase(Locale.ROOT))
+                            .password(inputValues.password)
+                            .roles(roles)
+                            .isBlocked(false)
+                            .confirmationCodeDestinationType(CreateCredentialRequest.ConfirmationCodeDestinationType.EMAIL)
+                            .personalConfirmationCode("4242")
+                            .confirmationCodeType(CreateCredentialRequest.Type.ONE_TIME)
+                            .build()
             );
         }
 

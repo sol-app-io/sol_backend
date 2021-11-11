@@ -23,6 +23,12 @@ public class DateUtils {
                 null;
     }
 
+    public static Long convert(Instant dateTime, Integer timezoneHours) {
+        return dateTime != null && timezoneHours != null ?
+                dateTime.toEpochMilli() :
+                null;
+    }
+
     public static Long range(Long start, Long end){
         if(start == null || end == null) return 0l;
 

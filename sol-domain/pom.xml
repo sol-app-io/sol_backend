@@ -38,18 +38,13 @@
         </dependency>
         <dependency>
             <groupId>ru.foodtechlab.lib</groupId>
-            <artifactId>auth-integration-core-commons</artifactId>
-            <version>${auth-lib.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ru.foodtechlab.lib</groupId>
-            <artifactId>auth-integration-core-role</artifactId>
+            <artifactId>auth-integration-core</artifactId>
             <version>${auth-lib.version}</version>
         </dependency>
         <dependency>
             <groupId>ru.foodtechlab.lib</groupId>
             <artifactId>auth-domain</artifactId>
-            <version>2.0.9</version>
+            <version>${auth-lib.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

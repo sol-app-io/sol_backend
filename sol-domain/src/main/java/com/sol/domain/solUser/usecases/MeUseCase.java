@@ -5,7 +5,7 @@ import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
 import com.sol.domain.solUser.entity.SolUserEntity;
 import com.sol.domain.solUser.port.SolUserRepository;
 import lombok.*;
-import ru.foodtechlab.lib.auth.service.domain.authorization.exceptions.BadCredentialsException;
+import ru.foodtechlab.lib.auth.service.domain.auth.exceptions.BadCredentialsException;
 
 import java.util.Optional;
 

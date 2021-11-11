@@ -1,33 +1,20 @@
 package com.sol.client.solUser.v1.enpoints;
 
-import com.rcore.domain.security.model.AccessTokenData;
-import com.rcore.domain.security.model.CredentialDetails;
-import com.rcore.domain.security.model.RefreshTokenData;
-import com.rcore.domain.security.port.TokenGenerator;
 import com.rcore.rest.api.commons.response.SuccessApiResponse;
 import com.sol.client.solUser.v1.api.SignUpEmailRequest;
 import com.sol.client.solUser.v1.api.SignUpResponse;
-import com.sol.client.solUser.v1.api.UpdateRefreshTokenRequest;
 import com.sol.client.solUser.v1.routes.SignUpRoutes;
 import com.sol.domain.solUser.config.SolUserConfig;
 import com.sol.domain.solUser.entity.SolUserEntity;
-import com.sol.domain.solUser.usecases.MeUseCase;
 import com.sol.domain.solUser.usecases.SignUpByEmailSolUserUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ru.foodtechlab.lib.auth.service.domain.authorization.config.AuthorizationConfig;
-import ru.foodtechlab.lib.auth.service.domain.authorization.usecases.PasswordAuthorizationUseCase;
-import ru.foodtechlab.lib.auth.service.domain.credential.entity.CredentialEntity;
-import ru.foodtechlab.lib.auth.service.domain.token.config.TokenConfig;
-import ru.foodtechlab.lib.auth.service.domain.token.entity.TokenPair;
-
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
-public class SignUpController {
+public class SignUpController  {
 
     private final SolUserConfig solUserConfig;
 

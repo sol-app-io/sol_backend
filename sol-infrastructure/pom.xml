@@ -25,7 +25,7 @@
 
         <dependency>
             <groupId>ru.foodtechlab.lib</groupId>
-            <artifactId>auth-integration-core-commons</artifactId>
+            <artifactId>auth-integration-core</artifactId>
             <version>${auth-lib.version}</version>
         </dependency>
 
@@ -43,13 +43,7 @@
 
         <dependency>
             <groupId>ru.foodtechlab.lib</groupId>
-            <artifactId>auth-integration-core-authorization</artifactId>
-            <version>${auth-lib.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>ru.foodtechlab.lib</groupId>
-            <artifactId>auth-integration-core-role</artifactId>
+            <artifactId>auth-integration-core</artifactId>
             <version>${auth-lib.version}</version>
         </dependency>
 

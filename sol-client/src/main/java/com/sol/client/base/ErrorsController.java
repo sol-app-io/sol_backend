@@ -1,23 +1,5 @@
 package com.sol.client.base;
 
-import com.sol.domain.solUser.exceptions.SolUserExistException;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.foodtechlab.aeh.core.ErrorApiResponse;
-import ru.foodtechlab.aeh.core.Error;
-import ru.foodtechlab.lib.auth.integration.core.authorization.exception.InvalidTokenException;
-import ru.foodtechlab.lib.auth.service.domain.authorization.exceptions.BadCredentialsException;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
-import java.util.Locale;
-
 //@Slf4j
 //@RestControllerAdvice
 //@Order(Ordered.HIGHEST_PRECEDENCE)

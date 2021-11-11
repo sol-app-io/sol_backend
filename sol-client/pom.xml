@@ -69,14 +69,19 @@
             <version>${rcore.version}</version>
         </dependency>
         <dependency>
-            <groupId>ru.foodtechlab.lib</groupId>
-            <artifactId>authorization-api</artifactId>
-            <version>${auth-lib.version}</version>
-        </dependency>
-        <dependency>
             <groupId>ru.foodtechlab.aeh</groupId>
             <artifactId>spring-api-error-handling</artifactId>
             <version>${api-error-handling.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.foodtechlab.lib</groupId>
+            <artifactId>auth-integration-restapi-feign-role-access</artifactId>
+            <version>${auth-lib.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.foodtechlab.lib</groupId>
+            <artifactId>auth-integration-proxy-api</artifactId>
+            <version>${auth-lib.version}</version>
         </dependency>
 
         <dependency>
