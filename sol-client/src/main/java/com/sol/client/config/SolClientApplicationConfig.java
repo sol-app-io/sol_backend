@@ -16,6 +16,9 @@ import com.rcore.rest.api.spring.security.jwt.access.JwtAccessTokenGenerator;
 import com.rcore.rest.api.spring.security.jwt.access.JwtAccessTokenParser;
 import com.rcore.rest.api.spring.security.jwt.refresh.JwtRefreshTokenGenerator;
 import com.rcore.rest.api.spring.security.jwt.refresh.JwtRefreshTokenParser;
+import com.sol.domain.category.config.CategoryConfig;
+import com.sol.domain.category.port.CategoryIdGenerator;
+import com.sol.domain.category.port.CategoryRepository;
 import com.sol.domain.slot.config.SlotConfig;
 import com.sol.domain.slot.port.SlotIdGenerator;
 import com.sol.domain.slot.port.SlotRepository;
@@ -47,11 +50,6 @@ import ru.foodtechlab.lib.auth.integration.restapi.feign.credential.FeignCredent
 import ru.foodtechlab.lib.auth.integration.restapi.feign.credential.impl.FeignHTTPCredentialFacade;
 import ru.foodtechlab.lib.auth.integration.restapi.feign.role.access.FeignRoleAccessServiceClient;
 import ru.foodtechlab.lib.auth.integration.restapi.feign.role.access.impl.FeignHTTPRoleAccessFacade;
-import ru.foodtechlab.lib.auth.service.domain.role.port.RoleRepository;
-import ru.foodtechlab.lib.auth.service.domain.roleAccess.config.RoleAccessConfig;
-import ru.foodtechlab.lib.auth.service.domain.roleAccess.port.RoleAccessIdGenerator;
-import ru.foodtechlab.lib.auth.service.domain.roleAccess.port.RoleAccessRepository;
-import ru.foodtechlab.lib.auth.service.domain.roleAccess.port.impl.AccessCheckerImpl;
 import ru.foodtechlab.lib.auth.service.domain.token.config.TokenLifeCycleConfig;
 
 import java.time.Instant;
@@ -163,5 +161,10 @@ public class SolClientApplicationConfig {
     @Bean
     public AccessChecker accessChecker(CheckAccessServiceFacade checkAccessServiceFacade) {
         return new AccessCheckerViaAuthService(checkAccessServiceFacade);
+    }
+
+    @Bean
+    public CategoryConfig categoryConfig(CategoryRepository categoryRepository, CategoryIdGenerator categoryIdGenerator) {
+        return new CategoryConfig(categoryRepository, categoryIdGenerator);
     }
 }
