@@ -5,6 +5,8 @@ import com.sol.domain.solUser.port.SolUserRepository;
 import com.sol.domain.solUser.usecases.*;
 import com.sol.domain.space.config.SpaceConfig;
 import com.sol.domain.space.usecases.CreateSpaceUseCase;
+import com.sol.domain.viewUser.config.ViewUserConfig;
+import com.sol.domain.viewUser.usecases.InitAllViewsUseCase;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -23,11 +25,18 @@ public class SolUserConfig {
             SolUserIdGenerator<?> solUserIdGenerator,
             SpaceConfig spaceConfig,
             ru.foodtechlab.lib.auth.integration.core.credential.CredentialServiceFacade credentialServiceFacade,
-            ru.foodtechlab.lib.auth.integration.core.role.RoleServiceFacade roleServiceFacade
+            ru.foodtechlab.lib.auth.integration.core.role.RoleServiceFacade roleServiceFacade,
+            ViewUserConfig viewUserConfig
     ) {
         this.signUpByEmailSolUserUseCase = new SignUpByEmailSolUserUseCase(
-                solUserRepository, solUserIdGenerator, credentialServiceFacade, roleServiceFacade, spaceConfig.createSpaceUseCase()
+                solUserRepository,
+                solUserIdGenerator,
+                credentialServiceFacade,
+                roleServiceFacade,
+                spaceConfig.createSpaceUseCase(),
+                viewUserConfig.initAllViewsUseCase()
         );
+
         this.deleteSolUserUseCase = new DeleteSolUserUseCase(solUserRepository);
         this.findSolUserByIdUseCase = new FindSolUserByIdUseCase(solUserRepository);
         this.updateSolUserUseCase = new UpdateSolUserUseCase(solUserRepository);

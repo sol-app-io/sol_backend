@@ -15,17 +15,17 @@ import javax.validation.constraints.NotBlank;
 @RequiredArgsConstructor
 public class UpdateTaskInViewUseCase extends UseCase<UpdateTaskInViewUseCase.InputValues, SingletonEntityOutputValues<TaskInViewEntity>> {
 
+    protected final FindTaskInViewByIdUseCase findTaskInViewByIdUseCase;
     private final TaskInViewRepository taskInViewRepository;
 
     @Override
     public SingletonEntityOutputValues<TaskInViewEntity> execute(InputValues inputValues) {
-        TaskInViewEntity taskInViewEntity = taskInViewRepository.findById(inputValues.getId())
-                .orElseThrow(TaskInViewNotFoundException::new);
+        TaskInViewEntity taskInViewEntity = findTaskInViewByIdUseCase.execute(FindTaskInViewByIdUseCase.InputValues.of(
+                inputValues.viewId, inputValues.taskId
+        )).getEntity();
 
-        taskInViewEntity.setViewId(inputValues.viewId);
-        taskInViewEntity.setTaskId(inputValues.taskId);
         taskInViewEntity.setSortNum(inputValues.sortNum);
-        
+
         taskInViewEntity = taskInViewRepository.save(taskInViewEntity);
 
         return SingletonEntityOutputValues.of(taskInViewEntity);
@@ -36,20 +36,17 @@ public class UpdateTaskInViewUseCase extends UseCase<UpdateTaskInViewUseCase.Inp
     @Getter
     @Builder
     public static class InputValues implements UseCase.InputValues {
-        @NotBlank
-        protected String id;
         /**
-        * view 
-        */
+         * view
+         */
         protected String viewId;
         /**
-        * Task 
-        */
+         * Task
+         */
         protected String taskId;
         /**
-        * Sort num 
-        */
+         * Sort num
+         */
         protected Integer sortNum;
-
     }
 }

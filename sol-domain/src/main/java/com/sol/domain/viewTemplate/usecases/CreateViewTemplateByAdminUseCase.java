@@ -15,10 +15,10 @@ import com.sol.domain.viewTemplate.port.ViewTemplateRepository;
 /**
  * Создание сущности
  */
-public class CreateViewTemplateUseCase extends AbstractCreateUseCase<ViewTemplateEntity, ViewTemplateIdGenerator<?>, ViewTemplateRepository, CreateViewTemplateUseCase.InputValues> {
+public class CreateViewTemplateByAdminUseCase extends AbstractCreateUseCase<ViewTemplateEntity, ViewTemplateIdGenerator<?>, ViewTemplateRepository, CreateViewTemplateByAdminUseCase.InputValues> {
 
 
-    public CreateViewTemplateUseCase(ViewTemplateRepository repository, ViewTemplateIdGenerator idGenerator) {
+    public CreateViewTemplateByAdminUseCase(ViewTemplateRepository repository, ViewTemplateIdGenerator idGenerator) {
         super(repository, idGenerator);
     }
 
@@ -27,15 +27,14 @@ public class CreateViewTemplateUseCase extends AbstractCreateUseCase<ViewTemplat
 
         ViewTemplateEntity viewTemplateEntity = new ViewTemplateEntity(idGenerator.generate());
 
-        viewTemplateEntity.setOwnerId(inputValues.ownerId);
         viewTemplateEntity.setTitle(inputValues.title);
         viewTemplateEntity.setDescription(inputValues.description);
-        viewTemplateEntity.setCreatedFromViewId(inputValues.createdFromViewId);
-        viewTemplateEntity.setStatus(inputValues.status);
-        viewTemplateEntity.setOwnerType(inputValues.ownerType);
-        viewTemplateEntity.setLanguage(inputValues.language);
-        viewTemplateEntity.setView(inputValues.view);
-        viewTemplateEntity.setAddByDefault(inputValues.addByDefault);
+        viewTemplateEntity.setStatus(ViewTemplateEntity.Status.DRAFT);
+        viewTemplateEntity.setOwnerType(ViewTemplateEntity.OwnerType.BY_ADMIN);
+        viewTemplateEntity.setLanguage(ViewTemplateEntity.Language.ENGLISH);
+        viewTemplateEntity.setView(new View());
+        viewTemplateEntity.setAddByDefault(false);
+        viewTemplateEntity.setCanEdit(false);
 
         viewTemplateEntity = repository.save(viewTemplateEntity);
 
@@ -48,10 +47,6 @@ public class CreateViewTemplateUseCase extends AbstractCreateUseCase<ViewTemplat
     @Data
     public static class InputValues implements UseCase.InputValues {
         /**
-        * Owner 
-        */
-        protected String ownerId;
-        /**
         * Заголовок 
         */
         protected String title;
@@ -59,30 +54,5 @@ public class CreateViewTemplateUseCase extends AbstractCreateUseCase<ViewTemplat
         * description 
         */
         protected String description;
-        /**
-        * Parent view 
-        */
-        protected String createdFromViewId;
-        /**
-        * Status 
-        */
-        protected ViewTemplateEntity.Status status;
-        /**
-        * Owner type 
-        */
-        protected ViewTemplateEntity.OwnerType ownerType;
-        /**
-        * language 
-        */
-        protected ViewTemplateEntity.Language language;
-        /**
-        * view 
-        */
-        protected View view;
-        /**
-        * added by default 
-        */
-        protected Boolean addByDefault;
-
     }
 }

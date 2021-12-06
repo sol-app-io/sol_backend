@@ -16,7 +16,9 @@ import java.util.List;
 @SuperBuilder
 @Data
 public class ViewsSortEntity extends BaseEntity<String> {
-
+    public enum Type{
+        ROOT, SPACE, TASK
+    }
 
     /**
      * Owner 
@@ -25,7 +27,7 @@ public class ViewsSortEntity extends BaseEntity<String> {
     /**
      * Type 
      */
-    protected String type;
+    protected Type type;
     /**
      * Views 
      */

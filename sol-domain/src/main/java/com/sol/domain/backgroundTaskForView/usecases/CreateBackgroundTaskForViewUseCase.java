@@ -27,8 +27,8 @@ public class CreateBackgroundTaskForViewUseCase extends AbstractCreateUseCase<Ba
         BackgroundTaskForViewEntity backgroundTaskForViewEntity = new BackgroundTaskForViewEntity(idGenerator.generate());
 
         backgroundTaskForViewEntity.setTaskId(inputValues.taskId);
-        backgroundTaskForViewEntity.setStatus(inputValues.status);
-        backgroundTaskForViewEntity.setLog(inputValues.log);
+        backgroundTaskForViewEntity.setStatus(BackgroundTaskForViewEntity.Status.NEW);
+        backgroundTaskForViewEntity.setLog("");
 
         backgroundTaskForViewEntity = repository.save(backgroundTaskForViewEntity);
 
@@ -44,14 +44,5 @@ public class CreateBackgroundTaskForViewUseCase extends AbstractCreateUseCase<Ba
         * Task 
         */
         protected String taskId;
-        /**
-        * status 
-        */
-        protected BackgroundTaskForViewEntity.Status status;
-        /**
-        * log 
-        */
-        protected String log;
-
     }
 }

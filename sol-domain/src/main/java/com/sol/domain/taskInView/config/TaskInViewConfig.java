@@ -1,5 +1,6 @@
 package com.sol.domain.taskInView.config;
 
+import com.sol.domain.task.port.TaskRepository;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import com.sol.domain.taskInView.port.TaskInViewIdGenerator;
@@ -19,11 +20,11 @@ public class TaskInViewConfig {
     private final UpdateTaskInViewUseCase updateTaskInViewUseCase;
     private final FindTaskInViewUseCase findTaskInViewUseCase;
 
-    public TaskInViewConfig(TaskInViewRepository taskInViewRepository, TaskInViewIdGenerator<?> taskInViewIdGenerator) {
-        this.createTaskInViewUseCase = new CreateTaskInViewUseCase(taskInViewRepository, taskInViewIdGenerator);
-        this.deleteTaskInViewUseCase = new DeleteTaskInViewUseCase(taskInViewRepository);
-        this.findTaskInViewByIdUseCase = new FindTaskInViewByIdUseCase(taskInViewRepository);
-        this.updateTaskInViewUseCase = new UpdateTaskInViewUseCase(taskInViewRepository);
+    public TaskInViewConfig(TaskInViewRepository taskInViewRepository, TaskInViewIdGenerator<?> taskInViewIdGenerator, TaskRepository taskRepository) {
+        this.findTaskInViewByIdUseCase = new FindTaskInViewByIdUseCase(taskInViewRepository, taskInViewIdGenerator, taskRepository);
         this.findTaskInViewUseCase = new FindTaskInViewUseCase(taskInViewRepository);
+        this.createTaskInViewUseCase = new CreateTaskInViewUseCase(this.findTaskInViewByIdUseCase, taskInViewRepository);
+        this.deleteTaskInViewUseCase = new DeleteTaskInViewUseCase(this.findTaskInViewByIdUseCase, taskInViewRepository, taskRepository);
+        this.updateTaskInViewUseCase = new UpdateTaskInViewUseCase(this.findTaskInViewByIdUseCase, taskInViewRepository);
     }
 }

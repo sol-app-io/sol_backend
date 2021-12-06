@@ -32,6 +32,7 @@ public class ViewUserEntity extends BaseEntity<String> {
      * Has new task 
      */
     protected Boolean hasTaskAdded;
+    protected Boolean canEdit = true;
     /**
      * view 
      */

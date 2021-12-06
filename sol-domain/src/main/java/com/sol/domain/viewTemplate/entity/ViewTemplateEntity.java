@@ -62,6 +62,7 @@ public class ViewTemplateEntity extends BaseEntity<String> {
      * added by default
      */
     protected Boolean addByDefault = false;
+    protected Boolean canEdit = false;
 
 
     public ViewTemplateEntity(String id) {

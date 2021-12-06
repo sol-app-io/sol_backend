@@ -1,29 +1,45 @@
 package com.sol.domain.viewTemplate.config;
 
+import com.sol.domain.viewTemplate.usecases.*;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import com.sol.domain.viewTemplate.port.ViewTemplateIdGenerator;
 import com.sol.domain.viewTemplate.port.ViewTemplateRepository;
-import com.sol.domain.viewTemplate.usecases.CreateViewTemplateUseCase;
-import com.sol.domain.viewTemplate.usecases.DeleteViewTemplateUseCase;
-import com.sol.domain.viewTemplate.usecases.FindViewTemplateByIdUseCase;
-import com.sol.domain.viewTemplate.usecases.UpdateViewTemplateUseCase;
-import com.sol.domain.viewTemplate.usecases.FindViewTemplateUseCase;
 
 @Accessors(fluent = true)
 @Getter
 public class ViewTemplateConfig {
-    private final CreateViewTemplateUseCase createViewTemplateUseCase;
+    private final CreateViewTemplateByAdminUseCase createViewTemplateByAdminUseCase;
     private final DeleteViewTemplateUseCase deleteViewTemplateUseCase;
     private final FindViewTemplateByIdUseCase findViewTemplateByIdUseCase;
-    private final UpdateViewTemplateUseCase updateViewTemplateUseCase;
-    private final FindViewTemplateUseCase findViewTemplateUseCase;
+    private final UpdateViewInTemplateByAdminUseCase updateViewInTemplateByAdminUseCase;
+    private final FindViewTemplateForAdminUseCase findViewTemplateForAdminUseCase;
+    private final FindViewTemplateDefaultsUseCase findViewTemplateDefaultsUseCase;
+    private final FindViewTemplatesUseCase findViewTemplatesUseCase;
 
-    public ViewTemplateConfig(ViewTemplateRepository viewTemplateRepository, ViewTemplateIdGenerator<?> viewTemplateIdGenerator) {
-        this.createViewTemplateUseCase = new CreateViewTemplateUseCase(viewTemplateRepository, viewTemplateIdGenerator);
+    /**
+     * Params
+     */
+    private final AddParamsToViewInTemplateUseCase addParamsToViewInTemplateUseCase;
+    private final EditParamsToViewInTemplateUseCase editParamsToViewInTemplateUseCase;
+    private final DeleteParamsToViewInTemplateUseCase deleteParamsToViewInTemplateUseCase;
+
+    public ViewTemplateConfig(
+            ViewTemplateRepository viewTemplateRepository,
+            ViewTemplateIdGenerator<?> viewTemplateIdGenerator) {
+        this.createViewTemplateByAdminUseCase = new CreateViewTemplateByAdminUseCase(viewTemplateRepository, viewTemplateIdGenerator);
         this.deleteViewTemplateUseCase = new DeleteViewTemplateUseCase(viewTemplateRepository);
         this.findViewTemplateByIdUseCase = new FindViewTemplateByIdUseCase(viewTemplateRepository);
-        this.updateViewTemplateUseCase = new UpdateViewTemplateUseCase(viewTemplateRepository);
-        this.findViewTemplateUseCase = new FindViewTemplateUseCase(viewTemplateRepository);
+        this.updateViewInTemplateByAdminUseCase = new UpdateViewInTemplateByAdminUseCase(viewTemplateRepository);
+        this.findViewTemplateForAdminUseCase = new FindViewTemplateForAdminUseCase(viewTemplateRepository);
+        this.findViewTemplatesUseCase = new FindViewTemplatesUseCase(viewTemplateRepository);
+
+        /**
+         * Params
+         */
+        this.addParamsToViewInTemplateUseCase = new AddParamsToViewInTemplateUseCase(viewTemplateRepository,viewTemplateIdGenerator);
+        this.editParamsToViewInTemplateUseCase = new EditParamsToViewInTemplateUseCase(viewTemplateRepository);
+        this.deleteParamsToViewInTemplateUseCase = new DeleteParamsToViewInTemplateUseCase(viewTemplateRepository);
+        this.findViewTemplateDefaultsUseCase = new FindViewTemplateDefaultsUseCase(viewTemplateRepository);
     }
 }

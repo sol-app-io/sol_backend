@@ -15,10 +15,10 @@ import com.sol.domain.viewUser.port.ViewUserRepository;
 /**
  * Создание сущности
  */
-public class CreateViewUserUseCase extends AbstractCreateUseCase<ViewUserEntity, ViewUserIdGenerator<?>, ViewUserRepository, CreateViewUserUseCase.InputValues> {
+public class CreateViewUserManuallyByUserUseCase extends AbstractCreateUseCase<ViewUserEntity, ViewUserIdGenerator<?>, ViewUserRepository, CreateViewUserManuallyByUserUseCase.InputValues> {
 
 
-    public CreateViewUserUseCase(ViewUserRepository repository, ViewUserIdGenerator idGenerator) {
+    public CreateViewUserManuallyByUserUseCase(ViewUserRepository repository, ViewUserIdGenerator idGenerator) {
         super(repository, idGenerator);
     }
 
@@ -28,10 +28,11 @@ public class CreateViewUserUseCase extends AbstractCreateUseCase<ViewUserEntity,
         ViewUserEntity viewUserEntity = new ViewUserEntity(idGenerator.generate());
 
         viewUserEntity.setOwnerId(inputValues.ownerId);
-        viewUserEntity.setCreatedFromTemplateId(inputValues.createdFromTemplateId);
-        viewUserEntity.setHasNewTaskToAdd(inputValues.hasNewTaskToAdd);
-        viewUserEntity.setHasTaskAdded(inputValues.hasTaskAdded);
+        viewUserEntity.setCreatedFromTemplateId(null);
+        viewUserEntity.setHasNewTaskToAdd(false);
+        viewUserEntity.setHasTaskAdded(false);
         viewUserEntity.setView(inputValues.view);
+        viewUserEntity.setCanEdit(true);
 
         viewUserEntity = repository.save(viewUserEntity);
 
@@ -48,19 +49,7 @@ public class CreateViewUserUseCase extends AbstractCreateUseCase<ViewUserEntity,
         */
         protected String ownerId;
         /**
-        * Created from template 
-        */
-        protected String createdFromTemplateId;
-        /**
-        * Has new task 
-        */
-        protected Boolean hasNewTaskToAdd;
-        /**
-        * Has new task 
-        */
-        protected Boolean hasTaskAdded;
-        /**
-        * view 
+        * view
         */
         protected View view;
 
