@@ -16,6 +16,12 @@ import com.rcore.rest.api.spring.security.jwt.access.JwtAccessTokenGenerator;
 import com.rcore.rest.api.spring.security.jwt.access.JwtAccessTokenParser;
 import com.rcore.rest.api.spring.security.jwt.refresh.JwtRefreshTokenGenerator;
 import com.rcore.rest.api.spring.security.jwt.refresh.JwtRefreshTokenParser;
+import com.sol.domain.backgroundTaskForView.config.BackgroundTaskForViewConfig;
+import com.sol.domain.backgroundTaskForView.port.BackgroundTaskForViewIdGenerator;
+import com.sol.domain.backgroundTaskForView.port.BackgroundTaskForViewRepository;
+import com.sol.domain.category.config.CategoryConfig;
+import com.sol.domain.category.port.CategoryIdGenerator;
+import com.sol.domain.category.port.CategoryRepository;
 import com.sol.domain.slot.config.SlotConfig;
 import com.sol.domain.slot.port.SlotIdGenerator;
 import com.sol.domain.slot.port.SlotRepository;
@@ -29,6 +35,19 @@ import com.sol.domain.space.usecases.UpdateTaskCountInSpaceUseCase;
 import com.sol.domain.task.config.TaskConfig;
 import com.sol.domain.task.port.TaskIdGenerator;
 import com.sol.domain.task.port.TaskRepository;
+import com.sol.domain.taskInView.config.TaskInViewConfig;
+import com.sol.domain.taskInView.port.TaskInViewIdGenerator;
+import com.sol.domain.taskInView.port.TaskInViewRepository;
+import com.sol.domain.taskInView.usecases.CreateTaskInViewUseCase;
+import com.sol.domain.viewTemplate.config.ViewTemplateConfig;
+import com.sol.domain.viewTemplate.port.ViewTemplateIdGenerator;
+import com.sol.domain.viewTemplate.port.ViewTemplateRepository;
+import com.sol.domain.viewUser.config.ViewUserConfig;
+import com.sol.domain.viewUser.port.ViewUserIdGenerator;
+import com.sol.domain.viewUser.port.ViewUserRepository;
+import com.sol.domain.viewsSort.config.ViewsSortConfig;
+import com.sol.domain.viewsSort.port.ViewsSortIdGenerator;
+import com.sol.domain.viewsSort.port.ViewsSortRepository;
 import feign.RequestInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,11 +66,6 @@ import ru.foodtechlab.lib.auth.integration.restapi.feign.credential.FeignCredent
 import ru.foodtechlab.lib.auth.integration.restapi.feign.credential.impl.FeignHTTPCredentialFacade;
 import ru.foodtechlab.lib.auth.integration.restapi.feign.role.access.FeignRoleAccessServiceClient;
 import ru.foodtechlab.lib.auth.integration.restapi.feign.role.access.impl.FeignHTTPRoleAccessFacade;
-import ru.foodtechlab.lib.auth.service.domain.role.port.RoleRepository;
-import ru.foodtechlab.lib.auth.service.domain.roleAccess.config.RoleAccessConfig;
-import ru.foodtechlab.lib.auth.service.domain.roleAccess.port.RoleAccessIdGenerator;
-import ru.foodtechlab.lib.auth.service.domain.roleAccess.port.RoleAccessRepository;
-import ru.foodtechlab.lib.auth.service.domain.roleAccess.port.impl.AccessCheckerImpl;
 import ru.foodtechlab.lib.auth.service.domain.token.config.TokenLifeCycleConfig;
 
 import java.time.Instant;
@@ -130,9 +144,10 @@ public class SolClientApplicationConfig {
             SolUserIdGenerator<?> solUserIdGenerator,
             SpaceConfig spaceConfig,
             ru.foodtechlab.lib.auth.integration.core.credential.CredentialServiceFacade credentialServiceFacade,
-            ru.foodtechlab.lib.auth.integration.core.role.RoleServiceFacade roleServiceFacade
+            ru.foodtechlab.lib.auth.integration.core.role.RoleServiceFacade roleServiceFacade,
+            ViewUserConfig viewUserConfig
     ) {
-        return new SolUserConfig(solUserRepository, solUserIdGenerator, spaceConfig, credentialServiceFacade, roleServiceFacade);
+        return new SolUserConfig(solUserRepository, solUserIdGenerator, spaceConfig, credentialServiceFacade, roleServiceFacade, viewUserConfig);
     }
 
     @Bean
@@ -141,27 +156,82 @@ public class SolClientApplicationConfig {
     }
 
     @Bean
-    public TaskConfig taskConfig(TaskRepository taskRepository, TaskIdGenerator<?> taskIdGenerator, SolUserConfig solUserConfig, SpaceConfig spaceConfig, SlotRepository slotRepository, SpaceRepository spaceRepository){
+    public TaskConfig taskConfig(TaskRepository taskRepository, TaskIdGenerator<?> taskIdGenerator, SolUserConfig solUserConfig, SpaceConfig spaceConfig, SlotRepository slotRepository, SpaceRepository spaceRepository) {
         return new TaskConfig(taskRepository, taskIdGenerator, solUserConfig.meUseCase(), spaceConfig.findSpaceByIdUseCase(), spaceConfig.findInboxSpaceByOwnerIdUseCase(), slotRepository, new UpdateTaskCountInSpaceUseCase(spaceRepository, taskRepository));
     }
 
     @Bean
-    public SlotConfig slotConfig(SlotRepository slotRepository, SlotIdGenerator slotIdGenerator, TaskConfig taskConfig, TaskRepository taskRepository){
+    public SlotConfig slotConfig(SlotRepository slotRepository, SlotIdGenerator slotIdGenerator, TaskConfig taskConfig, TaskRepository taskRepository) {
         return new SlotConfig(slotRepository, slotIdGenerator, taskConfig.recalcSlotsTimeForTaskUseCase(), taskRepository);
     }
 
     @Bean
-    public RoleAccessServiceFacade roleAccessServiceFacade(FeignRoleAccessServiceClient feignRoleAccessServiceClient){
+    public RoleAccessServiceFacade roleAccessServiceFacade(FeignRoleAccessServiceClient feignRoleAccessServiceClient) {
         return new FeignHTTPRoleAccessFacade(feignRoleAccessServiceClient);
     }
 
     @Bean
-    public CredentialServiceFacade credentialServiceFacade(FeignCredentialServiceClient feignCredentialServiceClient){
+    public CredentialServiceFacade credentialServiceFacade(FeignCredentialServiceClient feignCredentialServiceClient) {
         return new FeignHTTPCredentialFacade(feignCredentialServiceClient);
     }
 
     @Bean
     public AccessChecker accessChecker(CheckAccessServiceFacade checkAccessServiceFacade) {
         return new AccessCheckerViaAuthService(checkAccessServiceFacade);
+    }
+
+    @Bean
+    public CategoryConfig categoryConfig(CategoryRepository categoryRepository, CategoryIdGenerator categoryIdGenerator) {
+        return new CategoryConfig(categoryRepository, categoryIdGenerator);
+    }
+
+    @Bean
+    public ViewUserConfig viewUserConfig(
+            ViewUserRepository viewUserRepository,
+            ViewUserIdGenerator<?> viewUserIdGenerator,
+            TaskInViewRepository taskInViewRepository,
+            SolUserRepository solUserRepository,
+            ViewTemplateRepository viewTemplateRepository,
+            ViewsSortRepository viewsSortRepository,
+            BackgroundTaskForViewRepository backgroundTaskForViewRepository
+    ) {
+        return new ViewUserConfig(viewUserRepository, viewUserIdGenerator, taskInViewRepository, solUserRepository, viewTemplateRepository, viewsSortRepository, backgroundTaskForViewRepository);
+    }
+
+    @Bean
+    public BackgroundTaskForViewConfig backgroundTaskForViewConfig(
+            BackgroundTaskForViewRepository backgroundTaskForViewRepository,
+            BackgroundTaskForViewIdGenerator backgroundTaskForViewIdGenerator,
+            TaskRepository taskRepository,
+            ViewUserRepository viewUserRepository,
+            TaskInViewConfig taskInViewConfig
+    ) {
+        return new BackgroundTaskForViewConfig(
+                backgroundTaskForViewRepository,
+                backgroundTaskForViewIdGenerator,
+                taskRepository,
+                viewUserRepository,
+                taskInViewConfig.createTaskInViewUseCase());
+    }
+
+    @Bean
+    public TaskInViewConfig taskInViewConfig(TaskInViewRepository taskInViewRepository, TaskInViewIdGenerator taskInViewIdGenerator, TaskRepository taskRepository) {
+        return new TaskInViewConfig(taskInViewRepository, taskInViewIdGenerator, taskRepository);
+    }
+
+    @Bean
+    public ViewsSortConfig viewsSortConfig(
+            ViewsSortRepository viewsSortRepository,
+            ViewUserRepository viewUserRepository,
+            ViewsSortIdGenerator viewsSortIdGenerator) {
+        return new ViewsSortConfig(
+                viewsSortRepository, viewUserRepository, viewsSortIdGenerator
+        );
+    }
+
+    @Bean
+    public ViewTemplateConfig viewTemplateConfig(ViewTemplateRepository viewTemplateRepository,
+                                                 ViewTemplateIdGenerator viewTemplateIdGenerator){
+        return new ViewTemplateConfig(viewTemplateRepository, viewTemplateIdGenerator);
     }
 }

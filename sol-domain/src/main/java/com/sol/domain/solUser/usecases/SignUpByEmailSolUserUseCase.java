@@ -10,6 +10,7 @@ import com.sol.domain.solUser.port.SolUserIdGenerator;
 import com.sol.domain.solUser.port.SolUserRepository;
 import com.sol.domain.space.entity.SpaceEntity;
 import com.sol.domain.space.usecases.CreateSpaceUseCase;
+import com.sol.domain.viewUser.usecases.InitAllViewsUseCase;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,6 +37,7 @@ public class SignUpByEmailSolUserUseCase extends UseCase<SignUpByEmailSolUserUse
     private final ru.foodtechlab.lib.auth.integration.core.credential.CredentialServiceFacade credentialServiceFacade;
     private final ru.foodtechlab.lib.auth.integration.core.role.RoleServiceFacade roleServiceFacade;
     private final CreateSpaceUseCase createSpaceUseCase;
+    private final InitAllViewsUseCase initAllViewsUseCase;
 
     private final static String SOL_USER_ROLE = "SOL_USER_ROLE";
 
@@ -137,6 +139,8 @@ public class SignUpByEmailSolUserUseCase extends UseCase<SignUpByEmailSolUserUse
                     .build()
             );
         }
+
+        initAllViewsUseCase.execute(InitAllViewsUseCase.InputValues.of(solUserEntity));
 
         return SingletonEntityOutputValues.of(solUserEntity);
     }

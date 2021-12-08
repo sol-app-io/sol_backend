@@ -1,16 +1,15 @@
 package com.sol.client.task.v1;
 
-import com.rcore.rest.api.commons.response.OkApiResponse;
-import com.rcore.rest.api.commons.response.SearchApiResponse;
 import com.rcore.rest.api.commons.response.SuccessApiResponse;
 import com.rcore.rest.api.spring.security.CredentialPrincipal;
 import com.rcore.rest.api.spring.security.CurrentCredential;
-import com.sol.client.task.v1.request.*;
-import io.swagger.annotations.Api;
+import com.sol.client.task.v1.request.ChangeSortOfTasksRequest;
+import com.sol.client.task.v1.request.CreateTaskRequest;
+import com.sol.client.task.v1.request.TaskEditTitleRequest;
+import com.sol.client.task.v1.response.TaskResponse;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import com.sol.client.task.v1.response.TaskResponse;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
