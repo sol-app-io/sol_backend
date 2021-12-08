@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface ViewsSortRepository extends CRUDRepository<String, ViewsSortEntity, ViewsSortFilters> {
     void removeByViewId(String viewId);
     Optional<ViewsSortEntity> find(ViewsSortBySolTypeFilters filters);
+    List<ViewsSortEntity> findBySolUser(String solUserId);
 }

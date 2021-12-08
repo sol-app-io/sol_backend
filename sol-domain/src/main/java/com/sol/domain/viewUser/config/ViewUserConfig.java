@@ -24,6 +24,7 @@ public class ViewUserConfig {
     private final RemoveAllViewByTemplateForAllUserUseCase removeAllViewByTemplateForAllUserUseCase;
     private final UpdateViewsByTemplateUseCase updateViewsByTemplateUseCase;
     private final UpdateViewUserUseCase updateViewUserUseCase;
+    private final FindViewBySolUserUseCase findViewBySolUserUseCase;
 
     public ViewUserConfig(
             ViewUserRepository viewUserRepository,
@@ -47,5 +48,6 @@ public class ViewUserConfig {
         this.initAllViewsUseCase = new InitAllViewsUseCase(viewTemplateRepository, this.createViewUserFromTemplateByUserUseCase);
         this.removeAllViewByTemplateForAllUserUseCase = new RemoveAllViewByTemplateForAllUserUseCase(viewUserRepository, viewTemplateRepository, viewsSortRepository, taskInViewRepository, backgroundTaskForViewRepository);
         this.updateViewsByTemplateUseCase = new UpdateViewsByTemplateUseCase(viewUserRepository, viewTemplateRepository, taskInViewRepository);
+        this.findViewBySolUserUseCase = new FindViewBySolUserUseCase(viewUserRepository, viewsSortRepository);
     }
 }

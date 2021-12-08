@@ -6,6 +6,7 @@ import com.rcore.domain.commons.port.dto.SearchResult;
 import com.sol.domain.viewsSort.port.filters.ViewsSortBySolTypeFilters;
 import com.sol.infrastructure.database.mongo.viewsSort.query.ViewsSortBySolTypeQuery;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -17,6 +18,7 @@ import com.sol.domain.viewsSort.entity.ViewsSortEntity;
 import com.sol.domain.viewsSort.port.ViewsSortRepository;
 import com.sol.domain.viewsSort.port.filters.ViewsSortFilters;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -70,5 +72,12 @@ public class MongoViewsSortRepository implements ViewsSortRepository {
     public Optional<ViewsSortEntity> find(ViewsSortBySolTypeFilters filters) {
         Query query = new ViewsSortBySolTypeQuery(filters).getQuery();
         return Optional.ofNullable(mongoTemplate.findById(query, ViewsSortDoc.class)).map(mapper::inverseMap);
+    }
+
+    @Override
+    public List<ViewsSortEntity> findBySolUser(String solUserId) {
+        Criteria criteria = Criteria.where("ownerId").is(solUserId);
+        Query query = new Query(criteria);
+        return mongoTemplate.find(query, ViewsSortDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList());
     }
 }
