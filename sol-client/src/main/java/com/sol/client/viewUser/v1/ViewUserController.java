@@ -12,6 +12,7 @@ import com.sol.domain.solUser.entity.SolUserEntity;
 import com.sol.domain.solUser.usecases.MeUseCase;
 import com.sol.domain.taskInView.config.TaskInViewConfig;
 import com.sol.domain.taskInView.usecases.CreateTaskInViewUseCase;
+import com.sol.domain.taskInView.usecases.DeleteTaskInViewUseCase;
 import com.sol.domain.taskInView.usecases.FindByTaskUseCase;
 import com.sol.domain.viewTemplate.config.ViewTemplateConfig;
 import com.sol.domain.viewUser.config.ViewUserConfig;
@@ -73,5 +74,14 @@ public class ViewUserController implements ViewUserResource {
                         o -> mapper.map(o.getEntity())
                 )
         );
+    }
+
+    @Override
+    public SuccessApiResponse<String> delete(String taskId, String viewId, CredentialPrincipal credentialPrincipal) {
+        useCaseExecutor.execute(
+                taskInViewConfig.deleteTaskInViewUseCase(),
+                DeleteTaskInViewUseCase.InputValues.of(viewId, taskId)
+        );
+        return SuccessApiResponse.of("Ok");
     }
 }
