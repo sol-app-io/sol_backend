@@ -4,6 +4,7 @@ import com.rcore.database.mongo.commons.query.FindByIdQuery;
 import com.rcore.database.mongo.commons.utils.CollectionNameUtils;
 import com.rcore.domain.commons.port.dto.SearchResult;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -15,6 +16,7 @@ import com.sol.domain.taskInView.entity.TaskInViewEntity;
 import com.sol.domain.taskInView.port.TaskInViewRepository;
 import com.sol.domain.taskInView.port.filters.TaskInViewFilters;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -76,5 +78,13 @@ public class MongoTaskInViewRepository implements TaskInViewRepository {
     public Long count(String viewId) {
         Criteria criteria = Criteria.where("viewId").is(viewId);
         return mongoTemplate.count(new Query(criteria), TaskInViewDoc.class);
+    }
+
+    @Override
+    public List<TaskInViewEntity> findByTaskId(String taskId) {
+        Criteria criteria = Criteria.where("taskId").is(taskId);
+        Query query = new Query(criteria);
+        query.with(Sort.by(Sort.Direction.ASC, "sortNum"));
+        return mongoTemplate.find(query, TaskInViewDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList());
     }
 }
