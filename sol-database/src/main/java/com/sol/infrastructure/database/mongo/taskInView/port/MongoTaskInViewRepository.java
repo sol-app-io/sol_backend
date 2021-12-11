@@ -68,7 +68,7 @@ public class MongoTaskInViewRepository implements TaskInViewRepository {
 
     @Override
     public Optional<TaskInViewEntity> findOne(String taskId, String viewId) {
-        Criteria criteria = Criteria.where("viewId").is(viewId).and("taskId").is("taskId");
+        Criteria criteria = Criteria.where("viewId").is(viewId).and("taskId").is(taskId);
         Query query = new Query(criteria);
         query.limit(1);
         return Optional.ofNullable(mongoTemplate.findOne(query, TaskInViewDoc.class)).map(mapper::inverseMap);
