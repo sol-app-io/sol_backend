@@ -31,7 +31,7 @@ public interface ViewUserResource {
     SuccessApiResponse<TaskInViewResponse> findByTask(@RequestBody CreateTaskInViewRequest request, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
 
     @ApiOperation("Удалить таск во вью")
-    @DeleteMapping(value =  Routes.SINGLETON, produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value =  Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
     SuccessApiResponse<String> delete(@RequestParam String taskId, @RequestParam String viewId, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
 
 }
