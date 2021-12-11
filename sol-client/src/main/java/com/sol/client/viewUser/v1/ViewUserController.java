@@ -69,7 +69,7 @@ public class ViewUserController implements ViewUserResource {
         return SuccessApiResponse.of(
                 useCaseExecutor.execute(
                         taskInViewConfig.createTaskInViewUseCase(),
-                        CreateTaskInViewUseCase.InputValues.of(request.getViewId(), request.getTaskId(), request.getSortNum()),
+                        CreateTaskInViewUseCase.InputValues.of(request.getViewId(), request.getTaskId(), null),
                         o -> mapper.map(o.getEntity())
                 )
         );

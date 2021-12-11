@@ -12,5 +12,4 @@ import lombok.Setter;
 public class CreateTaskInViewRequest {
     private String taskId;
     private String viewId;
-    private Integer sortNum;
 }
