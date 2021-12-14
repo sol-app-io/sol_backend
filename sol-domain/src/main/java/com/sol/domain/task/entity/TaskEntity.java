@@ -9,7 +9,9 @@ import lombok.experimental.SuperBuilder;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * task
@@ -43,7 +45,7 @@ public class TaskEntity extends BaseEntity<String> {
     /**
      * viewIds
      */
-    protected List<String> viewIds = new ArrayList<>();
+    protected Set<String> viewIds = new HashSet<>();
     /**
      * deadline
      */

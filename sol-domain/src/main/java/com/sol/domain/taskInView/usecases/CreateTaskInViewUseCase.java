@@ -2,6 +2,8 @@ package com.sol.domain.taskInView.usecases;
 
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
+import com.sol.domain.task.entity.TaskEntity;
+import com.sol.domain.task.port.TaskRepository;
 import com.sol.domain.taskInView.entity.TaskInViewEntity;
 import com.sol.domain.taskInView.port.TaskInViewIdGenerator;
 import com.sol.domain.taskInView.port.TaskInViewRepository;
@@ -15,6 +17,7 @@ public class CreateTaskInViewUseCase extends UseCase<CreateTaskInViewUseCase.Inp
 
     protected final FindTaskInViewByIdUseCase findTaskInViewByIdUseCase;
     protected final TaskInViewRepository taskInViewRepository;
+    protected final TaskRepository taskRepository;
 
     @Override
     public SingletonEntityOutputValues<TaskInViewEntity> execute(InputValues inputValues) {
@@ -30,6 +33,10 @@ public class CreateTaskInViewUseCase extends UseCase<CreateTaskInViewUseCase.Inp
         }
 
         taskInViewEntity = taskInViewRepository.save(taskInViewEntity);
+
+        TaskEntity taskEntity = taskRepository.findById(inputValues.taskId).get();
+        taskEntity.getViewIds().add(inputValues.viewId);
+        taskRepository.save(taskEntity);
 
         return SingletonEntityOutputValues.of(taskInViewEntity);
     }
