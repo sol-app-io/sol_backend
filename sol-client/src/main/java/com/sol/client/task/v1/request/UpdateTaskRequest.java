@@ -9,6 +9,7 @@ import com.sol.domain.task.usecases.UpdateTaskUseCase;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Builder
 @Getter
@@ -29,7 +30,7 @@ public class UpdateTaskRequest {
     @ApiModelProperty("icon")
     protected Icon icon;
     @ApiModelProperty("viewIds")
-    protected List<String> viewIds;
+    protected Set<String> viewIds;
     @ApiModelProperty("planningPoints")
     protected List<String> planningPoints;
     @ApiModelProperty("deadline")

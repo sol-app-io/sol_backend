@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Time slot
@@ -44,7 +45,7 @@ public class SlotEntity extends BaseEntity<String> {
     /**
      * viewIds 
      */
-    protected List<String> viewIds;
+    protected Set<String> viewIds;
     /**
      * start Time 
      */

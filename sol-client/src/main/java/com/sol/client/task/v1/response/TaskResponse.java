@@ -12,6 +12,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Builder
 @Getter
@@ -32,7 +33,7 @@ public class TaskResponse {
     @ApiModelProperty("icon")
     protected Icon icon;
     @ApiModelProperty("viewIds")
-    protected List<String> viewIds;
+    protected Set<String> viewIds;
     @ApiModelProperty("planningPoints")
     protected List<String> planningPoints;
     @ApiModelProperty("deadline")

@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Document
 @SuperBuilder
@@ -41,7 +42,7 @@ public class TaskDoc extends BaseDocument {
     /**
      * viewIds 
      */
-    protected List<ObjectId> viewIds;
+    protected Set<ObjectId> viewIds;
     /**
      * planningPoints 
      */

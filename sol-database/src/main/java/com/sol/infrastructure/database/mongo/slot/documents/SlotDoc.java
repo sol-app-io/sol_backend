@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Document
 @SuperBuilder
@@ -37,7 +38,7 @@ public class SlotDoc extends BaseDocument {
     /**
      * viewIds
      */
-    protected List<ObjectId> viewIds;
+    protected Set<ObjectId> viewIds;
     /**
      * start Time
      */

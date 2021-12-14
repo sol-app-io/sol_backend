@@ -24,6 +24,7 @@ import com.sol.domain.task.port.TaskIdGenerator;
 import com.sol.domain.task.port.TaskRepository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
 
 /**
@@ -110,7 +111,7 @@ public class CreateTaskUseCase extends AbstractCreateUseCase<TaskEntity, TaskIdG
         taskEntity.setSpaceId(spaceEntity.getId());
         taskEntity.setTitle(inputValues.title);
         taskEntity.setIcon(inputValues.icon);
-        taskEntity.setViewIds(new ArrayList<>());
+        taskEntity.setViewIds(new HashSet<>());
         taskEntity.setDeadlineType(inputValues.deadlineType);
         taskEntity.setDeadline(DateUtils.convert(inputValues.deadline, inputValues.timezone));
         taskEntity.setTimezone(inputValues.timezone);

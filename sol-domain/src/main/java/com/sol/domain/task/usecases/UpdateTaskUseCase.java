@@ -12,6 +12,7 @@ import com.sol.domain.task.port.TaskRepository;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Обновление сущности
@@ -76,7 +77,7 @@ public class UpdateTaskUseCase extends UseCase<UpdateTaskUseCase.InputValues, Si
         /**
         * viewIds 
         */
-        protected List<String> viewIds;
+        protected Set<String> viewIds;
         /**
         * planningPoints 
         */

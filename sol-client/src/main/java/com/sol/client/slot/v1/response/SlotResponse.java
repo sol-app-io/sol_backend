@@ -13,6 +13,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Builder
 @Getter
@@ -31,7 +32,7 @@ public class SlotResponse {
     @ApiModelProperty("spaceId")
     protected String spaceId;
     @ApiModelProperty("viewIds")
-    protected List<String> viewIds;
+    protected Set<String> viewIds;
     @ApiModelProperty("startTime")
     protected Long startTime;
     @ApiModelProperty("endTime")

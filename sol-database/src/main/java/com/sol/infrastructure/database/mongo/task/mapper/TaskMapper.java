@@ -56,7 +56,7 @@ public class TaskMapper implements ExampleDataMapper<TaskEntity, TaskDoc> {
                 .spaceId(doc.getSpaceId().toString())
                 .title(doc.getTitle())
                 .icon(doc.getIcon())
-                .viewIds(doc.getViewIds().stream().map((id)-> id.toString()).collect(Collectors.toList()))
+                .viewIds(doc.getViewIds().stream().map((id)-> id.toString()).collect(Collectors.toSet()))
                 .deadline(doc.getDeadline())
                 .deadlineType(doc.getDeadlineType())
                 .timezone(doc.getTimezone())
