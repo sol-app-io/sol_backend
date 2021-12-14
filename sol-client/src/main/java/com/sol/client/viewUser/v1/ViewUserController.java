@@ -14,6 +14,7 @@ import com.sol.domain.taskInView.config.TaskInViewConfig;
 import com.sol.domain.taskInView.usecases.CreateTaskInViewUseCase;
 import com.sol.domain.taskInView.usecases.DeleteTaskInViewUseCase;
 import com.sol.domain.taskInView.usecases.FindByTaskUseCase;
+import com.sol.domain.taskInView.usecases.FindByViewUseCase;
 import com.sol.domain.viewTemplate.config.ViewTemplateConfig;
 import com.sol.domain.viewUser.config.ViewUserConfig;
 import com.sol.domain.viewUser.usecases.FindViewBySolUserUseCase;
@@ -60,6 +61,17 @@ public class ViewUserController implements ViewUserResource {
                 useCaseExecutor.execute(
                         taskInViewConfig.findByTaskUseCase(),
                         FindByTaskUseCase.InputValues.of(taskId),
+                        o -> o.getEntity().stream().map(mapper::map).collect(Collectors.toList())
+                )
+        );
+    }
+
+    @Override
+    public SuccessApiResponse<List<TaskInViewResponse>> findTasksByView(String viewId, CredentialPrincipal credentialPrincipal) {
+        return SuccessApiResponse.of(
+                useCaseExecutor.execute(
+                        taskInViewConfig.findByViewUseCase(),
+                        FindByViewUseCase.InputValues.of(viewId),
                         o -> o.getEntity().stream().map(mapper::map).collect(Collectors.toList())
                 )
         );

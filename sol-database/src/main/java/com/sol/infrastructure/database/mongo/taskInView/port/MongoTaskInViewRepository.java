@@ -87,4 +87,12 @@ public class MongoTaskInViewRepository implements TaskInViewRepository {
         query.with(Sort.by(Sort.Direction.ASC, "sortNum"));
         return mongoTemplate.find(query, TaskInViewDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList());
     }
+
+    @Override
+    public List<TaskInViewEntity> findByViewId(String viewId) {
+        Criteria criteria = Criteria.where("viewId").is(viewId);
+        Query query = new Query(criteria);
+        query.with(Sort.by(Sort.Direction.ASC, "sortNum"));
+        return mongoTemplate.find(query, TaskInViewDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList());
+    }
 }

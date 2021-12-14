@@ -12,4 +12,5 @@ public interface TaskInViewRepository extends CRUDRepository<String, TaskInViewE
     Optional<TaskInViewEntity> findOne(String taskId, String viewId);
     Long count(String viewId);
     List<TaskInViewEntity> findByTaskId(String taskId);
+    List<TaskInViewEntity> findByViewId(String viewId);
 }

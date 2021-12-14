@@ -23,6 +23,7 @@ public class ViewUserResponseMapper {
     public TaskInViewResponse map(TaskInViewEntity task) {
         return TaskInViewResponse.builder()
                 .viewId(task.getViewId())
+                .taskId(task.getTaskId())
                 .sortNum(task.getSortNum())
                 .build();
     }

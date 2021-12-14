@@ -11,5 +11,6 @@ import lombok.Setter;
 @ApiModel("View")
 public class TaskInViewResponse {
     private String viewId;
+    private String taskId;
     private Integer sortNum;
 }
