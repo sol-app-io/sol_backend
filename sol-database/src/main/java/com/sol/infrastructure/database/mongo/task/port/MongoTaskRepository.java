@@ -76,7 +76,7 @@ public class MongoTaskRepository implements TaskRepository {
     @Override
     public List<TaskEntity> findByUserId(String userId) {
         Criteria criteria = Criteria
-                .where("ownerId").is(userId)
+                .where("ownerId").is(ObjectIdHelper.mapOrDie(userId))
                 .and("status").is(TaskStatus.OPEN);
         Query query = new Query(criteria);
 //        query = query.with(Sort.by(Sort.Direction.ASC, "sortNum"));

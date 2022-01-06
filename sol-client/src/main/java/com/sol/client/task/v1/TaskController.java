@@ -66,7 +66,9 @@ public class TaskController implements TaskResource {
 
     @Override
     public SuccessApiResponse<List<TaskResponse>> tasks(CredentialPrincipal credentialPrincipal) {
-        SolUserEntity solUserEntity = solUserConfig.meUseCase().execute(MeUseCase.InputValues.builder().credentialId(credentialPrincipal.getId()).build()).getEntity();
+        SolUserEntity solUserEntity = solUserConfig
+                .meUseCase()
+                .execute(MeUseCase.InputValues.builder().credentialId(credentialPrincipal.getId()).build()).getEntity();
 
         List<TaskResponse> result = useCaseExecutor.execute(
                 taskConfig.findTaskByUserIdUseCase(),
