@@ -25,8 +25,8 @@ public interface ViewUserResource {
     @ApiOperation("Получение view, в которых есть таск")
     @GetMapping(value =  Routes.FIND_VIEW_BY_TASK, produces = MediaType.APPLICATION_JSON_VALUE)
     SuccessApiResponse<List<TaskInViewResponse>> findByTask(@RequestParam String taskId, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
-    @ApiOperation("Получение view, в которых есть таск")
 
+    @ApiOperation("Получение тасков, в которые есть во вью")
     @GetMapping(value =  Routes.FIND_TASKS_BY_VIEW, produces = MediaType.APPLICATION_JSON_VALUE)
     SuccessApiResponse<List<TaskInViewResponse>> findTasksByView(@RequestParam String viewId, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
 

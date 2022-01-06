@@ -28,6 +28,7 @@ public class TaskResponseMapper {
                 .externalIds(entity.getExternalIds())
                 .slotsMilliseconds(entity.getSlotsMilliseconds())
                 .status(entity.getStatus())
+                .child(new ArrayList<>())
                 .build();
     }
 

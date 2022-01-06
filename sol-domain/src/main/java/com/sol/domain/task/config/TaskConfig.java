@@ -27,6 +27,7 @@ public class TaskConfig {
     private final ChangeSortTasksUseCase changeSortTasksUseCase;
     private final RecalcSlotsTimeForTaskUseCase recalcSlotsTimeForTaskUseCase;
     private final UpdateTaskCountInSpaceUseCase updateTaskCountInSpaceUseCase;
+    private final FindTaskByUserIdUseCase findTaskByUserIdUseCase;
 
     public TaskConfig(
             TaskRepository taskRepository,
@@ -49,5 +50,6 @@ public class TaskConfig {
         this.changeSortTasksUseCase = new ChangeSortTasksUseCase(taskRepository);
         this.recalcSlotsTimeForTaskUseCase = new RecalcSlotsTimeForTaskUseCase(taskRepository,slotRepository);
         this.updateTaskCountInSpaceUseCase = updateTaskCountInSpaceUseCase;
+        this.findTaskByUserIdUseCase = new FindTaskByUserIdUseCase(taskRepository);
     }
 }

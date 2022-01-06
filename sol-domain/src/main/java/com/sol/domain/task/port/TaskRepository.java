@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface TaskRepository extends CRUDRepository<String, TaskEntity, TaskFilters> {
     List<TaskEntity> findBySpaceId(String spaceId, List<TaskStatus> statuses);
+    List<TaskEntity> findByUserId(String userId);
 
     List<TaskEntity> findByParentId(String parentId, List<TaskStatus> statuses);
 

@@ -74,6 +74,16 @@ public class MongoTaskRepository implements TaskRepository {
     }
 
     @Override
+    public List<TaskEntity> findByUserId(String userId) {
+        Criteria criteria = Criteria
+                .where("ownerId").is(userId)
+                .and("status").is(TaskStatus.OPEN);
+        Query query = new Query(criteria);
+//        query = query.with(Sort.by(Sort.Direction.ASC, "sortNum"));
+        return mongoTemplate.find(query, TaskDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList());
+    }
+
+    @Override
     public List<TaskEntity> findByParentId(String parentId, List<TaskStatus> statuses) {
         Criteria criteria = Criteria
                 .where("parentTaskId").is(ObjectIdHelper.mapOrDie(parentId))

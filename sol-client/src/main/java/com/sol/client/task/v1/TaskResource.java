@@ -38,6 +38,10 @@ public interface TaskResource {
     @GetMapping(value = Routes.SINGLETON, produces = MediaType.APPLICATION_JSON_VALUE)
     SuccessApiResponse<TaskResponse> singleton(@PathVariable("id") String id, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
 
+    @ApiOperation("Получение всех задач")
+    @GetMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
+    SuccessApiResponse<List<TaskResponse>> tasks(@ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+
     @ApiOperation("Make task done")
     @PostMapping(value = Routes.DONE, produces = MediaType.APPLICATION_JSON_VALUE)
     SuccessApiResponse<TaskResponse> done(@PathVariable("id") String id, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
