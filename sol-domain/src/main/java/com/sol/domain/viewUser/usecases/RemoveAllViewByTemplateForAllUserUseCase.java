@@ -53,10 +53,9 @@ public class RemoveAllViewByTemplateForAllUserUseCase extends UseCase<RemoveAllV
             if (views.getItems().size() == 0) break;
 
             for (ViewUserEntity view : views.getItems()) {
-                viewUserRepository.delete(view.getId());
                 viewsSortRepository.removeByViewId(view.getId());
                 taskInViewRepository.removeByViewId(view.getId());
-                backgroundTaskForViewRepository.removeByViewId(view.getId());
+                viewUserRepository.delete(view.getId());
             }
         }
 

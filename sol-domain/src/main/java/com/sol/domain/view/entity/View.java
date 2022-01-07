@@ -12,7 +12,7 @@ import java.util.List;
 public class View {
 
     public enum Sort {
-LIST
+        LIST
     }
 
     public enum DisplayMode {
@@ -94,7 +94,7 @@ LIST
         }
 
         public Boolean didPass(TaskEntity taskEntity) {
-            switch (type){
+            switch (type) {
                 case SLOT_TIME:
                     return didPassSlotTime(taskEntity);
                 case NOTIFICATION:
@@ -131,14 +131,14 @@ LIST
     }
 
     public CheckTaskType checkTask(TaskEntity taskEntity) {
-        if(params == null || params.size() == 0) return CheckTaskType.NOT_IN_VIEW;
+        if (params == null || params.size() == 0) return CheckTaskType.NOT_IN_VIEW;
 
         for (Params param : params) {
             Boolean paramPass = param.didPass(taskEntity);
-            if(paramPass == false) return CheckTaskType.NOT_IN_VIEW;
+            if (paramPass == false) return CheckTaskType.NOT_IN_VIEW;
         }
 
-        if(addedType.equals(AddedType.MANUALLY)) return CheckTaskType.NEED_ADD_MANUALLY;
+        if (addedType.equals(AddedType.MANUALLY)) return CheckTaskType.NEED_ADD_MANUALLY;
 
         return CheckTaskType.NEED_ADD_AUTO;
     }

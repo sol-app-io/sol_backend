@@ -65,7 +65,17 @@ public class MongoViewsSortRepository implements ViewsSortRepository {
     @Override
     public void removeByViewId(String viewId) {
         Criteria criteria = Criteria.where("viewsId").is(viewId);
-        mongoTemplate.remove(new Query(criteria), ViewsSortDoc.class);
+        while (true){
+            Query query = new Query(criteria);
+            query.limit(100);
+            List<ViewsSortDoc> result = mongoTemplate.find(query, ViewsSortDoc.class);
+            if(result.size() == 0) break;
+
+            for(ViewsSortDoc viewsSortDoc : result){
+                viewsSortDoc.getViewsId().remove(viewId);
+                mongoTemplate.save(viewsSortDoc);
+            }
+        }
     }
 
     @Override

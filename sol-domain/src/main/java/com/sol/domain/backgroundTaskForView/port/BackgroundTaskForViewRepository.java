@@ -7,6 +7,5 @@ import com.sol.domain.backgroundTaskForView.port.filters.BackgroundTaskForViewFi
 import java.util.Optional;
 
 public interface BackgroundTaskForViewRepository extends CRUDRepository<String, BackgroundTaskForViewEntity, BackgroundTaskForViewFilters> {
-    void removeByViewId(String viewId);
     Optional<BackgroundTaskForViewEntity> findNext();
 }

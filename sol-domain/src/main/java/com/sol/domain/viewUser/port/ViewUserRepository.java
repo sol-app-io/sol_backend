@@ -11,6 +11,8 @@ import java.util.Optional;
 
 public interface ViewUserRepository extends CRUDRepository<String, ViewUserEntity, ViewUserFilters> {
     SearchResult<ViewUserEntity> find(ViewUserByTemplateFilters filters);
+
     List<ViewUserEntity> find(String solUserId);
+
     Optional<ViewUserEntity> findByTemplateAndUser(String solUserId, String templateId);
 }

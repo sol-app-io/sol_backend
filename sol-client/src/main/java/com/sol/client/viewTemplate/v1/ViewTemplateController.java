@@ -6,19 +6,20 @@ import com.rcore.rest.api.commons.response.OkApiResponse;
 import com.rcore.rest.api.commons.response.SearchApiResponse;
 import com.rcore.rest.api.commons.response.SuccessApiResponse;
 import com.sol.client.viewTemplate.v1.mappers.ViewTemplateResponseMapper;
-import com.sol.client.viewTemplate.v1.request.CreateViewTemplateRequest;
-import com.sol.client.viewTemplate.v1.request.SearchViewTemplateRequest;
-import com.sol.client.viewTemplate.v1.request.UpdateViewTemplateRequest;
+import com.sol.client.viewTemplate.v1.request.*;
 import com.sol.client.viewTemplate.v1.response.ViewTemplateResponse;
+import com.sol.domain.view.entity.View;
 import com.sol.domain.viewTemplate.config.ViewTemplateConfig;
 import com.sol.domain.viewTemplate.entity.ViewTemplateEntity;
 import com.sol.domain.viewTemplate.exceptions.ViewTemplateNotFoundException;
-import com.sol.domain.viewTemplate.usecases.FindViewTemplatesUseCase;
+import com.sol.domain.viewTemplate.usecases.*;
 import com.sol.domain.viewUser.config.ViewUserConfig;
 import com.sol.domain.viewUser.usecases.CreateViewUserFromTemplateBulkByAdminUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -51,7 +52,7 @@ public class ViewTemplateController implements ViewTemplateResource {
     public OkApiResponse delete(String id) {
         return useCaseExecutor.execute(
                 viewTemplateConfig.deleteViewTemplateUseCase(),
-                IdInputValues.of(id),
+                DeleteViewTemplateUseCase.InputValues.of(id),
                 o -> new OkApiResponse()
         );
     }
@@ -92,5 +93,52 @@ public class ViewTemplateController implements ViewTemplateResource {
         );
 
         return SuccessApiResponse.of("Ok");
+    }
+
+    @Override
+    public SuccessApiResponse<ViewTemplateResponse> addParam(String id, ViewTemplateAddParamRequest request) {
+        ViewTemplateEntity viewTemplateEntity = useCaseExecutor.execute(
+                viewTemplateConfig.addParamsToViewInTemplateUseCase(),
+                AddParamsToViewInTemplateUseCase.InputValues.of(
+                        id,
+                        request.getType(),
+                        request.getValueString(),
+                        request.getValueDate(),
+                        request.getValueBool()),
+                o -> o.getEntity()
+        );
+
+        return SuccessApiResponse.of(ViewTemplateResponseMapper.map(viewTemplateEntity));
+    }
+
+    @Override
+    public SuccessApiResponse<ViewTemplateResponse> editParam(String id, ViewTemplateEditParamRequest request) {
+        ViewTemplateEntity viewTemplateEntity = useCaseExecutor.execute(
+                viewTemplateConfig.editParamsToViewInTemplateUseCase(),
+                EditParamsToViewInTemplateUseCase.InputValues.of(
+                        id,
+                        request.getId(),
+                        request.getType(),
+                        request.getValueString(),
+                        request.getValueDate(),
+                        request.getValueBool()),
+                o -> o.getEntity()
+        );
+
+        return SuccessApiResponse.of(ViewTemplateResponseMapper.map(viewTemplateEntity));
+    }
+
+    @Override
+    public SuccessApiResponse<ViewTemplateResponse> deleteParam(String id, ViewTemplateDeleteParamRequest request) {
+        ViewTemplateEntity viewTemplateEntity = useCaseExecutor.execute(
+                viewTemplateConfig.deleteParamsToViewInTemplateUseCase(),
+                DeleteParamsToViewInTemplateUseCase.InputValues.of(
+                        id,
+                        request.getId()
+                ),
+                o -> o.getEntity()
+        );
+
+        return SuccessApiResponse.of(ViewTemplateResponseMapper.map(viewTemplateEntity));
     }
 }

@@ -231,7 +231,7 @@ public class SolClientApplicationConfig {
 
     @Bean
     public ViewTemplateConfig viewTemplateConfig(ViewTemplateRepository viewTemplateRepository,
-                                                 ViewTemplateIdGenerator viewTemplateIdGenerator){
-        return new ViewTemplateConfig(viewTemplateRepository, viewTemplateIdGenerator);
+                                                 ViewTemplateIdGenerator viewTemplateIdGenerator, ViewUserConfig viewUserConfig){
+        return new ViewTemplateConfig(viewTemplateRepository, viewTemplateIdGenerator, viewUserConfig.removeAllViewByTemplateForAllUserUseCase());
     }
 }

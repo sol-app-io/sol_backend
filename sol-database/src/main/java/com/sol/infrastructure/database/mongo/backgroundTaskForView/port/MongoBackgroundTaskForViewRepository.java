@@ -61,10 +61,7 @@ public class MongoBackgroundTaskForViewRepository implements BackgroundTaskForVi
         return mongoTemplate.count(new Query(), BackgroundTaskForViewDoc.class);
     }
 
-    @Override
-    public void removeByViewId(String viewId) {
-        //Criteria criteria = Criteria.where("")
-    }
+
 
     @Override
     public Optional<BackgroundTaskForViewEntity> findNext() {

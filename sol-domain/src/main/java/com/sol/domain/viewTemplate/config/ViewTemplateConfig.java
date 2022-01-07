@@ -1,6 +1,7 @@
 package com.sol.domain.viewTemplate.config;
 
 import com.sol.domain.viewTemplate.usecases.*;
+import com.sol.domain.viewUser.usecases.RemoveAllViewByTemplateForAllUserUseCase;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import com.sol.domain.viewTemplate.port.ViewTemplateIdGenerator;
@@ -26,9 +27,10 @@ public class ViewTemplateConfig {
 
     public ViewTemplateConfig(
             ViewTemplateRepository viewTemplateRepository,
-            ViewTemplateIdGenerator<?> viewTemplateIdGenerator) {
+            ViewTemplateIdGenerator<?> viewTemplateIdGenerator,
+            RemoveAllViewByTemplateForAllUserUseCase removeAllViewByTemplateForAllUserUseCase) {
         this.createViewTemplateByAdminUseCase = new CreateViewTemplateByAdminUseCase(viewTemplateRepository, viewTemplateIdGenerator);
-        this.deleteViewTemplateUseCase = new DeleteViewTemplateUseCase(viewTemplateRepository);
+        this.deleteViewTemplateUseCase = new DeleteViewTemplateUseCase(viewTemplateRepository, removeAllViewByTemplateForAllUserUseCase);
         this.findViewTemplateByIdUseCase = new FindViewTemplateByIdUseCase(viewTemplateRepository);
         this.updateViewInTemplateByAdminUseCase = new UpdateViewInTemplateByAdminUseCase(viewTemplateRepository);
         this.findViewTemplateForAdminUseCase = new FindViewTemplateForAdminUseCase(viewTemplateRepository);
