@@ -40,6 +40,8 @@ public class TaskResponse {
     protected Long deadline;
     @ApiModelProperty("deadlineType")
     protected DeadlineType deadlineType;
+    @ApiModelProperty("deadlineChangeFewTimes")
+    protected Boolean deadlineChangeFewTimes ;
     @ApiModelProperty("timezone")
     protected Integer timezone;
     @ApiModelProperty("repeatTaskConfId")

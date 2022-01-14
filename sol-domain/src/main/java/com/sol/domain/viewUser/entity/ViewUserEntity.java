@@ -39,6 +39,7 @@ public class ViewUserEntity extends BaseEntity<String> {
     protected View view = new View();
 
 
+
     public ViewUserEntity(String id) {
         this.id = id;
     }

@@ -43,15 +43,15 @@ public class UpdateViewsSortUseCase extends UseCase<UpdateViewsSortUseCase.Input
         }else{
             viewsSortEntity = new ViewsSortEntity();
             viewsSortEntity.setId(viewsSortIdGenerator.generate());
+            viewsSortEntity.setViewsId(viewUserRepository
+                    .find(inputValues.solUserId)
+                    .stream()
+                    .map(item -> item.getId())
+                    .collect(Collectors.toList()));
         }
 
-        viewsSortEntity.setViewsId(viewUserRepository
-                .find(inputValues.solUserId)
-                .stream()
-                .map(item -> item.getId())
-                .collect(Collectors.toList()));
-        viewsSortRepository.save(viewsSortEntity);
-
+        viewsSortEntity.setViewsId(inputValues.viewsId);
+        viewsSortEntity = viewsSortRepository.save(viewsSortEntity);
         return SingletonEntityOutputValues.of(viewsSortEntity);
     }
 

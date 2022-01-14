@@ -54,10 +54,11 @@ public class UpdateViewsByTemplateUseCase extends UseCase<UpdateViewsByTemplateU
     }
 
     private void update(ViewUserEntity viewUserEntity, ViewTemplateEntity template){
-        // TODO обновить фоновые задания в UpdateViewsByTemplateUseCase
         viewUserEntity.setView(template.getView());
         viewUserEntity = viewUserRepository.save(viewUserEntity);
         taskInViewRepository.removeByViewId(viewUserEntity.getId());
+        // TODO обновить фоновые задания в UpdateViewsByTemplateUseCase
+        // Нужны фоновые задачи, на обновление тасков во воью, когда мы меняем вью
     }
 
     @AllArgsConstructor(staticName = "of")

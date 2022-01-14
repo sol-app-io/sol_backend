@@ -4,7 +4,10 @@ import com.rcore.domain.commons.usecase.UseCaseExecutor;
 import com.rcore.rest.api.commons.response.SuccessApiResponse;
 import com.rcore.rest.api.spring.security.CredentialPrincipal;
 import com.sol.client.viewUser.v1.mappers.ViewUserResponseMapper;
+import com.sol.client.viewUser.v1.request.ChangeViewSortRequest;
 import com.sol.client.viewUser.v1.request.CreateTaskInViewRequest;
+import com.sol.client.viewUser.v1.request.ViewParamRequest;
+import com.sol.client.viewUser.v1.request.UpdateUserViewRequest;
 import com.sol.client.viewUser.v1.response.TaskInViewResponse;
 import com.sol.client.viewUser.v1.response.ViewUserResponse;
 import com.sol.domain.solUser.config.SolUserConfig;
@@ -15,14 +18,18 @@ import com.sol.domain.taskInView.usecases.CreateTaskInViewUseCase;
 import com.sol.domain.taskInView.usecases.DeleteTaskInViewUseCase;
 import com.sol.domain.taskInView.usecases.FindByTaskUseCase;
 import com.sol.domain.taskInView.usecases.FindByViewUseCase;
+import com.sol.domain.view.entity.View;
 import com.sol.domain.viewTemplate.config.ViewTemplateConfig;
 import com.sol.domain.viewUser.config.ViewUserConfig;
-import com.sol.domain.viewUser.usecases.FindViewBySolUserUseCase;
+import com.sol.domain.viewUser.entity.ViewUserEntity;
+import com.sol.domain.viewUser.usecases.*;
+import com.sol.domain.viewsSort.config.ViewsSortConfig;
+import com.sol.domain.viewsSort.entity.ViewsSortEntity;
+import com.sol.domain.viewsSort.usecases.UpdateViewsSortUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -31,6 +38,7 @@ public class ViewUserController implements ViewUserResource {
     private final UseCaseExecutor useCaseExecutor;
     private final ViewTemplateConfig viewTemplateConfig;
     private final ViewUserConfig viewUserConfig;
+    private final ViewsSortConfig viewsSortConfig;
     private final TaskInViewConfig taskInViewConfig;
     private final SolUserConfig solUserConfig;
     private final ViewUserResponseMapper mapper = new ViewUserResponseMapper();
@@ -95,5 +103,146 @@ public class ViewUserController implements ViewUserResource {
                 DeleteTaskInViewUseCase.InputValues.of(viewId, taskId)
         );
         return SuccessApiResponse.of("Ok");
+    }
+
+    @Override
+    public SuccessApiResponse<ViewUserResponse> updateView(String id, UpdateUserViewRequest request, CredentialPrincipal credentialPrincipal) {
+        SolUserEntity solUserEntity = solUserConfig
+                .meUseCase()
+                .execute(
+                        MeUseCase.InputValues.builder()
+                                .credentialId(credentialPrincipal.getId())
+                                .build()
+                ).getEntity();
+
+        View view = new View();
+        view.setIcon(request.getIcon());
+        view.setTitle(request.getTitle());
+        request.setDescription(request.getDescription());
+        request.setAddedType(request.getAddedType());
+        request.setDisplayMode(request.getDisplayMode());
+        request.setSortType(request.getSortType());
+        request.setViewType(request.getViewType());
+
+        ViewUserEntity viewUserEntity = useCaseExecutor.execute(
+                viewUserConfig.updateViewUserUseCase(),
+                UpdateViewUserUseCase.InputValues.of(id, solUserEntity.getId(), view),
+                o -> o.getEntity()
+        );
+
+        return SuccessApiResponse.of(mapper.map(viewUserEntity));
+    }
+
+    @Override
+    public SuccessApiResponse<ViewUserResponse> paramAdd(String id, ViewParamRequest request, CredentialPrincipal credentialPrincipal) {
+        SolUserEntity solUserEntity = solUserConfig
+                .meUseCase()
+                .execute(
+                        MeUseCase.InputValues.builder()
+                                .credentialId(credentialPrincipal.getId())
+                                .build()
+                ).getEntity();
+
+
+        ViewUserEntity viewUserEntity = useCaseExecutor.execute(
+                viewUserConfig.addParamToViewUserUseCase(),
+                AddParamToViewUserUseCase.InputValues.of(id, solUserEntity.getId(), request.getType(), request.getValueString(), request.getValueDate(), request.getValueBool()),
+                o -> o.getEntity()
+        );
+
+        return SuccessApiResponse.of(mapper.map(viewUserEntity));
+    }
+
+    @Override
+    public SuccessApiResponse<ViewUserResponse> paramEdit(String id, String paramId, ViewParamRequest request, CredentialPrincipal credentialPrincipal) {
+        SolUserEntity solUserEntity = solUserConfig
+                .meUseCase()
+                .execute(
+                        MeUseCase.InputValues.builder()
+                                .credentialId(credentialPrincipal.getId())
+                                .build()
+                ).getEntity();
+
+
+        ViewUserEntity viewUserEntity = useCaseExecutor.execute(
+                viewUserConfig.editParamToViewUserUseCase(),
+                EditParamToViewUserUseCase.InputValues.of(
+                        id,
+                        solUserEntity.getId(), paramId,
+                        request.getType(),
+                        request.getValueString(),
+                        request.getValueDate(),
+                        request.getValueBool()),
+                o -> o.getEntity()
+        );
+
+        return SuccessApiResponse.of(mapper.map(viewUserEntity));
+    }
+
+    @Override
+    public SuccessApiResponse<ViewUserResponse> paramDelete(String id, String paramId, CredentialPrincipal credentialPrincipal) {
+        SolUserEntity solUserEntity = solUserConfig
+                .meUseCase()
+                .execute(
+                        MeUseCase.InputValues.builder()
+                                .credentialId(credentialPrincipal.getId())
+                                .build()
+                ).getEntity();
+
+
+        ViewUserEntity viewUserEntity = useCaseExecutor.execute(
+                viewUserConfig.deleteParamToViewUserUseCase(),
+                DeleteParamToViewUserUseCase.InputValues.of(
+                        id,
+                        solUserEntity.getId(),
+                        paramId),
+                o -> o.getEntity()
+        );
+
+        return SuccessApiResponse.of(mapper.map(viewUserEntity));
+    }
+
+    @Override
+    public SuccessApiResponse<Boolean> changeSort(String id, ChangeViewSortRequest request, CredentialPrincipal credentialPrincipal) {
+        SolUserEntity solUserEntity = solUserConfig
+                .meUseCase()
+                .execute(
+                        MeUseCase.InputValues.builder()
+                                .credentialId(credentialPrincipal.getId())
+                                .build()
+                ).getEntity();
+
+
+        useCaseExecutor.execute(
+                viewsSortConfig.updateViewsSortUseCase(),
+                UpdateViewsSortUseCase.InputValues.of(
+                        solUserEntity.getId(),
+                        ViewsSortEntity.Type.ROOT,
+                        request.getViews()),
+                o -> o.getEntity()
+        );
+
+        return SuccessApiResponse.of(true);
+    }
+
+    @Override
+    public SuccessApiResponse<Boolean> delete(String id, CredentialPrincipal credentialPrincipal) {
+        SolUserEntity solUserEntity = solUserConfig
+                .meUseCase()
+                .execute(
+                        MeUseCase.InputValues.builder()
+                                .credentialId(credentialPrincipal.getId())
+                                .build()
+                ).getEntity();
+
+
+        useCaseExecutor.execute(
+                viewUserConfig.deleteViewUserUseCase(),
+                DeleteViewUserUseCase.InputValues.of(
+                        id,
+                        solUserEntity.getId())
+        );
+
+        return SuccessApiResponse.of(true);
     }
 }

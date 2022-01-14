@@ -2,26 +2,26 @@ package com.sol.domain.viewUser.usecases;
 
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
-import com.sol.domain.base.entity.Icon;
 import com.sol.domain.taskInView.port.TaskInViewRepository;
 import com.sol.domain.view.entity.View;
-import com.sol.domain.viewTemplate.entity.ViewTemplateEntity;
-import com.sol.domain.viewTemplate.exceptions.ViewTemplateNotFoundException;
-import com.sol.domain.viewTemplate.port.ViewTemplateRepository;
-import lombok.*;
 import com.sol.domain.viewUser.entity.ViewUserEntity;
+import com.sol.domain.viewUser.exceptions.HasNoAccessToViewUserException;
 import com.sol.domain.viewUser.exceptions.ViewUserNotFoundException;
+import com.sol.domain.viewUser.port.ViewUserIdGenerator;
 import com.sol.domain.viewUser.port.ViewUserRepository;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 
 /**
  * Обновление сущности
  */
 @RequiredArgsConstructor
-public class UpdateViewUserUseCase extends UseCase<UpdateViewUserUseCase.InputValues, SingletonEntityOutputValues<ViewUserEntity>> {
+public class AddParamToViewUserUseCase extends UseCase<AddParamToViewUserUseCase.InputValues, SingletonEntityOutputValues<ViewUserEntity>> {
 
     private final ViewUserRepository viewUserRepository;
+    private final ViewUserIdGenerator idGenerator;
     private final TaskInViewRepository taskInViewRepository;
 
     @Override
@@ -32,19 +32,21 @@ public class UpdateViewUserUseCase extends UseCase<UpdateViewUserUseCase.InputVa
 
 
         if (viewUserEntity.getCanEdit() == false) return SingletonEntityOutputValues.of(viewUserEntity);
+        if(viewUserEntity.getOwnerId().equals(inputValues.getSolUserId()) == false) throw new HasNoAccessToViewUserException();
 
-        viewUserEntity.setView(inputValues.view);
+        View.Params param = new View.Params();
+        param.setId(idGenerator.generate());
+        param.setType(inputValues.type);
+        param.setValueBool(inputValues.valueBool);
+        param.setValueString(inputValues.valueString);
+        param.setValueDate(inputValues.valueDate);
 
-        viewUserEntity.getView().setIcon(inputValues.getView().getIcon());
-        viewUserEntity.getView().setTitle(inputValues.getView().getTitle());
-        viewUserEntity.getView().setDescription(inputValues.getView().getDescription());
-        viewUserEntity.getView().setAddedType(inputValues.getView().getAddedType());
-        viewUserEntity.getView().setDisplayMode(inputValues.getView().getDisplayMode());
-        viewUserEntity.getView().setSortType(inputValues.getView().getSortType());
-        viewUserEntity.getView().setViewType(inputValues.getView().getViewType());
+        viewUserEntity.getView().getParams().add(param);
 
         viewUserEntity = viewUserRepository.save(viewUserEntity);
         taskInViewRepository.removeByViewId(viewUserEntity.getId());
+        //
+        // Нужны фоновые задачи, на обновление тасков во воью, когда мы меняем вью
 
         return SingletonEntityOutputValues.of(viewUserEntity);
     }
@@ -58,7 +60,10 @@ public class UpdateViewUserUseCase extends UseCase<UpdateViewUserUseCase.InputVa
         protected String id;
         protected String solUserId;
 
-        protected View view;
+        protected View.Params.Type type;
+        protected String valueString;
+        protected LocalDateTime valueDate;
+        protected Boolean valueBool;
 
     }
 }

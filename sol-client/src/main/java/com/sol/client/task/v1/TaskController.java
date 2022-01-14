@@ -2,6 +2,7 @@ package com.sol.client.task.v1;
 
 import com.rcore.domain.commons.usecase.UseCaseExecutor;
 import com.rcore.domain.commons.usecase.model.IdInputValues;
+import com.rcore.rest.api.commons.response.SearchApiResponse;
 import com.rcore.rest.api.commons.response.SuccessApiResponse;
 import com.rcore.rest.api.spring.security.CredentialPrincipal;
 import com.rcore.rest.api.spring.security.CurrentCredential;
@@ -80,6 +81,36 @@ public class TaskController implements TaskResource {
     }
 
     @Override
+    public SuccessApiResponse<SearchApiResponse<TaskResponse>> suggestSearch(String viewId, CredentialPrincipal credentialPrincipal) {
+        SolUserEntity solUserEntity = solUserConfig
+                .meUseCase()
+                .execute(MeUseCase.InputValues.builder().credentialId(credentialPrincipal.getId()).build()).getEntity();
+
+        SearchApiResponse response = useCaseExecutor.execute(
+                taskConfig.findSuggestByViewUseCase(),
+                FindSuggestByViewUseCase.InputValues.of(solUserEntity.getId(), viewId),
+                o -> SearchApiResponse.withItemsAndCount(o.getResult().getItems(), o.getResult().getCount())
+        );
+
+        return SuccessApiResponse.of(response);
+    }
+
+    @Override
+    public SuccessApiResponse<Long> suggestCount(String viewId, CredentialPrincipal credentialPrincipal) {
+        SolUserEntity solUserEntity = solUserConfig
+                .meUseCase()
+                .execute(MeUseCase.InputValues.builder().credentialId(credentialPrincipal.getId()).build()).getEntity();
+
+        Long count = useCaseExecutor.execute(
+                taskConfig.findSuggestCountByViewUseCase(),
+                FindSuggestCountByViewUseCase.InputValues.of(solUserEntity.getId(), viewId),
+                o -> o.getEntity()
+        );
+
+        return SuccessApiResponse.of(count);
+    }
+
+    @Override
     public SuccessApiResponse<TaskResponse> done(String id, CredentialPrincipal credentialPrincipal) {
         SolUserEntity solUserEntity = solUserConfig.meUseCase().execute(MeUseCase.InputValues.builder().credentialId(credentialPrincipal.getId()).build()).getEntity();
 
@@ -121,7 +152,7 @@ public class TaskController implements TaskResource {
     }
 
     @Override
-    public SuccessApiResponse<List<TaskResponse>> sortNum(ChangeSortOfTasksRequest request, CredentialPrincipal credentialPrincipal){
+    public SuccessApiResponse<List<TaskResponse>> sortNum(ChangeSortOfTasksRequest request, CredentialPrincipal credentialPrincipal) {
         SolUserEntity solUserEntity = solUserConfig.meUseCase().execute(
                 MeUseCase.InputValues.builder().credentialId(credentialPrincipal.getId()).build()
         ).getEntity();

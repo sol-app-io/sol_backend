@@ -156,8 +156,8 @@ public class SolClientApplicationConfig {
     }
 
     @Bean
-    public TaskConfig taskConfig(TaskRepository taskRepository, TaskIdGenerator<?> taskIdGenerator, SolUserConfig solUserConfig, SpaceConfig spaceConfig, SlotRepository slotRepository, SpaceRepository spaceRepository) {
-        return new TaskConfig(taskRepository, taskIdGenerator, solUserConfig.meUseCase(), spaceConfig.findSpaceByIdUseCase(), spaceConfig.findInboxSpaceByOwnerIdUseCase(), slotRepository, new UpdateTaskCountInSpaceUseCase(spaceRepository, taskRepository));
+    public TaskConfig taskConfig(TaskRepository taskRepository, TaskIdGenerator<?> taskIdGenerator, SolUserConfig solUserConfig, SpaceConfig spaceConfig, SlotRepository slotRepository, SpaceRepository spaceRepository, ViewUserRepository viewUserRepository) {
+        return new TaskConfig(taskRepository, taskIdGenerator, solUserConfig.meUseCase(), spaceConfig.findSpaceByIdUseCase(), spaceConfig.findInboxSpaceByOwnerIdUseCase(), slotRepository, new UpdateTaskCountInSpaceUseCase(spaceRepository, taskRepository), viewUserRepository);
     }
 
     @Bean
@@ -193,9 +193,20 @@ public class SolClientApplicationConfig {
             SolUserRepository solUserRepository,
             ViewTemplateRepository viewTemplateRepository,
             ViewsSortRepository viewsSortRepository,
-            BackgroundTaskForViewRepository backgroundTaskForViewRepository
+            BackgroundTaskForViewRepository backgroundTaskForViewRepository,
+            ViewsSortConfig viewsSortConfig,
+            TaskInViewConfig taskInViewConfig
     ) {
-        return new ViewUserConfig(viewUserRepository, viewUserIdGenerator, taskInViewRepository, solUserRepository, viewTemplateRepository, viewsSortRepository, backgroundTaskForViewRepository);
+        return new ViewUserConfig(
+                viewUserRepository,
+                viewUserIdGenerator,
+                taskInViewRepository,
+                solUserRepository,
+                viewTemplateRepository,
+                viewsSortRepository,
+                backgroundTaskForViewRepository,
+                taskInViewConfig.deleteAllTaskInViewByViewUseCase(),
+                viewsSortConfig.findViewsSortByUserIdUseCase());
     }
 
     @Bean

@@ -6,6 +6,7 @@ import com.sol.domain.solUser.usecases.MeUseCase;
 import com.sol.domain.space.usecases.FindInboxSpaceByOwnerIdUseCase;
 import com.sol.domain.space.usecases.FindSpaceByIdUseCase;
 import com.sol.domain.task.usecases.*;
+import com.sol.domain.viewUser.port.ViewUserRepository;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import com.sol.domain.task.port.TaskIdGenerator;
@@ -28,6 +29,8 @@ public class TaskConfig {
     private final RecalcSlotsTimeForTaskUseCase recalcSlotsTimeForTaskUseCase;
     private final UpdateTaskCountInSpaceUseCase updateTaskCountInSpaceUseCase;
     private final FindTaskByUserIdUseCase findTaskByUserIdUseCase;
+    private final FindSuggestByViewUseCase findSuggestByViewUseCase;
+    private final FindSuggestCountByViewUseCase findSuggestCountByViewUseCase;
 
     public TaskConfig(
             TaskRepository taskRepository,
@@ -36,7 +39,8 @@ public class TaskConfig {
             FindSpaceByIdUseCase findSpaceByIdUseCase,
             FindInboxSpaceByOwnerIdUseCase findInboxSpaceByOwnerIdUseCase,
             SlotRepository slotRepository,
-            UpdateTaskCountInSpaceUseCase updateTaskCountInSpaceUseCase) {
+            UpdateTaskCountInSpaceUseCase updateTaskCountInSpaceUseCase,
+            ViewUserRepository viewUserRepository) {
         this.findTaskByIdUseCase = new FindTaskByIdUseCase(taskRepository);
         this.createTaskUseCase = new CreateTaskUseCase(taskRepository, taskIdGenerator, meUseCase, findSpaceByIdUseCase, findTaskByIdUseCase, findInboxSpaceByOwnerIdUseCase, updateTaskCountInSpaceUseCase);
         this.deleteTaskUseCase = new DeleteTaskUseCase(taskRepository);
@@ -51,5 +55,7 @@ public class TaskConfig {
         this.recalcSlotsTimeForTaskUseCase = new RecalcSlotsTimeForTaskUseCase(taskRepository,slotRepository);
         this.updateTaskCountInSpaceUseCase = updateTaskCountInSpaceUseCase;
         this.findTaskByUserIdUseCase = new FindTaskByUserIdUseCase(taskRepository);
+        this.findSuggestByViewUseCase = new FindSuggestByViewUseCase(viewUserRepository, taskRepository);
+        this.findSuggestCountByViewUseCase = new FindSuggestCountByViewUseCase(viewUserRepository, taskRepository);
     }
 }

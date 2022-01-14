@@ -5,6 +5,7 @@ import com.rcore.domain.commons.usecase.AbstractDeleteUseCase;
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
 import com.rcore.domain.commons.usecase.model.VoidOutputValues;
+import com.sol.domain.taskInView.usecases.DeleteAllTaskInViewByViewUseCase;
 import com.sol.domain.viewTemplate.entity.ViewTemplateEntity;
 import com.sol.domain.viewTemplate.exceptions.ViewTemplateNotFoundException;
 import com.sol.domain.viewTemplate.port.ViewTemplateRepository;
@@ -13,6 +14,9 @@ import com.sol.domain.viewUser.exceptions.HasNoAccessToViewUserException;
 import com.sol.domain.viewUser.exceptions.ViewUserNotFoundException;
 import com.sol.domain.viewUser.port.ViewUserRepository;
 import com.sol.domain.viewUser.port.filters.ViewUserByTemplateFilters;
+import com.sol.domain.viewsSort.entity.ViewsSortEntity;
+import com.sol.domain.viewsSort.port.ViewsSortRepository;
+import com.sol.domain.viewsSort.usecases.FindViewsSortByUserIdUseCase;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -25,6 +29,9 @@ import java.util.Optional;
 public class DeleteViewUserUseCase extends UseCase<DeleteViewUserUseCase.InputValues, VoidOutputValues> {
 
     private final ViewUserRepository viewUserRepository;
+    private final DeleteAllTaskInViewByViewUseCase deleteAllTaskInViewByViewUseCase;
+    private final FindViewsSortByUserIdUseCase findViewsSortByUserIdUseCase;
+    private final ViewsSortRepository viewsSortRepository;
 
     @Override
     public VoidOutputValues execute(InputValues inputValues) {
@@ -34,19 +41,16 @@ public class DeleteViewUserUseCase extends UseCase<DeleteViewUserUseCase.InputVa
                 .orElseThrow(ViewUserNotFoundException::new);
 
         if(viewUserEntity.getCanEdit() == false) return new VoidOutputValues();
-
         if(viewUserEntity.getOwnerId().equals(inputValues.solUserId) == false) throw new HasNoAccessToViewUserException();
 
+        ViewsSortEntity viewsSortEntity = findViewsSortByUserIdUseCase.execute(FindViewsSortByUserIdUseCase.InputValues.of(inputValues.getSolUserId(), ViewsSortEntity.Type.ROOT)).getEntity();
+        viewsSortEntity.getViewsId().remove(inputValues.id);
+        viewsSortRepository.save(viewsSortEntity);
+
         viewUserRepository.delete(inputValues.id);
-        //TODO удалить все связи с view
+        deleteAllTaskInViewByViewUseCase.execute(DeleteAllTaskInViewByViewUseCase.InputValues.of(viewUserEntity.getId()));
 
         return new VoidOutputValues();
-    }
-
-    private void update(ViewUserEntity viewUserEntity, ViewTemplateEntity template){
-        // TODO обновить фоновые задания в UpdateViewsByTemplateUseCase
-        viewUserEntity.setView(template.getView());
-        viewUserEntity = viewUserRepository.save(viewUserEntity);
     }
 
     @AllArgsConstructor(staticName = "of")

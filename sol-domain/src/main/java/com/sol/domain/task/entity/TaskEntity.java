@@ -54,6 +54,7 @@ public class TaskEntity extends BaseEntity<String> {
      * deadline type
      */
     protected DeadlineType deadlineType;
+    protected Boolean deadlineChangeFewTimes = false;
     /**
      * timezone
      */

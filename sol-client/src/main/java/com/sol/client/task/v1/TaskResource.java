@@ -1,5 +1,6 @@
 package com.sol.client.task.v1;
 
+import com.rcore.rest.api.commons.response.SearchApiResponse;
 import com.rcore.rest.api.commons.response.SuccessApiResponse;
 import com.rcore.rest.api.spring.security.CredentialPrincipal;
 import com.rcore.rest.api.spring.security.CurrentCredential;
@@ -41,6 +42,15 @@ public interface TaskResource {
     @ApiOperation("Получение всех задач")
     @GetMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
     SuccessApiResponse<List<TaskResponse>> tasks(@ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+
+    @ApiOperation("Suggest search")
+    @GetMapping(value = Routes.SUGGEST_SEARCH, produces = MediaType.APPLICATION_JSON_VALUE)
+    SuccessApiResponse<SearchApiResponse<TaskResponse>> suggestSearch(@RequestParam String viewId, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+
+    @ApiOperation("Suggest count")
+    @GetMapping(value = Routes.SUGGEST_COUNT, produces = MediaType.APPLICATION_JSON_VALUE)
+    SuccessApiResponse<Long> suggestCount(@RequestParam String viewId, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+
 
     @ApiOperation("Make task done")
     @PostMapping(value = Routes.DONE, produces = MediaType.APPLICATION_JSON_VALUE)

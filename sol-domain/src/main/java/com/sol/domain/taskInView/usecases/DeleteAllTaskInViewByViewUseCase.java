@@ -9,30 +9,31 @@ import com.sol.domain.taskInView.entity.TaskInViewEntity;
 import com.sol.domain.taskInView.port.TaskInViewRepository;
 import lombok.*;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
  * Удаление сущности
  */
 @RequiredArgsConstructor
-public class DeleteTaskInViewUseCase extends UseCase<DeleteTaskInViewUseCase.InputValues, VoidOutputValues> {
+public class DeleteAllTaskInViewByViewUseCase extends UseCase<DeleteAllTaskInViewByViewUseCase.InputValues, VoidOutputValues> {
 
-    protected final FindTaskInViewByIdUseCase findTaskInViewByIdUseCase;
     private final TaskInViewRepository taskInViewRepository;
     private final TaskRepository taskRepository;
 
     @Override
     public VoidOutputValues execute(InputValues inputValues) {
-        TaskInViewEntity taskInViewEntity = findTaskInViewByIdUseCase.execute(FindTaskInViewByIdUseCase.InputValues.of(
-                inputValues.viewId, inputValues.taskId
-        )).getEntity();
 
-        taskInViewRepository.delete(taskInViewEntity.getId());
-
-        TaskEntity taskEntity = taskRepository.findById(taskInViewEntity.getTaskId()).orElseThrow(TaskNotFoundException::new);
-        if(taskEntity.getViewIds().contains(inputValues.viewId)){
-            taskEntity.getViewIds().remove(inputValues.viewId);
-            taskRepository.save(taskEntity);
+        List<TaskInViewEntity> taskInViewEntities = taskInViewRepository.findByViewId(inputValues.viewId);
+        for(TaskInViewEntity taskInViewEntity: taskInViewEntities){
+            Optional<TaskEntity> taskEntityOptional = taskRepository.findById(taskInViewEntity.getTaskId());
+            if(taskEntityOptional.isPresent()){
+                TaskEntity taskEntity = taskEntityOptional.get();
+                taskEntity.getViewIds().remove(taskInViewEntity.getViewId());
+                taskRepository.save(taskEntity);
+            }
+            taskInViewRepository.delete(taskInViewEntity.getId());
         }
-
         return new VoidOutputValues();
     }
 
@@ -45,9 +46,5 @@ public class DeleteTaskInViewUseCase extends UseCase<DeleteTaskInViewUseCase.Inp
          * view
          */
         protected String viewId;
-        /**
-         * Task
-         */
-        protected String taskId;
     }
 }

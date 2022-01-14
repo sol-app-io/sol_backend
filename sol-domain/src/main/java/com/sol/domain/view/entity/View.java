@@ -12,7 +12,12 @@ import java.util.List;
 public class View {
 
     public enum Sort {
-        LIST
+        BY_CREATE,
+        BY_DEADLINE,
+        CUSTOM,
+        BY_TITLE,
+        @Deprecated
+        LIST,
     }
 
     public enum DisplayMode {
@@ -21,7 +26,7 @@ public class View {
         CONCENTRATE
     }
 
-    public enum Type {
+    public enum ViewType {
         CUSTOM, PARAMS
     }
 
@@ -123,7 +128,8 @@ public class View {
     protected String description = "";
     protected AddedType addedType = AddedType.MANUALLY;
     protected DisplayMode displayMode = DisplayMode.LIST;
-    protected Sort sortType = Sort.LIST;
+    protected Sort sortType = Sort.CUSTOM;
+    protected ViewType viewType = ViewType.CUSTOM;
     protected List<Params> params = new ArrayList<>();
 
     public enum CheckTaskType {

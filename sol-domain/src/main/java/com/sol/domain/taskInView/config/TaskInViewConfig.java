@@ -17,6 +17,7 @@ public class TaskInViewConfig {
     private final FindTaskInViewUseCase findTaskInViewUseCase;
     private final FindByTaskUseCase findByTaskUseCase;
     private final FindByViewUseCase findByViewUseCase;
+    private final DeleteAllTaskInViewByViewUseCase deleteAllTaskInViewByViewUseCase;
 
     public TaskInViewConfig(TaskInViewRepository taskInViewRepository, TaskInViewIdGenerator<?> taskInViewIdGenerator, TaskRepository taskRepository) {
         this.findTaskInViewByIdUseCase = new FindTaskInViewByIdUseCase(taskInViewRepository, taskInViewIdGenerator, taskRepository);
@@ -26,5 +27,6 @@ public class TaskInViewConfig {
         this.updateTaskInViewUseCase = new UpdateTaskInViewUseCase(this.findTaskInViewByIdUseCase, taskInViewRepository);
         this.findByTaskUseCase = new FindByTaskUseCase(taskInViewRepository);
         this.findByViewUseCase = new FindByViewUseCase(taskInViewRepository);
+        this.deleteAllTaskInViewByViewUseCase = new DeleteAllTaskInViewByViewUseCase(taskInViewRepository, taskRepository);
     }
 }

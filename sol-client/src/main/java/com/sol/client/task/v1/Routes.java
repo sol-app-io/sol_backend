@@ -8,6 +8,8 @@ public class Routes {
     public static final String DONE = SINGLETON + "/done";
     public static final String OPEN = SINGLETON + "/open";
     public static final String PARENT = ROOT + "/parent";
+    public static final String SUGGEST_SEARCH = ROOT + "/suggest";
+    public static final String SUGGEST_COUNT = ROOT + "/suggest/count";
     public static final String SPACE = ROOT + "/space";
     public static final String SORT_NUM = ROOT + "/sort";
 }

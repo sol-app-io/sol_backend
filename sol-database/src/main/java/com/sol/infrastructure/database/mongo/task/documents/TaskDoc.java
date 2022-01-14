@@ -51,6 +51,7 @@ public class TaskDoc extends BaseDocument {
      * deadline
      */
     protected LocalDateTime deadline;
+    protected Boolean deadlineChangeFewTimes = false;
     /**
      * deadline type
      */
