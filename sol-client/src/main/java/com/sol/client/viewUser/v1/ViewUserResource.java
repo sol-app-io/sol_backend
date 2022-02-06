@@ -3,10 +3,7 @@ package com.sol.client.viewUser.v1;
 import com.rcore.rest.api.commons.response.SuccessApiResponse;
 import com.rcore.rest.api.spring.security.CredentialPrincipal;
 import com.rcore.rest.api.spring.security.CurrentCredential;
-import com.sol.client.viewUser.v1.request.ChangeViewSortRequest;
-import com.sol.client.viewUser.v1.request.CreateTaskInViewRequest;
-import com.sol.client.viewUser.v1.request.ViewParamRequest;
-import com.sol.client.viewUser.v1.request.UpdateUserViewRequest;
+import com.sol.client.viewUser.v1.request.*;
 import com.sol.client.viewUser.v1.response.TaskInViewResponse;
 import com.sol.client.viewUser.v1.response.ViewUserResponse;
 import io.swagger.annotations.Api;
@@ -34,8 +31,12 @@ public interface ViewUserResource {
     SuccessApiResponse<List<TaskInViewResponse>> findTasksByView(@RequestParam String viewId, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
 
     @ApiOperation("Добавить таск во вью")
+    @PostMapping(value =  ViewUserRoutes.ADD_TASK_TO_VIEW, produces = MediaType.APPLICATION_JSON_VALUE)
+    SuccessApiResponse<TaskInViewResponse> addTaskToView(@RequestBody CreateTaskInViewRequest request, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+
+    @ApiOperation("Создать View User")
     @PostMapping(value =  ViewUserRoutes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
-    SuccessApiResponse<TaskInViewResponse> findByTask(@RequestBody CreateTaskInViewRequest request, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    SuccessApiResponse<ViewUserResponse> create(@RequestBody CreateViewUserRequest request, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
 
     @ApiOperation("Удалить таск во вью")
     @DeleteMapping(value =  ViewUserRoutes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)

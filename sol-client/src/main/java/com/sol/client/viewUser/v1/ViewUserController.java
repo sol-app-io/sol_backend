@@ -4,12 +4,10 @@ import com.rcore.domain.commons.usecase.UseCaseExecutor;
 import com.rcore.rest.api.commons.response.SuccessApiResponse;
 import com.rcore.rest.api.spring.security.CredentialPrincipal;
 import com.sol.client.viewUser.v1.mappers.ViewUserResponseMapper;
-import com.sol.client.viewUser.v1.request.ChangeViewSortRequest;
-import com.sol.client.viewUser.v1.request.CreateTaskInViewRequest;
-import com.sol.client.viewUser.v1.request.ViewParamRequest;
-import com.sol.client.viewUser.v1.request.UpdateUserViewRequest;
+import com.sol.client.viewUser.v1.request.*;
 import com.sol.client.viewUser.v1.response.TaskInViewResponse;
 import com.sol.client.viewUser.v1.response.ViewUserResponse;
+import com.sol.domain.base.entity.Icon;
 import com.sol.domain.solUser.config.SolUserConfig;
 import com.sol.domain.solUser.entity.SolUserEntity;
 import com.sol.domain.solUser.usecases.MeUseCase;
@@ -22,6 +20,7 @@ import com.sol.domain.view.entity.View;
 import com.sol.domain.viewTemplate.config.ViewTemplateConfig;
 import com.sol.domain.viewUser.config.ViewUserConfig;
 import com.sol.domain.viewUser.entity.ViewUserEntity;
+import com.sol.domain.viewUser.port.ViewUserIdGenerator;
 import com.sol.domain.viewUser.usecases.*;
 import com.sol.domain.viewsSort.config.ViewsSortConfig;
 import com.sol.domain.viewsSort.entity.ViewsSortEntity;
@@ -29,6 +28,7 @@ import com.sol.domain.viewsSort.usecases.UpdateViewsSortUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,7 +42,7 @@ public class ViewUserController implements ViewUserResource {
     private final TaskInViewConfig taskInViewConfig;
     private final SolUserConfig solUserConfig;
     private final ViewUserResponseMapper mapper = new ViewUserResponseMapper();
-
+    private final ViewUserIdGenerator viewUserIdGenerator;
 
     @Override
     public SuccessApiResponse<List<ViewUserResponse>> myRoot(CredentialPrincipal credentialPrincipal) {
@@ -86,7 +86,7 @@ public class ViewUserController implements ViewUserResource {
     }
 
     @Override
-    public SuccessApiResponse<TaskInViewResponse> findByTask(CreateTaskInViewRequest request, CredentialPrincipal credentialPrincipal) {
+    public SuccessApiResponse<TaskInViewResponse> addTaskToView(CreateTaskInViewRequest request, CredentialPrincipal credentialPrincipal) {
         return SuccessApiResponse.of(
                 useCaseExecutor.execute(
                         taskInViewConfig.createTaskInViewUseCase(),
@@ -244,5 +244,45 @@ public class ViewUserController implements ViewUserResource {
         );
 
         return SuccessApiResponse.of(true);
+    }
+
+    @Override
+    public SuccessApiResponse<ViewUserResponse> create(CreateViewUserRequest request, CredentialPrincipal credentialPrincipal) {
+
+        SolUserEntity solUserEntity = solUserConfig
+                .meUseCase()
+                .execute(
+                        MeUseCase.InputValues.builder()
+                                .credentialId(credentialPrincipal.getId())
+                                .build()
+                ).getEntity();
+
+        View view = new View();
+        view.setIcon(request.getIcon());
+        view.setTitle(request.getTitle());
+        view.setDescription(request.getDescription());
+        view.setAddedType(request.getAddedType());
+        view.setDisplayMode(request.getDisplayMode());
+        view.setSortType(request.getSortType());
+        view.setViewType(request.getViewType());
+        view.setParams(request.getParams());
+
+        if(request.getParams() != null) {
+            for (View.Params params : request.getParams()) {
+                params.setId(viewUserIdGenerator.generate());
+            }
+        }else {
+            view.setParams(new ArrayList<>());
+        }
+
+        ViewUserEntity viewUserEntity = useCaseExecutor.execute(
+                viewUserConfig.createViewUserManuallyByUserUseCase(),
+                CreateViewUserManuallyByUserUseCase.InputValues.of(
+                        solUserEntity.getId(),
+                        view),
+                o -> o.getEntity()
+        );
+
+        return SuccessApiResponse.of(mapper.map(viewUserEntity));
     }
 }

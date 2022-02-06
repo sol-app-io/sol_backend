@@ -4,6 +4,7 @@ import com.rcore.rest.api.commons.routes.BaseRoutes;
 
 public class ViewUserRoutes {
     public static final String ROOT = BaseRoutes.API + BaseRoutes.V1 + "/view-user";
+    public static final String ADD_TASK_TO_VIEW = ROOT  + "/add-task";
     public static final String MY_ROOT = ROOT + "/root";
     public static final String FIND_VIEW_BY_TASK = ROOT + "/by-task";
     public static final String FIND_TASKS_BY_VIEW = ROOT + "/by-view";
