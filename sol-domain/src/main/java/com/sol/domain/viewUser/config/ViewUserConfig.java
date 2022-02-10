@@ -31,6 +31,7 @@ public class ViewUserConfig {
     private final AddParamToViewUserUseCase addParamToViewUserUseCase;
     private final EditParamToViewUserUseCase editParamToViewUserUseCase;
     private final DeleteParamToViewUserUseCase deleteParamToViewUserUseCase;
+    private final FindAllViewBySolUserUseCase findAllViewBySolUserUseCase;
 
     public ViewUserConfig(
             ViewUserRepository viewUserRepository,
@@ -61,5 +62,6 @@ public class ViewUserConfig {
         this.addParamToViewUserUseCase = new AddParamToViewUserUseCase(viewUserRepository, viewUserIdGenerator, taskInViewRepository);
         this.editParamToViewUserUseCase = new EditParamToViewUserUseCase(viewUserRepository, taskInViewRepository);
         this.deleteParamToViewUserUseCase = new DeleteParamToViewUserUseCase(viewUserRepository, taskInViewRepository);
+        this.findAllViewBySolUserUseCase = new FindAllViewBySolUserUseCase(viewUserRepository);
     }
 }

@@ -22,6 +22,10 @@ public interface ViewUserResource {
     @GetMapping(value =  ViewUserRoutes.MY_ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
     SuccessApiResponse<List<ViewUserResponse>> myRoot(@ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
 
+    @ApiOperation("Все ресурсы")
+    @GetMapping(value =  ViewUserRoutes.ALL, produces = MediaType.APPLICATION_JSON_VALUE)
+    SuccessApiResponse<List<ViewUserResponse>> all(@ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+
     @ApiOperation("Получение view, в которых есть таск")
     @GetMapping(value =  ViewUserRoutes.FIND_VIEW_BY_TASK, produces = MediaType.APPLICATION_JSON_VALUE)
     SuccessApiResponse<List<TaskInViewResponse>> findByTask(@RequestParam String taskId, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);

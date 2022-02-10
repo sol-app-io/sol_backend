@@ -66,6 +66,25 @@ public class ViewUserController implements ViewUserResource {
     }
 
     @Override
+    public SuccessApiResponse<List<ViewUserResponse>> all(CredentialPrincipal credentialPrincipal) {
+        SolUserEntity solUserEntity = solUserConfig
+                .meUseCase()
+                .execute(
+                        MeUseCase.InputValues.builder()
+                                .credentialId(credentialPrincipal.getId())
+                                .build()
+                ).getEntity();
+
+        return SuccessApiResponse.of(
+                useCaseExecutor.execute(
+                        viewUserConfig.findAllViewBySolUserUseCase(),
+                        FindAllViewBySolUserUseCase.InputValues.of(solUserEntity.getId()),
+                        o -> o.getEntity().stream().map(mapper::map).collect(Collectors.toList())
+                )
+        );
+    }
+
+    @Override
     public SuccessApiResponse<List<TaskInViewResponse>> findByTask(String taskId, CredentialPrincipal credentialPrincipal) {
         return SuccessApiResponse.of(
                 useCaseExecutor.execute(
