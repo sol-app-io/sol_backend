@@ -127,16 +127,7 @@ public class SolClientApplicationConfig {
     }
 
 
-    @Bean
-    public ObjectMapper objectMapper() {
-        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
-        builder.serializerByType(LocalDateTime.class, new LocalDateTimeSerializer());
-        builder.serializationInclusion(JsonInclude.Include.NON_NULL);
-        builder.deserializerByType(LocalDateTime.class, new LocalDateTimeDeserializer());
-        builder.serializerByType(Instant.class, new InstantSerializer());
-        builder.deserializerByType(Instant.class, new InstantDeserializer());
-        return builder.build();
-    }
+
 
     @Bean
     public SolUserConfig solUserConfig(
