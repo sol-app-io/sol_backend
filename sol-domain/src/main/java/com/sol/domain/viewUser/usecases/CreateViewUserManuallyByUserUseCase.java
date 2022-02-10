@@ -4,6 +4,10 @@ import com.rcore.domain.commons.usecase.AbstractCreateUseCase;
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
 import com.sol.domain.view.entity.View;
+import com.sol.domain.viewsSort.config.ViewsSortConfig;
+import com.sol.domain.viewsSort.entity.ViewsSortEntity;
+import com.sol.domain.viewsSort.usecases.FindViewsSortByUserIdUseCase;
+import com.sol.domain.viewsSort.usecases.UpdateViewsSortUseCase;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,9 +21,17 @@ import com.sol.domain.viewUser.port.ViewUserRepository;
  */
 public class CreateViewUserManuallyByUserUseCase extends AbstractCreateUseCase<ViewUserEntity, ViewUserIdGenerator<?>, ViewUserRepository, CreateViewUserManuallyByUserUseCase.InputValues> {
 
+    private final UpdateViewsSortUseCase updateViewsSortUseCase;
+    private final FindViewsSortByUserIdUseCase findViewsSortByUserIdUseCase;
 
-    public CreateViewUserManuallyByUserUseCase(ViewUserRepository repository, ViewUserIdGenerator idGenerator) {
+    public CreateViewUserManuallyByUserUseCase(
+            ViewUserRepository repository,
+            ViewUserIdGenerator idGenerator,
+            UpdateViewsSortUseCase updateViewsSortUseCase,
+            FindViewsSortByUserIdUseCase findViewsSortByUserIdUseCase) {
         super(repository, idGenerator);
+        this.updateViewsSortUseCase = updateViewsSortUseCase;
+        this.findViewsSortByUserIdUseCase = findViewsSortByUserIdUseCase;
     }
 
     @Override
@@ -35,6 +47,19 @@ public class CreateViewUserManuallyByUserUseCase extends AbstractCreateUseCase<V
         viewUserEntity.setCanEdit(true);
 
         viewUserEntity = repository.save(viewUserEntity);
+
+        ViewsSortEntity viewsSortEntity = findViewsSortByUserIdUseCase.execute(
+                FindViewsSortByUserIdUseCase.InputValues.of(
+                        inputValues.ownerId,
+                        ViewsSortEntity.Type.ROOT)).getEntity();
+
+        if(viewsSortEntity.getViewsId().contains(viewUserEntity.getId()) == false){
+            viewsSortEntity.getViewsId().add(viewUserEntity.getId());
+            updateViewsSortUseCase.execute(UpdateViewsSortUseCase.InputValues.of(
+                    inputValues.ownerId,
+                    ViewsSortEntity.Type.ROOT,
+                    viewsSortEntity.getViewsId()));
+        }
 
         return SingletonEntityOutputValues.of(viewUserEntity);
     }
