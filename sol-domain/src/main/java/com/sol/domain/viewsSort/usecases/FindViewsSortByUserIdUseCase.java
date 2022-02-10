@@ -30,12 +30,14 @@ public class FindViewsSortByUserIdUseCase extends UseCase<FindViewsSortByUserIdU
 
     @Override
     public SingletonEntityOutputValues<ViewsSortEntity> execute(InputValues inputValues) {
+        System.out.println("Run - ViewsSortBySolTypeFilters filters = ViewsSortBySolTypeFilters");
         ViewsSortBySolTypeFilters filters = ViewsSortBySolTypeFilters
                 .builder()
                 .solUserId(inputValues.solUserId)
                 .type(inputValues.type)
                 .build();
 
+        System.out.println("Run - Optional<ViewsSortEntity> viewsSortEntityOptional = viewsSortRepository.find(filters);");
         Optional<ViewsSortEntity> viewsSortEntityOptional = viewsSortRepository.find(filters);
         ViewsSortEntity viewsSortEntity;
         if(viewsSortEntityOptional.isPresent()){
@@ -43,6 +45,7 @@ public class FindViewsSortByUserIdUseCase extends UseCase<FindViewsSortByUserIdU
         }else{
             viewsSortEntity = new ViewsSortEntity();
             viewsSortEntity.setId(viewsSortIdGenerator.generate());
+            System.out.println("Run - viewsSortEntity.setViewsId(viewUserRepository");
             viewsSortEntity.setViewsId(viewUserRepository
                     .find(inputValues.solUserId)
                     .stream()
@@ -50,6 +53,7 @@ public class FindViewsSortByUserIdUseCase extends UseCase<FindViewsSortByUserIdU
                     .collect(Collectors.toList()));
             viewsSortEntity.setOwnerId(inputValues.solUserId);
             viewsSortEntity.setType(inputValues.type);
+            System.out.println("Run - viewsSortRepository.save(viewsSortEntity);");
             viewsSortRepository.save(viewsSortEntity);
         }
 
