@@ -47,6 +47,7 @@ public class DeleteViewUserUseCase extends UseCase<DeleteViewUserUseCase.InputVa
 
         System.out.println("Run - ViewsSortEntity viewsSortEntity = findViewsSortByUserIdUseCase.execute(FindViewsSortByUserIdUseCase.InputValues.of(inputValues.getSolUserId(), ViewsSortEntity.Type.ROOT)).getEntity();");
         ViewsSortEntity viewsSortEntity = findViewsSortByUserIdUseCase.execute(FindViewsSortByUserIdUseCase.InputValues.of(inputValues.getSolUserId(), ViewsSortEntity.Type.ROOT)).getEntity();
+        System.out.println("Run - viewsSortEntity.getViewsId().remove(inputValues.id);");
         viewsSortEntity.getViewsId().remove(inputValues.id);
         viewsSortRepository.save(viewsSortEntity);
 
