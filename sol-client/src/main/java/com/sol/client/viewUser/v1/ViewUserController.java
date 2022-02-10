@@ -25,7 +25,9 @@ import com.sol.domain.viewUser.usecases.*;
 import com.sol.domain.viewsSort.config.ViewsSortConfig;
 import com.sol.domain.viewsSort.entity.ViewsSortEntity;
 import com.sol.domain.viewsSort.usecases.UpdateViewsSortUseCase;
+import com.sol.infrastructure.database.mongo.base.ObjectIdHelper;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -153,6 +155,12 @@ public class ViewUserController implements ViewUserResource {
         view.setSortType(request.getSortType());
         view.setViewType(request.getViewType());
         view.setParams(request.getParams());
+
+        for (View.Params params : request.getParams()) {
+            if(ObjectIdHelper.mapOrDie(params.getId()) == null){
+                params.setId((new ObjectId()).toString());
+            }
+        }
 
         ViewUserEntity viewUserEntity = useCaseExecutor.execute(
                 viewUserConfig.updateViewUserUseCase(),
@@ -297,11 +305,11 @@ public class ViewUserController implements ViewUserResource {
         view.setViewType(request.getViewType());
         view.setParams(request.getParams());
 
-        if(request.getParams() != null) {
+        if (request.getParams() != null) {
             for (View.Params params : request.getParams()) {
                 params.setId(viewUserIdGenerator.generate());
             }
-        }else {
+        } else {
             view.setParams(new ArrayList<>());
         }
 
