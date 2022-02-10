@@ -8,6 +8,7 @@ import com.sol.domain.viewTemplate.port.ViewTemplateRepository;
 import com.sol.domain.viewUser.usecases.*;
 import com.sol.domain.viewsSort.port.ViewsSortRepository;
 import com.sol.domain.viewsSort.usecases.FindViewsSortByUserIdUseCase;
+import com.sol.domain.viewsSort.usecases.UpdateViewsSortUseCase;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import com.sol.domain.viewUser.port.ViewUserIdGenerator;
@@ -40,14 +41,15 @@ public class ViewUserConfig {
             ViewsSortRepository viewsSortRepository,
             BackgroundTaskForViewRepository backgroundTaskForViewRepository,
             DeleteAllTaskInViewByViewUseCase deleteAllTaskInViewByViewUseCase,
-            FindViewsSortByUserIdUseCase findViewsSortByUserIdUseCase) {
+            FindViewsSortByUserIdUseCase findViewsSortByUserIdUseCase,
+            UpdateViewsSortUseCase updateViewsSortUseCase) {
         this.createViewUserFromTemplateBulkByAdminUseCase = new CreateViewUserFromTemplateBulkByAdminUseCase(
                 solUserRepository,
                 viewUserRepository,
                 viewUserIdGenerator
         );
         this.createViewUserFromTemplateByUserUseCase = new CreateViewUserFromTemplateByUserUseCase(solUserRepository, viewUserRepository, viewUserIdGenerator);
-        this.createViewUserManuallyByUserUseCase = new CreateViewUserManuallyByUserUseCase(viewUserRepository, viewUserIdGenerator);
+        this.createViewUserManuallyByUserUseCase = new CreateViewUserManuallyByUserUseCase(viewUserRepository, viewUserIdGenerator, updateViewsSortUseCase, findViewsSortByUserIdUseCase);
         this.deleteViewUserUseCase = new DeleteViewUserUseCase(viewUserRepository, deleteAllTaskInViewByViewUseCase, findViewsSortByUserIdUseCase, viewsSortRepository);
         this.findViewUserByIdUseCase = new FindViewUserByIdUseCase(viewUserRepository);
         this.updateViewUserUseCase = new UpdateViewUserUseCase(viewUserRepository, taskInViewRepository);

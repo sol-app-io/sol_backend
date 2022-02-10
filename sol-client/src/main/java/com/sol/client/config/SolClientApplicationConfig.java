@@ -197,7 +197,8 @@ public class SolClientApplicationConfig {
                 viewsSortRepository,
                 backgroundTaskForViewRepository,
                 taskInViewConfig.deleteAllTaskInViewByViewUseCase(),
-                viewsSortConfig.findViewsSortByUserIdUseCase());
+                viewsSortConfig.findViewsSortByUserIdUseCase(),
+                viewsSortConfig.updateViewsSortUseCase());
     }
 
     @Bean
