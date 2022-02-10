@@ -33,7 +33,7 @@ public class UpdateViewUserUseCase extends UseCase<UpdateViewUserUseCase.InputVa
 
         if (viewUserEntity.getCanEdit() == false) return SingletonEntityOutputValues.of(viewUserEntity);
 
-        viewUserEntity.setView(inputValues.view);
+        //viewUserEntity.setView(inputValues.view);
 
         viewUserEntity.getView().setIcon(inputValues.getView().getIcon());
         viewUserEntity.getView().setTitle(inputValues.getView().getTitle());
@@ -42,6 +42,10 @@ public class UpdateViewUserUseCase extends UseCase<UpdateViewUserUseCase.InputVa
         viewUserEntity.getView().setDisplayMode(inputValues.getView().getDisplayMode());
         viewUserEntity.getView().setSortType(inputValues.getView().getSortType());
         viewUserEntity.getView().setViewType(inputValues.getView().getViewType());
+
+        if (inputValues.view.getParams() != null) {
+            viewUserEntity.getView().setParams(inputValues.view.getParams());
+        }
 
         viewUserEntity = viewUserRepository.save(viewUserEntity);
         taskInViewRepository.removeByViewId(viewUserEntity.getId());

@@ -46,6 +46,13 @@ public interface ViewUserResource {
     @PatchMapping(value = ViewUserRoutes.SINGLETON)
     SuccessApiResponse<ViewUserResponse> updateView(@PathVariable String id, @RequestBody UpdateUserViewRequest request, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
 
+    @ApiOperation("Обновить view full")
+    @PatchMapping(value = ViewUserRoutes.UPDATE_FULL)
+    SuccessApiResponse<ViewUserResponse> updateAllView(
+            @PathVariable String id,
+            @RequestBody UpdateUserViewFullRequest request,
+            @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+
     @ApiOperation("view param add")
     @PostMapping(value = ViewUserRoutes.PARAM_ADD)
     SuccessApiResponse<ViewUserResponse> paramAdd(@PathVariable String id, @RequestBody ViewParamRequest request, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);

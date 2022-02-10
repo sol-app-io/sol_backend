@@ -1,17 +1,11 @@
 package com.sol.client.config;
 
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rcore.domain.commons.usecase.UseCaseExecutor;
 import com.rcore.domain.commons.usecase.impl.UseCaseExecutorImpl;
 import com.rcore.domain.security.port.AccessChecker;
 import com.rcore.domain.security.port.CredentialIdentityService;
-import com.rcore.event.driven.EventDispatcher;
-import com.rcore.rest.api.spring.commons.jackson.datetime.InstantDeserializer;
-import com.rcore.rest.api.spring.commons.jackson.datetime.InstantSerializer;
-import com.rcore.rest.api.spring.commons.jackson.datetime.LocalDateTimeDeserializer;
-import com.rcore.rest.api.spring.commons.jackson.datetime.LocalDateTimeSerializer;
 import com.rcore.rest.api.spring.security.jwt.access.JwtAccessTokenGenerator;
 import com.rcore.rest.api.spring.security.jwt.access.JwtAccessTokenParser;
 import com.rcore.rest.api.spring.security.jwt.refresh.JwtRefreshTokenGenerator;
@@ -38,7 +32,6 @@ import com.sol.domain.task.port.TaskRepository;
 import com.sol.domain.taskInView.config.TaskInViewConfig;
 import com.sol.domain.taskInView.port.TaskInViewIdGenerator;
 import com.sol.domain.taskInView.port.TaskInViewRepository;
-import com.sol.domain.taskInView.usecases.CreateTaskInViewUseCase;
 import com.sol.domain.viewTemplate.config.ViewTemplateConfig;
 import com.sol.domain.viewTemplate.port.ViewTemplateIdGenerator;
 import com.sol.domain.viewTemplate.port.ViewTemplateRepository;
@@ -53,7 +46,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import ru.foodtechlab.lib.auth.integration.core.AccessTokenService;
 import ru.foodtechlab.lib.auth.integration.core.authorizartion.impl.AccessCheckerViaAuthService;
 import ru.foodtechlab.lib.auth.integration.core.authorizartion.impl.CredentialIdentityServiceViaAuthService;
@@ -67,9 +59,6 @@ import ru.foodtechlab.lib.auth.integration.restapi.feign.credential.impl.FeignHT
 import ru.foodtechlab.lib.auth.integration.restapi.feign.role.access.FeignRoleAccessServiceClient;
 import ru.foodtechlab.lib.auth.integration.restapi.feign.role.access.impl.FeignHTTPRoleAccessFacade;
 import ru.foodtechlab.lib.auth.service.domain.token.config.TokenLifeCycleConfig;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
 @Configuration

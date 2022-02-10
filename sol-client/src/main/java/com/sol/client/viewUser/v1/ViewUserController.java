@@ -118,11 +118,41 @@ public class ViewUserController implements ViewUserResource {
         View view = new View();
         view.setIcon(request.getIcon());
         view.setTitle(request.getTitle());
-        request.setDescription(request.getDescription());
-        request.setAddedType(request.getAddedType());
-        request.setDisplayMode(request.getDisplayMode());
-        request.setSortType(request.getSortType());
-        request.setViewType(request.getViewType());
+        view.setDescription(request.getDescription());
+        view.setAddedType(request.getAddedType());
+        view.setDisplayMode(request.getDisplayMode());
+        view.setSortType(request.getSortType());
+        view.setViewType(request.getViewType());
+        view.setParams(null);
+
+        ViewUserEntity viewUserEntity = useCaseExecutor.execute(
+                viewUserConfig.updateViewUserUseCase(),
+                UpdateViewUserUseCase.InputValues.of(id, solUserEntity.getId(), view),
+                o -> o.getEntity()
+        );
+
+        return SuccessApiResponse.of(mapper.map(viewUserEntity));
+    }
+
+    @Override
+    public SuccessApiResponse<ViewUserResponse> updateAllView(String id, UpdateUserViewFullRequest request, CredentialPrincipal credentialPrincipal) {
+        SolUserEntity solUserEntity = solUserConfig
+                .meUseCase()
+                .execute(
+                        MeUseCase.InputValues.builder()
+                                .credentialId(credentialPrincipal.getId())
+                                .build()
+                ).getEntity();
+
+        View view = new View();
+        view.setIcon(request.getIcon());
+        view.setTitle(request.getTitle());
+        view.setDescription(request.getDescription());
+        view.setAddedType(request.getAddedType());
+        view.setDisplayMode(request.getDisplayMode());
+        view.setSortType(request.getSortType());
+        view.setViewType(request.getViewType());
+        view.setParams(request.getParams());
 
         ViewUserEntity viewUserEntity = useCaseExecutor.execute(
                 viewUserConfig.updateViewUserUseCase(),
