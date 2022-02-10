@@ -35,7 +35,9 @@ public class DeleteViewUserUseCase extends UseCase<DeleteViewUserUseCase.InputVa
 
     @Override
     public VoidOutputValues execute(InputValues inputValues) {
-
+        System.out.println("");
+        System.out.println("=============================================");
+        System.out.println("Run - ViewUserEntity viewUserEntity = viewUserRepository");
         ViewUserEntity viewUserEntity = viewUserRepository
                 .findById(inputValues.id)
                 .orElseThrow(ViewUserNotFoundException::new);
@@ -43,13 +45,16 @@ public class DeleteViewUserUseCase extends UseCase<DeleteViewUserUseCase.InputVa
         if(viewUserEntity.getCanEdit() == false) return new VoidOutputValues();
         if(viewUserEntity.getOwnerId().equals(inputValues.solUserId) == false) throw new HasNoAccessToViewUserException();
 
+        System.out.println("Run - ViewsSortEntity viewsSortEntity = findViewsSortByUserIdUseCase.execute(FindViewsSortByUserIdUseCase.InputValues.of(inputValues.getSolUserId(), ViewsSortEntity.Type.ROOT)).getEntity();");
         ViewsSortEntity viewsSortEntity = findViewsSortByUserIdUseCase.execute(FindViewsSortByUserIdUseCase.InputValues.of(inputValues.getSolUserId(), ViewsSortEntity.Type.ROOT)).getEntity();
         viewsSortEntity.getViewsId().remove(inputValues.id);
         viewsSortRepository.save(viewsSortEntity);
 
+        System.out.println("Run - viewUserRepository.delete(inputValues.id);");
         viewUserRepository.delete(inputValues.id);
+        System.out.println("Run - deleteAllTaskInViewByViewUseCase.execute(DeleteAllTaskInViewByViewUseCase.InputValues.of(viewUserEntity.getId()));");
         deleteAllTaskInViewByViewUseCase.execute(DeleteAllTaskInViewByViewUseCase.InputValues.of(viewUserEntity.getId()));
-
+        System.out.println("=============================================");
         return new VoidOutputValues();
     }
 
