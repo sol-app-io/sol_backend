@@ -8,6 +8,8 @@ import com.sol.domain.viewTemplate.port.ViewTemplateRepository;
 import com.sol.domain.viewUser.usecases.*;
 import com.sol.domain.viewsSort.port.ViewsSortRepository;
 import com.sol.domain.viewsSort.usecases.FindViewsSortByUserIdUseCase;
+import com.sol.domain.viewsSort.usecases.HideViewInViewsSortUseCase;
+import com.sol.domain.viewsSort.usecases.ShowViewInViewsSortUseCase;
 import com.sol.domain.viewsSort.usecases.UpdateViewsSortUseCase;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -32,6 +34,8 @@ public class ViewUserConfig {
     private final EditParamToViewUserUseCase editParamToViewUserUseCase;
     private final DeleteParamToViewUserUseCase deleteParamToViewUserUseCase;
     private final FindAllViewBySolUserUseCase findAllViewBySolUserUseCase;
+    private final HideViewInViewsSortUseCase hideViewInViewsSortUseCase;
+    private final ShowViewInViewsSortUseCase showViewInViewsSortUseCase;
 
     public ViewUserConfig(
             ViewUserRepository viewUserRepository,
@@ -63,5 +67,7 @@ public class ViewUserConfig {
         this.editParamToViewUserUseCase = new EditParamToViewUserUseCase(viewUserRepository, taskInViewRepository);
         this.deleteParamToViewUserUseCase = new DeleteParamToViewUserUseCase(viewUserRepository, taskInViewRepository);
         this.findAllViewBySolUserUseCase = new FindAllViewBySolUserUseCase(viewUserRepository);
+        this.hideViewInViewsSortUseCase = new HideViewInViewsSortUseCase(viewsSortRepository, findViewsSortByUserIdUseCase);
+        this.showViewInViewsSortUseCase = new ShowViewInViewsSortUseCase(viewsSortRepository, findViewsSortByUserIdUseCase);
     }
 }

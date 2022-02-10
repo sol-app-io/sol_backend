@@ -7,6 +7,10 @@ public class ViewUserRoutes {
     public static final String ADD_TASK_TO_VIEW = ROOT  + "/add-task";
     public static final String MY_ROOT = ROOT + "/root";
     public static final String ALL = ROOT + "/all";
+
+    public static final String HIDE = ROOT + "/{id}/hide";
+    public static final String SHOW = ROOT + "/{id}/show";
+
     public static final String FIND_VIEW_BY_TASK = ROOT + "/by-task";
     public static final String FIND_TASKS_BY_VIEW = ROOT + "/by-view";
     public static final String SINGLETON = ROOT + "/{id}";

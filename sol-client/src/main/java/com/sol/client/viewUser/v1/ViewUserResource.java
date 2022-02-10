@@ -38,6 +38,14 @@ public interface ViewUserResource {
     @PostMapping(value =  ViewUserRoutes.ADD_TASK_TO_VIEW, produces = MediaType.APPLICATION_JSON_VALUE)
     SuccessApiResponse<TaskInViewResponse> addTaskToView(@RequestBody CreateTaskInViewRequest request, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
 
+    @ApiOperation("Show")
+    @PostMapping(value =  ViewUserRoutes.SHOW, produces = MediaType.APPLICATION_JSON_VALUE)
+    SuccessApiResponse<Boolean> show(@PathVariable String id, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+
+    @ApiOperation("Hide")
+    @PostMapping(value =  ViewUserRoutes.HIDE, produces = MediaType.APPLICATION_JSON_VALUE)
+    SuccessApiResponse<Boolean> hide(@PathVariable String id, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+
     @ApiOperation("Создать View User")
     @PostMapping(value =  ViewUserRoutes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
     SuccessApiResponse<ViewUserResponse> create(@RequestBody CreateViewUserRequest request, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);

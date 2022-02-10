@@ -24,6 +24,8 @@ import com.sol.domain.viewUser.port.ViewUserIdGenerator;
 import com.sol.domain.viewUser.usecases.*;
 import com.sol.domain.viewsSort.config.ViewsSortConfig;
 import com.sol.domain.viewsSort.entity.ViewsSortEntity;
+import com.sol.domain.viewsSort.usecases.HideViewInViewsSortUseCase;
+import com.sol.domain.viewsSort.usecases.ShowViewInViewsSortUseCase;
 import com.sol.domain.viewsSort.usecases.UpdateViewsSortUseCase;
 import com.sol.infrastructure.database.mongo.base.ObjectIdHelper;
 import lombok.RequiredArgsConstructor;
@@ -118,6 +120,44 @@ public class ViewUserController implements ViewUserResource {
     }
 
     @Override
+    public SuccessApiResponse<Boolean> show(String id, CredentialPrincipal credentialPrincipal) {
+        SolUserEntity solUserEntity = solUserConfig
+                .meUseCase()
+                .execute(
+                        MeUseCase.InputValues.builder()
+                                .credentialId(credentialPrincipal.getId())
+                                .build()
+                ).getEntity();
+
+
+        useCaseExecutor.execute(
+                viewUserConfig.showViewInViewsSortUseCase(),
+                ShowViewInViewsSortUseCase.InputValues.of(solUserEntity.getId(), id)
+        );
+
+        return SuccessApiResponse.of(true);
+    }
+
+    @Override
+    public SuccessApiResponse<Boolean> hide(String id, CredentialPrincipal credentialPrincipal) {
+        SolUserEntity solUserEntity = solUserConfig
+                .meUseCase()
+                .execute(
+                        MeUseCase.InputValues.builder()
+                                .credentialId(credentialPrincipal.getId())
+                                .build()
+                ).getEntity();
+
+
+        useCaseExecutor.execute(
+                viewUserConfig.hideViewInViewsSortUseCase(),
+                HideViewInViewsSortUseCase.InputValues.of(solUserEntity.getId(), id)
+        );
+
+        return SuccessApiResponse.of(true);
+    }
+
+    @Override
     public SuccessApiResponse<String> delete(String taskId, String viewId, CredentialPrincipal credentialPrincipal) {
         useCaseExecutor.execute(
                 taskInViewConfig.deleteTaskInViewUseCase(),
@@ -176,7 +216,7 @@ public class ViewUserController implements ViewUserResource {
         view.setParams(request.getParams());
 
         for (View.Params params : request.getParams()) {
-            if(ObjectIdHelper.mapOrDie(params.getId()) == null){
+            if (ObjectIdHelper.mapOrDie(params.getId()) == null) {
                 params.setId((new ObjectId()).toString());
             }
         }
