@@ -83,7 +83,7 @@ public class MongoViewsSortRepository implements ViewsSortRepository {
         System.out.println("RUN Query query = new ViewsSortBySolTypeQuery(filters).getQuery();");
         Query query = new ViewsSortBySolTypeQuery(filters).getQuery();
         System.out.println("RUN return Optional.ofNullable(mongoTemplate.findById(query, ViewsSortDoc.class)).map(mapper::inverseMap);");
-        return Optional.ofNullable(mongoTemplate.findById(query, ViewsSortDoc.class)).map(mapper::inverseMap);
+        return Optional.ofNullable(mongoTemplate.findOne(query, ViewsSortDoc.class)).map(mapper::inverseMap);
     }
 
     @Override
