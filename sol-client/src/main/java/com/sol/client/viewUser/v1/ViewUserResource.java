@@ -79,7 +79,7 @@ public interface ViewUserResource {
 
     @ApiOperation("Change view sort params")
     @PostMapping(value = ViewUserRoutes.CHANGE_SORT)
-    SuccessApiResponse<Boolean> changeSort(@PathVariable String id, @RequestBody ChangeViewSortRequest request, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    SuccessApiResponse<Boolean> changeSort(@RequestBody ChangeViewSortRequest request, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
 
     @ApiOperation("View delete")
     @DeleteMapping(value = ViewUserRoutes.SINGLETON)

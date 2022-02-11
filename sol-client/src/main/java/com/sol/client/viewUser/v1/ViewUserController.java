@@ -300,7 +300,7 @@ public class ViewUserController implements ViewUserResource {
     }
 
     @Override
-    public SuccessApiResponse<Boolean> changeSort(String id, ChangeViewSortRequest request, CredentialPrincipal credentialPrincipal) {
+    public SuccessApiResponse<Boolean> changeSort(ChangeViewSortRequest request, CredentialPrincipal credentialPrincipal) {
         SolUserEntity solUserEntity = solUserConfig
                 .meUseCase()
                 .execute(
