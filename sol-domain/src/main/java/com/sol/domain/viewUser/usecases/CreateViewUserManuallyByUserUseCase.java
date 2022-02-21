@@ -3,6 +3,7 @@ package com.sol.domain.viewUser.usecases;
 import com.rcore.domain.commons.usecase.AbstractCreateUseCase;
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
+import com.sol.domain.backgroundTaskForView.usecases.CreateBackgroundViewForViewUseCase;
 import com.sol.domain.view.entity.View;
 import com.sol.domain.viewsSort.config.ViewsSortConfig;
 import com.sol.domain.viewsSort.entity.ViewsSortEntity;
@@ -23,15 +24,18 @@ public class CreateViewUserManuallyByUserUseCase extends AbstractCreateUseCase<V
 
     private final UpdateViewsSortUseCase updateViewsSortUseCase;
     private final FindViewsSortByUserIdUseCase findViewsSortByUserIdUseCase;
+    private final CreateBackgroundViewForViewUseCase createBackgroundViewForViewUseCase;
 
     public CreateViewUserManuallyByUserUseCase(
             ViewUserRepository repository,
             ViewUserIdGenerator idGenerator,
             UpdateViewsSortUseCase updateViewsSortUseCase,
-            FindViewsSortByUserIdUseCase findViewsSortByUserIdUseCase) {
+            FindViewsSortByUserIdUseCase findViewsSortByUserIdUseCase,
+            CreateBackgroundViewForViewUseCase createBackgroundViewForViewUseCase) {
         super(repository, idGenerator);
         this.updateViewsSortUseCase = updateViewsSortUseCase;
         this.findViewsSortByUserIdUseCase = findViewsSortByUserIdUseCase;
+        this.createBackgroundViewForViewUseCase = createBackgroundViewForViewUseCase;
     }
 
     @Override
@@ -60,7 +64,7 @@ public class CreateViewUserManuallyByUserUseCase extends AbstractCreateUseCase<V
                     ViewsSortEntity.Type.ROOT,
                     viewsSortEntity.getViewsId()));
         }
-
+        createBackgroundViewForViewUseCase.execute(CreateBackgroundViewForViewUseCase.InputValues.of(viewUserEntity.getId()));
         return SingletonEntityOutputValues.of(viewUserEntity);
     }
 

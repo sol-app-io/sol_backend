@@ -30,6 +30,7 @@ public class UpdateViewInTemplateByAdminUseCase extends UseCase<UpdateViewInTemp
         viewTemplateEntity.getView().getIcon().setType(Icon.Type.EMOJI);
         viewTemplateEntity.getView().setTitle(inputValues.getViewTitle());
         viewTemplateEntity.getView().setDescription(inputValues.getViewDescription());
+        viewTemplateEntity.getView().setViewType(inputValues.getViewType());
         viewTemplateEntity.getView().setAddedType(inputValues.getAddedType());
         viewTemplateEntity.getView().setDisplayMode(inputValues.getDisplayMode());
         viewTemplateEntity.getView().setSortType(inputValues.getSortType());
@@ -57,6 +58,7 @@ public class UpdateViewInTemplateByAdminUseCase extends UseCase<UpdateViewInTemp
         protected String description;
         protected String viewTitle;
         protected String viewDescription;
+        protected View.ViewType viewType;
         protected View.AddedType addedType;
         protected View.DisplayMode displayMode;
         protected View.Sort sortType;

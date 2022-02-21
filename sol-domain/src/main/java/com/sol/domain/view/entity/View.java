@@ -2,6 +2,7 @@ package com.sol.domain.view.entity;
 
 import com.sol.domain.base.entity.Icon;
 import com.sol.domain.task.entity.TaskEntity;
+import com.sol.domain.task.entity.TaskStatus;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -80,12 +81,13 @@ public class View {
         }
 
         private Boolean didPassTaskIsOverdue(TaskEntity taskEntity) {
-            return false;
-
+            return taskEntity.getDeadline() != null && LocalDateTime.now().isAfter(taskEntity.getDeadline());
         }
 
         private Boolean didPassClosed(TaskEntity taskEntity) {
-            return false;
+            return
+                    (this.getValueBool() == true && taskEntity.getStatus().equals(TaskStatus.DONE)) ||
+                            (this.getValueBool() == false && taskEntity.getStatus().equals(TaskStatus.OPEN));
 
         }
 

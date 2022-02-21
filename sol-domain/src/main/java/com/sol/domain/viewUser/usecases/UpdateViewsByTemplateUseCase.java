@@ -3,6 +3,7 @@ package com.sol.domain.viewUser.usecases;
 import com.rcore.domain.commons.port.dto.SearchResult;
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.VoidOutputValues;
+import com.sol.domain.backgroundTaskForView.usecases.CreateBackgroundViewForViewUseCase;
 import com.sol.domain.taskInView.port.TaskInViewRepository;
 import com.sol.domain.viewTemplate.entity.ViewTemplateEntity;
 import com.sol.domain.viewTemplate.exceptions.ViewTemplateNotFoundException;
@@ -23,6 +24,7 @@ public class UpdateViewsByTemplateUseCase extends UseCase<UpdateViewsByTemplateU
     private final ViewUserRepository viewUserRepository;
     private final ViewTemplateRepository viewTemplateRepository;
     private final TaskInViewRepository taskInViewRepository;
+    private final CreateBackgroundViewForViewUseCase createBackgroundViewForViewUseCase;
 
     @Override
     public VoidOutputValues execute(InputValues inputValues) {
@@ -57,8 +59,7 @@ public class UpdateViewsByTemplateUseCase extends UseCase<UpdateViewsByTemplateU
         viewUserEntity.setView(template.getView());
         viewUserEntity = viewUserRepository.save(viewUserEntity);
         taskInViewRepository.removeByViewId(viewUserEntity.getId());
-        // TODO обновить фоновые задания в UpdateViewsByTemplateUseCase
-        // Нужны фоновые задачи, на обновление тасков во воью, когда мы меняем вью
+        createBackgroundViewForViewUseCase.execute(CreateBackgroundViewForViewUseCase.InputValues.of(viewUserEntity.getId()));
     }
 
     @AllArgsConstructor(staticName = "of")

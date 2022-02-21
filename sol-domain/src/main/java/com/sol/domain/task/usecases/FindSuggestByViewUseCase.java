@@ -15,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
- * Обновление сущности
+ * Поиск Suggest подходящих
  */
 @RequiredArgsConstructor
 public class FindSuggestByViewUseCase extends UseCase<FindSuggestByViewUseCase.InputValues, SearchResultEntityOutputValues<TaskEntity>> {
@@ -36,7 +36,6 @@ public class FindSuggestByViewUseCase extends UseCase<FindSuggestByViewUseCase.I
 
         return SearchResultEntityOutputValues.of(SearchResult.withItemsAndCount(taskEntities, Long.valueOf(taskEntities.size())));
     }
-
     @AllArgsConstructor(staticName = "of")
     @NoArgsConstructor(staticName = "empty")
     @Getter

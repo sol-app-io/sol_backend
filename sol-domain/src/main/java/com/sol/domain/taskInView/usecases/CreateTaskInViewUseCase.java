@@ -36,6 +36,7 @@ public class CreateTaskInViewUseCase extends UseCase<CreateTaskInViewUseCase.Inp
 
         TaskEntity taskEntity = taskRepository.findById(inputValues.taskId).get();
         taskEntity.getViewIds().add(inputValues.viewId);
+        taskEntity.getSuggestForViewIds().remove(inputValues.getViewId());
         taskRepository.save(taskEntity);
 
         return SingletonEntityOutputValues.of(taskInViewEntity);

@@ -10,6 +10,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -43,6 +44,7 @@ public class TaskDoc extends BaseDocument {
      * viewIds 
      */
     protected Set<ObjectId> viewIds;
+    protected Set<ObjectId> suggestForViewIds = new HashSet<>();
     /**
      * planningPoints 
      */

@@ -34,6 +34,8 @@ public class TaskResponse {
     protected Icon icon;
     @ApiModelProperty("viewIds")
     protected Set<String> viewIds;
+    @ApiModelProperty("suggestForViewIds")
+    protected Set<String> suggestForViewIds;
     @ApiModelProperty("planningPoints")
     protected List<String> planningPoints;
     @ApiModelProperty("deadline")

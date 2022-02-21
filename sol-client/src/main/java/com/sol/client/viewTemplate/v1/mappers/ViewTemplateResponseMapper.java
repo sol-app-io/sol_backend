@@ -29,6 +29,7 @@ public class ViewTemplateResponseMapper {
         view.setDescription(entity.getDescription());
         view.setAddedType(entity.getAddedType());
         view.setDisplayMode(entity.getDisplayMode());
+        view.setViewType(entity.getViewType());
         view.setSortType(entity.getSortType());
         view.setParams(entity.getParams() != null ? entity.getParams().stream().map(ViewTemplateResponseMapper::map).collect(Collectors.toList()) : new ArrayList<>());
         return view;

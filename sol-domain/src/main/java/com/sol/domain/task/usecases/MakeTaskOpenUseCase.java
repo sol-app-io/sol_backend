@@ -2,6 +2,7 @@ package com.sol.domain.task.usecases;
 
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
+import com.sol.domain.backgroundTaskForView.usecases.CreateBackgroundTaskForViewUseCase;
 import com.sol.domain.space.usecases.UpdateTaskCountInSpaceUseCase;
 import com.sol.domain.task.entity.TaskEntity;
 import com.sol.domain.task.entity.TaskStatus;
@@ -20,7 +21,7 @@ public class MakeTaskOpenUseCase extends UseCase<MakeTaskOpenUseCase.InputValues
 
     private final TaskRepository taskRepository;
     private final UpdateTaskCountInSpaceUseCase updateTaskCountInSlotUseCase;
-
+    private final CreateBackgroundTaskForViewUseCase createBackgroundTaskForViewUseCase;
     @Override
     public SingletonEntityOutputValues<TaskEntity> execute(InputValues inputValues) {
         TaskEntity taskEntity = taskRepository.findById(inputValues.getId())
@@ -34,7 +35,7 @@ public class MakeTaskOpenUseCase extends UseCase<MakeTaskOpenUseCase.InputValues
         taskEntity = taskRepository.save(taskEntity);
 
         updateTaskCountInSlotUseCase.execute(UpdateTaskCountInSpaceUseCase.InputValues.of(taskEntity.getSpaceId()));
-
+        createBackgroundTaskForViewUseCase.execute(CreateBackgroundTaskForViewUseCase.InputValues.of(taskEntity.getId()));
         return SingletonEntityOutputValues.of(taskEntity);
     }
 

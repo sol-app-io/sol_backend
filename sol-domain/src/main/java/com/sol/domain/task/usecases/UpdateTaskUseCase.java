@@ -2,6 +2,7 @@ package com.sol.domain.task.usecases;
 
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
+import com.sol.domain.backgroundTaskForView.usecases.CreateBackgroundTaskForViewUseCase;
 import com.sol.domain.base.entity.Icon;
 import com.sol.domain.task.entity.TaskStatus;
 import lombok.*;
@@ -21,18 +22,16 @@ import java.util.Set;
 public class UpdateTaskUseCase extends UseCase<UpdateTaskUseCase.InputValues, SingletonEntityOutputValues<TaskEntity>> {
 
     private final TaskRepository taskRepository;
-
+    private final CreateBackgroundTaskForViewUseCase createBackgroundTaskForViewUseCase;
     @Override
     public SingletonEntityOutputValues<TaskEntity> execute(InputValues inputValues) {
         TaskEntity taskEntity = taskRepository.findById(inputValues.getId())
                 .orElseThrow(TaskNotFoundException::new);
 
-        taskEntity.setOwnerId(inputValues.ownerId);
         taskEntity.setParentTaskId(inputValues.parentTaskId);
         taskEntity.setSpaceId(inputValues.spaceId);
         taskEntity.setTitle(inputValues.title);
         taskEntity.setIcon(inputValues.icon);
-        taskEntity.setViewIds(inputValues.viewIds);
         taskEntity.setDeadline(inputValues.deadline);
         taskEntity.setRepeatTaskConfId(inputValues.repeatTaskConfId);
         taskEntity.setCreatedFromRepeatTaskId(inputValues.createdFromRepeatTaskId);
@@ -44,6 +43,11 @@ public class UpdateTaskUseCase extends UseCase<UpdateTaskUseCase.InputValues, Si
         
         taskEntity = taskRepository.save(taskEntity);
 
+        createBackgroundTaskForViewUseCase
+                .execute(
+                        CreateBackgroundTaskForViewUseCase.InputValues.of(taskEntity.getId())
+                );
+
         return SingletonEntityOutputValues.of(taskEntity);
     }
 
@@ -54,10 +58,6 @@ public class UpdateTaskUseCase extends UseCase<UpdateTaskUseCase.InputValues, Si
     public static class InputValues implements UseCase.InputValues {
         @NotBlank
         protected String id;
-        /**
-        * ownerId
-        */
-        protected String ownerId;
         /**
         * parentTaskId 
         */
@@ -74,10 +74,7 @@ public class UpdateTaskUseCase extends UseCase<UpdateTaskUseCase.InputValues, Si
         * icon 
         */
         protected Icon icon;
-        /**
-        * viewIds 
-        */
-        protected Set<String> viewIds;
+        
         /**
         * planningPoints 
         */

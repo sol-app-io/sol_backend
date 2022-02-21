@@ -13,6 +13,7 @@ import com.rcore.rest.api.spring.security.jwt.refresh.JwtRefreshTokenParser;
 import com.sol.domain.backgroundTaskForView.config.BackgroundTaskForViewConfig;
 import com.sol.domain.backgroundTaskForView.port.BackgroundTaskForViewIdGenerator;
 import com.sol.domain.backgroundTaskForView.port.BackgroundTaskForViewRepository;
+import com.sol.domain.backgroundTaskForView.usecases.CreateBackgroundTaskForViewUseCase;
 import com.sol.domain.category.config.CategoryConfig;
 import com.sol.domain.category.port.CategoryIdGenerator;
 import com.sol.domain.category.port.CategoryRepository;
@@ -32,6 +33,7 @@ import com.sol.domain.task.port.TaskRepository;
 import com.sol.domain.taskInView.config.TaskInViewConfig;
 import com.sol.domain.taskInView.port.TaskInViewIdGenerator;
 import com.sol.domain.taskInView.port.TaskInViewRepository;
+import com.sol.domain.taskInView.usecases.DeleteAllTaskInViewByTaskUseCase;
 import com.sol.domain.viewTemplate.config.ViewTemplateConfig;
 import com.sol.domain.viewTemplate.port.ViewTemplateIdGenerator;
 import com.sol.domain.viewTemplate.port.ViewTemplateRepository;
@@ -116,8 +118,6 @@ public class SolClientApplicationConfig {
     }
 
 
-
-
     @Bean
     public SolUserConfig solUserConfig(
             SolUserRepository solUserRepository,
@@ -136,8 +136,29 @@ public class SolClientApplicationConfig {
     }
 
     @Bean
-    public TaskConfig taskConfig(TaskRepository taskRepository, TaskIdGenerator<?> taskIdGenerator, SolUserConfig solUserConfig, SpaceConfig spaceConfig, SlotRepository slotRepository, SpaceRepository spaceRepository, ViewUserRepository viewUserRepository) {
-        return new TaskConfig(taskRepository, taskIdGenerator, solUserConfig.meUseCase(), spaceConfig.findSpaceByIdUseCase(), spaceConfig.findInboxSpaceByOwnerIdUseCase(), slotRepository, new UpdateTaskCountInSpaceUseCase(spaceRepository, taskRepository), viewUserRepository);
+    public TaskConfig taskConfig(
+            TaskRepository taskRepository,
+            TaskIdGenerator<?> taskIdGenerator,
+            SolUserConfig solUserConfig,
+            SpaceConfig spaceConfig,
+            SlotRepository slotRepository,
+            SpaceRepository spaceRepository,
+            ViewUserRepository viewUserRepository,
+            TaskInViewRepository taskInViewRepository,
+            BackgroundTaskForViewConfig backgroundTaskForViewConfig
+            ) {
+        return new TaskConfig(
+                taskRepository,
+                taskIdGenerator,
+                solUserConfig.meUseCase(),
+                spaceConfig.findSpaceByIdUseCase(),
+                spaceConfig.findInboxSpaceByOwnerIdUseCase(),
+                slotRepository,
+                new UpdateTaskCountInSpaceUseCase(spaceRepository, taskRepository),
+                viewUserRepository,
+                backgroundTaskForViewConfig.createBackgroundTaskForViewUseCase(),
+                new DeleteAllTaskInViewByTaskUseCase(taskInViewRepository)
+        );
     }
 
     @Bean
@@ -175,7 +196,8 @@ public class SolClientApplicationConfig {
             ViewsSortRepository viewsSortRepository,
             BackgroundTaskForViewRepository backgroundTaskForViewRepository,
             ViewsSortConfig viewsSortConfig,
-            TaskInViewConfig taskInViewConfig
+            TaskInViewConfig taskInViewConfig,
+            BackgroundTaskForViewConfig backgroundTaskForViewConfig
     ) {
         return new ViewUserConfig(
                 viewUserRepository,
@@ -187,7 +209,8 @@ public class SolClientApplicationConfig {
                 backgroundTaskForViewRepository,
                 taskInViewConfig.deleteAllTaskInViewByViewUseCase(),
                 viewsSortConfig.findViewsSortByUserIdUseCase(),
-                viewsSortConfig.updateViewsSortUseCase());
+                viewsSortConfig.updateViewsSortUseCase(),
+                backgroundTaskForViewConfig.createBackgroundViewForViewUseCase());
     }
 
     @Bean
@@ -203,7 +226,8 @@ public class SolClientApplicationConfig {
                 backgroundTaskForViewIdGenerator,
                 taskRepository,
                 viewUserRepository,
-                taskInViewConfig.createTaskInViewUseCase());
+                taskInViewConfig.createTaskInViewUseCase(),
+                taskInViewConfig.deleteTaskInViewUseCase());
     }
 
     @Bean
@@ -223,7 +247,7 @@ public class SolClientApplicationConfig {
 
     @Bean
     public ViewTemplateConfig viewTemplateConfig(ViewTemplateRepository viewTemplateRepository,
-                                                 ViewTemplateIdGenerator viewTemplateIdGenerator, ViewUserConfig viewUserConfig){
+                                                 ViewTemplateIdGenerator viewTemplateIdGenerator, ViewUserConfig viewUserConfig) {
         return new ViewTemplateConfig(viewTemplateRepository, viewTemplateIdGenerator, viewUserConfig.removeAllViewByTemplateForAllUserUseCase());
     }
 }

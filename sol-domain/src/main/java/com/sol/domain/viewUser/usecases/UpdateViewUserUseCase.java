@@ -2,6 +2,7 @@ package com.sol.domain.viewUser.usecases;
 
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
+import com.sol.domain.backgroundTaskForView.usecases.CreateBackgroundViewForViewUseCase;
 import com.sol.domain.base.entity.Icon;
 import com.sol.domain.taskInView.port.TaskInViewRepository;
 import com.sol.domain.view.entity.View;
@@ -23,6 +24,7 @@ public class UpdateViewUserUseCase extends UseCase<UpdateViewUserUseCase.InputVa
 
     private final ViewUserRepository viewUserRepository;
     private final TaskInViewRepository taskInViewRepository;
+    private final CreateBackgroundViewForViewUseCase createBackgroundViewForViewUseCase;
 
     @Override
     public SingletonEntityOutputValues<ViewUserEntity> execute(InputValues inputValues) {
@@ -49,7 +51,7 @@ public class UpdateViewUserUseCase extends UseCase<UpdateViewUserUseCase.InputVa
 
         viewUserEntity = viewUserRepository.save(viewUserEntity);
         taskInViewRepository.removeByViewId(viewUserEntity.getId());
-
+        createBackgroundViewForViewUseCase.execute(CreateBackgroundViewForViewUseCase.InputValues.of(viewUserEntity.getId()));
         return SingletonEntityOutputValues.of(viewUserEntity);
     }
 

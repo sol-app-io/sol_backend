@@ -1,6 +1,7 @@
 package com.sol.domain.viewUser.config;
 
 import com.sol.domain.backgroundTaskForView.port.BackgroundTaskForViewRepository;
+import com.sol.domain.backgroundTaskForView.usecases.CreateBackgroundViewForViewUseCase;
 import com.sol.domain.solUser.port.SolUserRepository;
 import com.sol.domain.taskInView.port.TaskInViewRepository;
 import com.sol.domain.taskInView.usecases.DeleteAllTaskInViewByViewUseCase;
@@ -47,25 +48,27 @@ public class ViewUserConfig {
             BackgroundTaskForViewRepository backgroundTaskForViewRepository,
             DeleteAllTaskInViewByViewUseCase deleteAllTaskInViewByViewUseCase,
             FindViewsSortByUserIdUseCase findViewsSortByUserIdUseCase,
-            UpdateViewsSortUseCase updateViewsSortUseCase) {
+            UpdateViewsSortUseCase updateViewsSortUseCase,
+            CreateBackgroundViewForViewUseCase createBackgroundViewForViewUseCase) {
         this.createViewUserFromTemplateBulkByAdminUseCase = new CreateViewUserFromTemplateBulkByAdminUseCase(
                 solUserRepository,
                 viewUserRepository,
-                viewUserIdGenerator
+                viewUserIdGenerator,
+                createBackgroundViewForViewUseCase
         );
-        this.createViewUserFromTemplateByUserUseCase = new CreateViewUserFromTemplateByUserUseCase(solUserRepository, viewUserRepository, viewUserIdGenerator);
-        this.createViewUserManuallyByUserUseCase = new CreateViewUserManuallyByUserUseCase(viewUserRepository, viewUserIdGenerator, updateViewsSortUseCase, findViewsSortByUserIdUseCase);
+        this.createViewUserFromTemplateByUserUseCase = new CreateViewUserFromTemplateByUserUseCase(solUserRepository, viewUserRepository, viewUserIdGenerator, createBackgroundViewForViewUseCase);
+        this.createViewUserManuallyByUserUseCase = new CreateViewUserManuallyByUserUseCase(viewUserRepository, viewUserIdGenerator, updateViewsSortUseCase, findViewsSortByUserIdUseCase, createBackgroundViewForViewUseCase);
         this.deleteViewUserUseCase = new DeleteViewUserUseCase(viewUserRepository, deleteAllTaskInViewByViewUseCase, findViewsSortByUserIdUseCase, viewsSortRepository);
         this.findViewUserByIdUseCase = new FindViewUserByIdUseCase(viewUserRepository);
-        this.updateViewUserUseCase = new UpdateViewUserUseCase(viewUserRepository, taskInViewRepository);
+        this.updateViewUserUseCase = new UpdateViewUserUseCase(viewUserRepository, taskInViewRepository, createBackgroundViewForViewUseCase);
         this.findViewUserUseCase = new FindViewUserUseCase(viewUserRepository);
         this.initAllViewsUseCase = new InitAllViewsUseCase(viewTemplateRepository, this.createViewUserFromTemplateByUserUseCase);
         this.removeAllViewByTemplateForAllUserUseCase = new RemoveAllViewByTemplateForAllUserUseCase(viewUserRepository, viewTemplateRepository, viewsSortRepository, taskInViewRepository, backgroundTaskForViewRepository);
-        this.updateViewsByTemplateUseCase = new UpdateViewsByTemplateUseCase(viewUserRepository, viewTemplateRepository, taskInViewRepository);
+        this.updateViewsByTemplateUseCase = new UpdateViewsByTemplateUseCase(viewUserRepository, viewTemplateRepository, taskInViewRepository, createBackgroundViewForViewUseCase);
         this.findViewBySolUserUseCase = new FindViewBySolUserUseCase(viewUserRepository, viewsSortRepository);
-        this.addParamToViewUserUseCase = new AddParamToViewUserUseCase(viewUserRepository, viewUserIdGenerator, taskInViewRepository);
-        this.editParamToViewUserUseCase = new EditParamToViewUserUseCase(viewUserRepository, taskInViewRepository);
-        this.deleteParamToViewUserUseCase = new DeleteParamToViewUserUseCase(viewUserRepository, taskInViewRepository);
+        this.addParamToViewUserUseCase = new AddParamToViewUserUseCase(viewUserRepository, viewUserIdGenerator, taskInViewRepository, createBackgroundViewForViewUseCase);
+        this.editParamToViewUserUseCase = new EditParamToViewUserUseCase(viewUserRepository, taskInViewRepository, createBackgroundViewForViewUseCase);
+        this.deleteParamToViewUserUseCase = new DeleteParamToViewUserUseCase(viewUserRepository, taskInViewRepository, createBackgroundViewForViewUseCase);
         this.findAllViewBySolUserUseCase = new FindAllViewBySolUserUseCase(viewUserRepository);
         this.hideViewInViewsSortUseCase = new HideViewInViewsSortUseCase(viewsSortRepository, findViewsSortByUserIdUseCase);
         this.showViewInViewsSortUseCase = new ShowViewInViewsSortUseCase(viewsSortRepository, findViewsSortByUserIdUseCase);

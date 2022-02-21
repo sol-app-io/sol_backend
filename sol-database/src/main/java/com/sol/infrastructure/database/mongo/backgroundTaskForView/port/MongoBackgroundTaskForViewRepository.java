@@ -72,13 +72,7 @@ public class MongoBackgroundTaskForViewRepository implements BackgroundTaskForVi
         Update update = Update
                 .update("status", BackgroundTaskForViewEntity.Status.IN_PROCESS);
 
-        UpdateResult updateResult = mongoTemplate.updateFirst(query, update, BackgroundTaskForViewDoc.class);
-
-        if (updateResult.getModifiedCount() == 0) {
-            return Optional.empty();
-        }
-
-        ObjectId id = updateResult.getUpsertedId().asObjectId().getValue();
-        return Optional.ofNullable(mongoTemplate.findById(id, BackgroundTaskForViewDoc.class)).map(mapper::inverseMap);
+        BackgroundTaskForViewDoc doc = mongoTemplate.findAndModify(query, update, BackgroundTaskForViewDoc.class);
+        return Optional.ofNullable(doc).map(mapper::inverseMap);
     }
 }

@@ -2,6 +2,7 @@ package com.sol.domain.viewUser.usecases;
 
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
+import com.sol.domain.backgroundTaskForView.usecases.CreateBackgroundViewForViewUseCase;
 import com.sol.domain.taskInView.port.TaskInViewRepository;
 import com.sol.domain.view.entity.View;
 import com.sol.domain.viewUser.entity.ViewUserEntity;
@@ -22,6 +23,7 @@ public class EditParamToViewUserUseCase extends UseCase<EditParamToViewUserUseCa
 
     private final ViewUserRepository viewUserRepository;
     private final TaskInViewRepository taskInViewRepository;
+    private final CreateBackgroundViewForViewUseCase createBackgroundViewForViewUseCase;
 
     @Override
     public SingletonEntityOutputValues<ViewUserEntity> execute(InputValues inputValues) {
@@ -44,8 +46,7 @@ public class EditParamToViewUserUseCase extends UseCase<EditParamToViewUserUseCa
         }
         viewUserEntity = viewUserRepository.save(viewUserEntity);
         taskInViewRepository.removeByViewId(viewUserEntity.getId());
-        // Нужны фоновые задачи, на обновление тасков во воью, когда мы меняем вью
-
+        createBackgroundViewForViewUseCase.execute(CreateBackgroundViewForViewUseCase.InputValues.of(viewUserEntity.getId()));
         return SingletonEntityOutputValues.of(viewUserEntity);
     }
 

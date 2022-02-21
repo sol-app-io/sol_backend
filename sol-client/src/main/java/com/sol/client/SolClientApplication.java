@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoCo
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
         exclude = {EmbeddedMongoAutoConfiguration.class, ErrorMvcAutoConfiguration.class})
 @EnableMongoRepositories
 @EnableWebMvc
+@EnableScheduling
 @EnableFeignClients(basePackages = {"com.rcore", "ru.foodtechlab", "com.sol"})
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SolClientApplication {

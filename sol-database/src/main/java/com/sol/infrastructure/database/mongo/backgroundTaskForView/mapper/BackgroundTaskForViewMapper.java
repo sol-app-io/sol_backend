@@ -21,6 +21,8 @@ public class BackgroundTaskForViewMapper implements ExampleDataMapper<Background
                 .taskId(entity.getTaskId())
                 .status(entity.getStatus())
                 .log(entity.getLog())
+                .type(entity.getType())
+                .userViewId(entity.getUserViewId())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
@@ -34,6 +36,8 @@ public class BackgroundTaskForViewMapper implements ExampleDataMapper<Background
                 .taskId(doc.getTaskId())
                 .status(doc.getStatus())
                 .log(doc.getLog())
+                .type(doc.getType())
+                .userViewId(doc.getUserViewId())
                 .createdAt(doc.getCreatedAt())
                 .updatedAt(doc.getUpdatedAt())
                 .build();

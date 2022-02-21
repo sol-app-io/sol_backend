@@ -4,6 +4,7 @@ import com.rcore.domain.commons.usecase.AbstractCreateUseCase;
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.IdInputValues;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
+import com.sol.domain.backgroundTaskForView.usecases.CreateBackgroundTaskForViewUseCase;
 import com.sol.domain.base.entity.Icon;
 import com.sol.domain.base.utils.DateUtils;
 import com.sol.domain.space.usecases.UpdateTaskCountInSpaceUseCase;
@@ -37,6 +38,7 @@ public class CreateTaskUseCase extends AbstractCreateUseCase<TaskEntity, TaskIdG
     private final FindTaskByIdUseCase findTaskByIdUseCase;
     private final FindInboxSpaceByOwnerIdUseCase findInboxSpaceByOwnerIdUseCase;
     private final UpdateTaskCountInSpaceUseCase updateTaskCountInSpaceUseCase;
+    private final CreateBackgroundTaskForViewUseCase createBackgroundTaskForViewUseCase;
 
     public CreateTaskUseCase(
             TaskRepository repository,
@@ -45,13 +47,15 @@ public class CreateTaskUseCase extends AbstractCreateUseCase<TaskEntity, TaskIdG
             FindSpaceByIdUseCase findSpaceByIdUseCase,
             FindTaskByIdUseCase findTaskByIdUseCase,
             FindInboxSpaceByOwnerIdUseCase findInboxSpaceByOwnerIdUseCase,
-            UpdateTaskCountInSpaceUseCase updateTaskCountInSpaceUseCase) {
+            UpdateTaskCountInSpaceUseCase updateTaskCountInSpaceUseCase,
+            CreateBackgroundTaskForViewUseCase createBackgroundTaskForViewUseCase) {
         super(repository, idGenerator);
         this.meUseCase = meUseCase;
         this.findSpaceByIdUseCase = findSpaceByIdUseCase;
         this.findTaskByIdUseCase = findTaskByIdUseCase;
         this.findInboxSpaceByOwnerIdUseCase = findInboxSpaceByOwnerIdUseCase;
         this.updateTaskCountInSpaceUseCase = updateTaskCountInSpaceUseCase;
+        this.createBackgroundTaskForViewUseCase = createBackgroundTaskForViewUseCase;
     }
 
     private SolUserEntity solUserEntity(String credentialId) {
@@ -133,8 +137,9 @@ public class CreateTaskUseCase extends AbstractCreateUseCase<TaskEntity, TaskIdG
         taskEntity = repository.save(taskEntity);
 
         updateTaskCountInSpaceUseCase.execute(UpdateTaskCountInSpaceUseCase.InputValues.of(spaceEntity.getId()));
+        createBackgroundTaskForViewUseCase.execute(CreateBackgroundTaskForViewUseCase.InputValues.of(taskEntity.getId()));
 
-        return SingletonEntityOutputValues.of(taskEntity);
+        return SingletonEntityOutputValues.of(repository.findById(taskEntity.getId()).get());
     }
 
     @AllArgsConstructor(staticName = "of")

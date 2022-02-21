@@ -77,10 +77,32 @@ public class MongoTaskRepository implements TaskRepository {
     }
 
     @Override
+    public List<TaskEntity> findByUserId(String userId, Long skip, int limit) {
+        Criteria criteria = Criteria
+                .where("ownerId").is(ObjectIdHelper.mapOrDie(userId));
+        Query query = new Query(criteria);
+        query.limit(limit);
+        query.skip(skip);
+//        query = query.with(Sort.by(Sort.Direction.ASC, "sortNum"));
+        return mongoTemplate.find(query, TaskDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList());
+    }
+
+    @Override
     public List<TaskEntity> findByUserId(String userId) {
         Criteria criteria = Criteria
                 .where("ownerId").is(ObjectIdHelper.mapOrDie(userId))
                 .and("status").is(TaskStatus.OPEN);
+        Query query = new Query(criteria);
+        query.limit(5000);
+//        query = query.with(Sort.by(Sort.Direction.ASC, "sortNum"));
+        return mongoTemplate.find(query, TaskDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TaskEntity> findByUserIdAndClosed(String userId) {
+        Criteria criteria = Criteria
+                .where("ownerId").is(ObjectIdHelper.mapOrDie(userId))
+                .and("status").is(TaskStatus.DONE);
         Query query = new Query(criteria);
 //        query = query.with(Sort.by(Sort.Direction.ASC, "sortNum"));
         return mongoTemplate.find(query, TaskDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList());
@@ -194,15 +216,17 @@ public class MongoTaskRepository implements TaskRepository {
 
     @Override
     public List<TaskEntity> findSuggest(String ownerId, String viewId, View view) {
-        Query query = new Query(suggestCriteria(ownerId, viewId, view));
-        query.limit(50);
+        Criteria criteria = Criteria.where("ownerId").is(ownerId).and("suggestForViewIds").is(viewId);
+        Query query = new Query(criteria);
+        query.limit(500);
         //query.withHint()
         return mongoTemplate.find(query, TaskDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList());
     }
 
     @Override
     public Long countSuggest(String ownerId, String viewId, View view) {
-        Query query = new Query(suggestCriteria(ownerId, viewId, view));
+        Criteria criteria = Criteria.where("ownerId").is(ownerId).and("suggestForViewIds").is(viewId);
+        Query query = new Query(criteria);
 
         //query.withHint()
 

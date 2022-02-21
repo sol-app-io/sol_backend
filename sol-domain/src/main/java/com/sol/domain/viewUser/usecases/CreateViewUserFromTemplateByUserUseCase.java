@@ -2,6 +2,7 @@ package com.sol.domain.viewUser.usecases;
 
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.VoidOutputValues;
+import com.sol.domain.backgroundTaskForView.usecases.CreateBackgroundViewForViewUseCase;
 import com.sol.domain.solUser.entity.SolUserEntity;
 import com.sol.domain.solUser.port.SolUserRepository;
 import com.sol.domain.solUser.port.filters.SolUserFilters;
@@ -23,6 +24,7 @@ public class CreateViewUserFromTemplateByUserUseCase extends UseCase<CreateViewU
     private final SolUserRepository solUserRepository;
     private final ViewUserRepository viewUserRepository;
     private final ViewUserIdGenerator viewUserIdGenerator;
+    private final CreateBackgroundViewForViewUseCase createBackgroundViewForViewUseCase;
 
     @Override
     public VoidOutputValues execute(InputValues inputValues) {
@@ -37,6 +39,7 @@ public class CreateViewUserFromTemplateByUserUseCase extends UseCase<CreateViewU
             viewUserEntity.setHasNewTaskToAdd(true);
             viewUserEntity.setHasTaskAdded(true);
             viewUserRepository.save(viewUserEntity);
+            createBackgroundViewForViewUseCase.execute(CreateBackgroundViewForViewUseCase.InputValues.of(viewUserEntity.getId()));
         } else {
             ViewUserEntity viewUserEntity = new ViewUserEntity();
             viewUserEntity.setId(viewUserIdGenerator.generate());
@@ -47,6 +50,7 @@ public class CreateViewUserFromTemplateByUserUseCase extends UseCase<CreateViewU
             viewUserEntity.setCanEdit(inputValues.viewTemplateEntity.getCanEdit());
             viewUserEntity.setView(inputValues.viewTemplateEntity.getView());
             viewUserRepository.save(viewUserEntity);
+            createBackgroundViewForViewUseCase.execute(CreateBackgroundViewForViewUseCase.InputValues.of(viewUserEntity.getId()));
         }
 
         return new VoidOutputValues();

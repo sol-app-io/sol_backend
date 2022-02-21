@@ -16,9 +16,11 @@ import com.sol.domain.backgroundTaskForView.port.BackgroundTaskForViewRepository
  */
 public class CreateBackgroundTaskForViewUseCase extends AbstractCreateUseCase<BackgroundTaskForViewEntity, BackgroundTaskForViewIdGenerator<?>, BackgroundTaskForViewRepository, CreateBackgroundTaskForViewUseCase.InputValues> {
 
+    private final RunNextBackgroundTaskForViewUseCase runNextBackgroundTaskForViewUseCase;
 
-    public CreateBackgroundTaskForViewUseCase(BackgroundTaskForViewRepository repository, BackgroundTaskForViewIdGenerator idGenerator) {
+    public CreateBackgroundTaskForViewUseCase(BackgroundTaskForViewRepository repository, BackgroundTaskForViewIdGenerator idGenerator, RunNextBackgroundTaskForViewUseCase runNextBackgroundTaskForViewUseCase) {
         super(repository, idGenerator);
+        this.runNextBackgroundTaskForViewUseCase = runNextBackgroundTaskForViewUseCase;
     }
 
     @Override
@@ -27,10 +29,13 @@ public class CreateBackgroundTaskForViewUseCase extends AbstractCreateUseCase<Ba
         BackgroundTaskForViewEntity backgroundTaskForViewEntity = new BackgroundTaskForViewEntity(idGenerator.generate());
 
         backgroundTaskForViewEntity.setTaskId(inputValues.taskId);
-        backgroundTaskForViewEntity.setStatus(BackgroundTaskForViewEntity.Status.NEW);
+        backgroundTaskForViewEntity.setType(BackgroundTaskForViewEntity.Type.TASK);
+        backgroundTaskForViewEntity.setStatus(BackgroundTaskForViewEntity.Status.IN_PROCESS);
         backgroundTaskForViewEntity.setLog("");
 
         backgroundTaskForViewEntity = repository.save(backgroundTaskForViewEntity);
+
+        runNextBackgroundTaskForViewUseCase.execute(RunNextBackgroundTaskForViewUseCase.InputValues.of(backgroundTaskForViewEntity.getId()));
 
         return SingletonEntityOutputValues.of(backgroundTaskForViewEntity);
     }
@@ -41,8 +46,8 @@ public class CreateBackgroundTaskForViewUseCase extends AbstractCreateUseCase<Ba
     @Data
     public static class InputValues implements UseCase.InputValues {
         /**
-        * Task 
-        */
+         * Task
+         */
         protected String taskId;
     }
 }

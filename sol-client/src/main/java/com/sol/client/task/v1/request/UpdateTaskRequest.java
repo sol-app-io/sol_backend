@@ -19,8 +19,6 @@ import java.util.Set;
 @AllArgsConstructor
 public class UpdateTaskRequest {
 
-    @ApiModelProperty("ownerId")
-    protected String ownerId;
     @ApiModelProperty("parentTaskId")
     protected String parentTaskId;
     @ApiModelProperty("spaceId")
@@ -29,8 +27,6 @@ public class UpdateTaskRequest {
     protected String title;
     @ApiModelProperty("icon")
     protected Icon icon;
-    @ApiModelProperty("viewIds")
-    protected Set<String> viewIds;
     @ApiModelProperty("planningPoints")
     protected List<String> planningPoints;
     @ApiModelProperty("deadline")
@@ -58,12 +54,11 @@ public class UpdateTaskRequest {
         return UpdateTaskUseCase.InputValues
                 .builder()
                 .id(id)
-                .ownerId(ownerId)
+                //.ownerId(ownerId)
                 .parentTaskId(parentTaskId)
                 .spaceId(spaceId)
                 .title(title)
                 .icon(icon)
-                .viewIds(viewIds)
                 .planningPoints(planningPoints)
                 .deadline(deadline)
                 .repeatTaskConfId(repeatTaskConfId)

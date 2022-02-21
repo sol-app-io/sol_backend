@@ -47,6 +47,10 @@ public class TaskEntity extends BaseEntity<String> {
      */
     protected Set<String> viewIds = new HashSet<>();
     /**
+     * suggestForViewIds
+     */
+    protected Set<String> suggestForViewIds = new HashSet<>();
+    /**
      * deadline
      */
     protected LocalDateTime deadline;

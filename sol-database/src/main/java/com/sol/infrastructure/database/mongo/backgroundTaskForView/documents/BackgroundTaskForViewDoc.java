@@ -12,18 +12,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @Getter
 public class BackgroundTaskForViewDoc extends BaseDocument {
-    /**
-     * task 
-     */
     protected String taskId;
-    /**
-     * status 
-     */
     protected BackgroundTaskForViewEntity.Status status;
-    /**
-     * Log 
-     */
+    protected BackgroundTaskForViewEntity.Type type = BackgroundTaskForViewEntity.Type.TASK;
     protected String log;
-
- 
+    protected String userViewId;
 }

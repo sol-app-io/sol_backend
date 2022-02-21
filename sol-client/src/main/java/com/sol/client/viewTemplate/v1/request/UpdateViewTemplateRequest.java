@@ -28,7 +28,8 @@ public class UpdateViewTemplateRequest {
     @ApiModelProperty("iconEmoji")
     protected String iconEmoji;
 
-
+    @ApiModelProperty("type")
+    protected View.ViewType viewType;
     @ApiModelProperty("addedType")
     protected View.AddedType addedType;
     @ApiModelProperty("displayMode")
@@ -54,6 +55,7 @@ public class UpdateViewTemplateRequest {
                 .viewDescription(viewDescription)
                 .description(description)
                 .addedType(addedType)
+                .viewType(viewType)
                 .displayMode(displayMode)
                 .canEdit(canEdit)
                 .addByDefault(addByDefault)
