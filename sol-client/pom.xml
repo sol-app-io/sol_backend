@@ -12,8 +12,15 @@
     <artifactId>client</artifactId>
     <packaging>jar</packaging>
 
-    <name>Sol API client</name>
-
+    <name>Sol client</name>
+    все собралось, дальше нужно:
+    1. просто запустить(еще не забудь аус либу)
+    2. Обновить зависимости и подключить БОМ
+    3. Опять запустить, убедиться что все работает
+    4. Сделать докер контейнер, что бы работало
+    5. Организовать деплой на сервер
+    6. Запустить фронт
+    7. Мини планирование через ноушен, а что делаем дальше
     <dependencies>
         <dependency>
             <groupId>com.sol</groupId>
@@ -89,7 +96,12 @@
             <artifactId>spring-boot-admin-starter-client</artifactId>
             <version>2.3.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <scope>provided</scope>
+        </dependency>
 
     </dependencies>
 

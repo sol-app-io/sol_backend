@@ -23,11 +23,11 @@
         </repository>
         <repository>
             <id>rcore-releases</id>
-            <url>http://nexus.foodtech-lab.ru/repository/rcore-releases/</url>
+            <url>https://nexus.foodtech-lab.ru/repository/rcore-releases/</url>
         </repository>
         <repository>
             <id>rcore-snapshots</id>
-            <url>http://nexus.foodtech-lab.ru/repository/rcore-snapshots/</url>
+            <url>https://nexus.foodtech-lab.ru/repository/rcore-snapshots/</url>
         </repository>
     </repositories>
 

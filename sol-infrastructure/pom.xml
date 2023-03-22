@@ -13,7 +13,7 @@
     <artifactId>infrastructure</artifactId>
     <packaging>jar</packaging>
 
-    <name>sol DataBase</name>
+    <name>sol infrastructure</name>
 
 
     <dependencies>
@@ -51,6 +51,12 @@
             <groupId>ru.foodtechlab.lib</groupId>
             <artifactId>auth-integration-restapi-feign-role</artifactId>
             <version>${auth-lib.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

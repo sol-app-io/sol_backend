@@ -35,11 +35,11 @@
 <!--        </repository>-->
         <repository>
             <id>ftl-auth-lib-snapshots</id>
-            <url>http://nexus.foodtech-lab.ru/repository/ftl-auth-lib-snapshots/</url>
+            <url>https://nexus.foodtech-lab.ru/repository/ftl-auth-lib-snapshots/</url>
         </repository>
         <repository>
             <id>ftl-maven-libs-group</id>
-            <url>http://nexus.foodtech-lab.ru/repository/ftl-maven-libs-group/</url>
+            <url>https://nexus.foodtech-lab.ru/repository/ftl-maven-libs-group/</url>
         </repository>
 
 
