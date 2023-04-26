@@ -2,7 +2,7 @@ FROM eclipse-temurin:11-alpine
 
 WORKDIR /app
 
-ARG JAR_FILE=./sol-client/sol-app.jar
+ARG JAR_FILE=./sol-client/target/sol-app.jar
 
 COPY ${JAR_FILE} sol-app.jar
 
