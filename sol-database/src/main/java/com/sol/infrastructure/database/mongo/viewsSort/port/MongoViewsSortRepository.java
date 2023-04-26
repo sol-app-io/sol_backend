@@ -92,4 +92,9 @@ public class MongoViewsSortRepository implements ViewsSortRepository {
         Query query = new Query(criteria);
         return mongoTemplate.find(query, ViewsSortDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList());
     }
+
+    @Override
+    public boolean exist(String s) {
+        throw new RuntimeException();
+    }
 }

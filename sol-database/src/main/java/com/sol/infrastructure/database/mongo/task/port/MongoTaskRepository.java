@@ -232,4 +232,9 @@ public class MongoTaskRepository implements TaskRepository {
 
         return mongoTemplate.count(query, TaskDoc.class);
     }
+
+    @Override
+    public boolean exist(String s) {
+        throw new RuntimeException();
+    }
 }

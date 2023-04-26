@@ -15,10 +15,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.foodtechlab.lib.auth.integration.core.credential.CredentialServiceFacade;
 import ru.foodtechlab.lib.auth.integration.core.credential.exception.CredentialNotFoundException;
-import ru.foodtechlab.lib.auth.integration.core.credential.request.CreateCredentialRequest;
-import ru.foodtechlab.lib.auth.integration.core.credential.response.CredentialResponse;
-import ru.foodtechlab.lib.auth.integration.core.role.response.RoleResponse;
+import ru.foodtechlab.lib.auth.integration.core.role.RoleServiceFacade;
+import ru.foodtechlab.lib.auth.service.facade.credential.dto.requests.CreateCredentialRequest;
+import ru.foodtechlab.lib.auth.service.facade.credential.dto.responses.CredentialResponse;
+import ru.foodtechlab.lib.auth.service.facade.role.dto.requests.CreateRoleRequest;
+import ru.foodtechlab.lib.auth.service.facade.role.dto.responses.RoleResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,16 +37,16 @@ public class SignUpByEmailSolUserUseCase extends UseCase<SignUpByEmailSolUserUse
 
     private final SolUserRepository repository;
     private final SolUserIdGenerator idGenerator;
-    private final ru.foodtechlab.lib.auth.integration.core.credential.CredentialServiceFacade credentialServiceFacade;
-    private final ru.foodtechlab.lib.auth.integration.core.role.RoleServiceFacade roleServiceFacade;
+    private final CredentialServiceFacade credentialServiceFacade;
+    private final RoleServiceFacade roleServiceFacade;
     private final CreateSpaceUseCase createSpaceUseCase;
     private final InitAllViewsUseCase initAllViewsUseCase;
 
     private final static String SOL_USER_ROLE = "SOL_USER_ROLE";
 
-    private ru.foodtechlab.lib.auth.integration.core.role.response.RoleResponse solRolePassword() {
+    private RoleResponse solRolePassword() {
 
-        Optional<ru.foodtechlab.lib.auth.integration.core.role.response.RoleResponse> role = null;
+        Optional<RoleResponse> role = null;
         try {
             role = roleServiceFacade.findByCode(SOL_USER_ROLE);
         } catch (Exception e) {
@@ -51,7 +54,7 @@ public class SignUpByEmailSolUserUseCase extends UseCase<SignUpByEmailSolUserUse
 
         if (role != null && role.isPresent()) return role.get();
 
-        RoleResponse roleResponse = roleServiceFacade.create(ru.foodtechlab.lib.auth.integration.core.role.request.CreateRoleRequest.builder()
+        RoleResponse roleResponse = roleServiceFacade.create(CreateRoleRequest.builder()
                 .name(SOL_USER_ROLE)
                 .code(SOL_USER_ROLE)
                 .accessIds(new ArrayList<>())
@@ -85,7 +88,7 @@ public class SignUpByEmailSolUserUseCase extends UseCase<SignUpByEmailSolUserUse
             List<CreateCredentialRequest.Role> roles = new ArrayList<>();
             RoleResponse roleResponse = solRolePassword();
             CreateCredentialRequest.Role role = CreateCredentialRequest.Role.builder()
-                    .name(roleResponse.getCode())
+                    .code(roleResponse.getCode())
                     .roleId(roleResponse.getId())
                     .isBlocked(false)
                     .build();

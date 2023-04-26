@@ -8,40 +8,39 @@ import com.sol.client.slot.v1.request.CreateSlotRequest;
 import com.sol.client.slot.v1.request.SearchSlotRequest;
 import com.sol.client.slot.v1.request.UpdateSlotRequest;
 import com.sol.client.slot.v1.response.SlotResponse;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.naming.directory.SearchResult;
 import java.util.List;
 
 @RestController
+@Tag(name = "Slot", description = "Slot")
 public interface SlotResource {
 
-    @ApiOperation("PostMapping")
+
+    @Operation(summary = "create")
     @PostMapping(value = SlotRoutes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
-    SuccessApiResponse<SlotResponse> create(@RequestBody CreateSlotRequest request, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    SuccessApiResponse<SlotResponse> create(@RequestBody CreateSlotRequest request, @CurrentCredential CredentialPrincipal credentialPrincipal);
 
 
-    @ApiOperation("GetMapping")
     @GetMapping(value = SlotRoutes.SINGLETON, produces = MediaType.APPLICATION_JSON_VALUE)
-    SuccessApiResponse<SlotResponse> get(@PathVariable("id") String id, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    SuccessApiResponse<SlotResponse> get(@PathVariable("id") String id, @CurrentCredential CredentialPrincipal credentialPrincipal);
 
-    @ApiOperation("PutMapping")
     @PutMapping(value = SlotRoutes.SINGLETON, produces = MediaType.APPLICATION_JSON_VALUE)
-    SuccessApiResponse<SlotResponse> put(@PathVariable("id") String id, @RequestBody UpdateSlotRequest request, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    SuccessApiResponse<SlotResponse> put(@PathVariable("id") String id, @RequestBody UpdateSlotRequest request, @CurrentCredential CredentialPrincipal credentialPrincipal);
 
-    @ApiOperation("DeleteMapping")
     @DeleteMapping(value = SlotRoutes.SINGLETON, produces = MediaType.APPLICATION_JSON_VALUE)
-    SuccessApiResponse<String> delete(@PathVariable("id") String id, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    SuccessApiResponse<String> delete(@PathVariable("id") String id, @CurrentCredential CredentialPrincipal credentialPrincipal);
 
-    @ApiOperation("Find")
+
     @GetMapping(value = SlotRoutes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
     SuccessApiResponse<SearchApiResponse<SlotResponse>> find(
             @ModelAttribute SearchSlotRequest request,
-            @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    @CurrentCredential CredentialPrincipal credentialPrincipal);
 
 
 }

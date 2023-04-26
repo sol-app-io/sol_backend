@@ -10,18 +10,15 @@
     <version>${revision}</version>
     <modules>
         <module>sol-domain</module>
-        <module>sol-database</module>
-        <module>sol-infrastructure</module>
+<!--        <module>sol-infrastructure</module>-->
         <module>sol-client</module>
+        <module>sol-database</module>
+        <module>../ftl_dependency_lib</module>
     </modules>
 
     <properties>
-        <rcore.version>1.0.21</rcore.version>
         <revision>1.0.0</revision>
-        <auth-lib.version>3.1.7-SNAPSHOT</auth-lib.version>
-        <ftl_additional_base_entities_lib.version>1.0.0</ftl_additional_base_entities_lib.version>
-        <api-error-handling.version>1.3</api-error-handling.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+<!--        <auth-lib.version>3.1.7-SNAPSHOT</auth-lib.version>-->
         <snippetsDirectory>${project.build.directory}/generated-snippets</snippetsDirectory>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
@@ -33,10 +30,10 @@
 <!--            <id>rcore-snapshots</id>-->
 <!--            <url>http://nexus.foodtech-lab.ru/repository/rcore-snapshots/</url>-->
 <!--        </repository>-->
-        <repository>
-            <id>ftl-auth-lib-snapshots</id>
-            <url>https://nexus.foodtech-lab.ru/repository/ftl-auth-lib-snapshots/</url>
-        </repository>
+<!--        <repository>-->
+<!--            <id>ftl-auth-lib-snapshots</id>-->
+<!--            <url>https://nexus.foodtech-lab.ru/repository/ftl-auth-lib-snapshots/</url>-->
+<!--        </repository>-->
         <repository>
             <id>ftl-maven-libs-group</id>
             <url>https://nexus.foodtech-lab.ru/repository/ftl-maven-libs-group/</url>
@@ -44,4 +41,17 @@
 
 
     </repositories>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>ru.foodtechlab</groupId>
+                <artifactId>ftl-dependency-lib</artifactId>
+                <version>4.0.0-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

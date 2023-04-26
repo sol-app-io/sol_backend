@@ -17,13 +17,11 @@ import com.sol.domain.solUser.usecases.MeUseCase;
 import com.sol.domain.task.config.TaskConfig;
 import com.sol.domain.task.entity.TaskEntity;
 import com.sol.domain.task.usecases.*;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 import java.util.stream.Collectors;

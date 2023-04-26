@@ -11,41 +11,41 @@
 
     <artifactId>domain</artifactId>
     <name>sol domain</name>
-
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
-            <groupId>ru.foodtechlab</groupId>
-            <artifactId>ftl-additional-base-entities-lib</artifactId>
-            <version>${ftl_additional_base_entities_lib.version}</version>
+            <groupId>ru.foodtechlab.abe</groupId>
+            <artifactId>additional-base-entities-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ru.foodtechlab.abe</groupId>
+            <artifactId>additional-base-entities-domain</artifactId>
         </dependency>
         <dependency>
             <groupId>com.github.rostislav-maslov.rcore</groupId>
             <artifactId>rcore-domain-commons</artifactId>
-            <version>${rcore.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.24</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.rostislav-maslov.rcore</groupId>
             <artifactId>rcore-domain-security</artifactId>
-            <version>${rcore.version}</version>
-            <scope>compile</scope>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>ru.foodtechlab.lib</groupId>-->
+<!--            <artifactId>auth-integration-core</artifactId>-->
+<!--            <version>${auth-lib.version}</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>ru.foodtechlab.lib</groupId>
+            <artifactId>auth-domain</artifactId>
         </dependency>
         <dependency>
             <groupId>ru.foodtechlab.lib</groupId>
             <artifactId>auth-integration-core</artifactId>
-            <version>${auth-lib.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ru.foodtechlab.lib</groupId>
-            <artifactId>auth-domain</artifactId>
-            <version>${auth-lib.version}</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 
@@ -55,8 +55,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
             </plugin>
         </plugins>

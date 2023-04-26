@@ -95,4 +95,9 @@ public class MongoTaskInViewRepository implements TaskInViewRepository {
         query.with(Sort.by(Sort.Direction.ASC, "sortNum"));
         return mongoTemplate.find(query, TaskInViewDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList());
     }
+
+    @Override
+    public boolean exist(String s) {
+        throw new RuntimeException();
+    }
 }

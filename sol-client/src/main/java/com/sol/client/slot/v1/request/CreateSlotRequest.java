@@ -5,14 +5,11 @@ import com.sol.domain.slot.usecases.CreateSlotUseCase;
 import com.sol.domain.task.entity.DeadlineType;
 import com.sol.domain.task.entity.TaskEntity;
 import com.sol.domain.task.usecases.CreateTaskUseCase;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 @Builder
 @Getter
 @Setter
-@ApiModel("Slot: для запроса на создание")
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateSlotRequest {

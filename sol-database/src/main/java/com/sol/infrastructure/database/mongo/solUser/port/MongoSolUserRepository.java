@@ -64,4 +64,9 @@ public class MongoSolUserRepository implements SolUserRepository {
     public Long count() {
         return mongoTemplate.count(new Query(), SolUserDoc.class);
     }
+
+    @Override
+    public boolean exist(String s) {
+        throw new RuntimeException();
+    }
 }

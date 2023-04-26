@@ -6,12 +6,10 @@ import com.sol.domain.slot.usecases.FindByDateSlotUseCase;
 import com.sol.domain.slot.usecases.FindByTaskSlotUseCase;
 import com.sol.domain.solUser.entity.SolUserEntity;
 import com.sol.domain.task.port.filters.TaskFilters;
-import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.Setter;
 
 
-@ApiModel("Slot: для запроса на поиск")
 @Getter
 @Setter
 public class SearchSlotRequest  {

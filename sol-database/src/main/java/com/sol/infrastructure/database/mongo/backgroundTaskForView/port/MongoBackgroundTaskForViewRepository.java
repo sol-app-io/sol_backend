@@ -75,4 +75,9 @@ public class MongoBackgroundTaskForViewRepository implements BackgroundTaskForVi
         BackgroundTaskForViewDoc doc = mongoTemplate.findAndModify(query, update, BackgroundTaskForViewDoc.class);
         return Optional.ofNullable(doc).map(mapper::inverseMap);
     }
+
+    @Override
+    public boolean exist(String s) {
+        throw new RuntimeException();
+    }
 }

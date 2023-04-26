@@ -6,82 +6,62 @@ import com.rcore.rest.api.spring.security.CurrentCredential;
 import com.sol.client.viewUser.v1.request.*;
 import com.sol.client.viewUser.v1.response.TaskInViewResponse;
 import com.sol.client.viewUser.v1.response.ViewUserResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
-@Api(tags = "View User API", description = "View ViewUserController docs")
 @RestController
 public interface ViewUserResource {
 
-    @ApiOperation("Получение документа в ресурсе")
     @GetMapping(value =  ViewUserRoutes.MY_ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
-    SuccessApiResponse<List<ViewUserResponse>> myRoot(@ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    SuccessApiResponse<List<ViewUserResponse>> myRoot(@CurrentCredential CredentialPrincipal credentialPrincipal);
 
-    @ApiOperation("Все ресурсы")
     @GetMapping(value =  ViewUserRoutes.ALL, produces = MediaType.APPLICATION_JSON_VALUE)
-    SuccessApiResponse<List<ViewUserResponse>> all(@ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    SuccessApiResponse<List<ViewUserResponse>> all( @CurrentCredential CredentialPrincipal credentialPrincipal);
 
-    @ApiOperation("Получение view, в которых есть таск")
     @GetMapping(value =  ViewUserRoutes.FIND_VIEW_BY_TASK, produces = MediaType.APPLICATION_JSON_VALUE)
-    SuccessApiResponse<List<TaskInViewResponse>> findByTask(@RequestParam String taskId, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    SuccessApiResponse<List<TaskInViewResponse>> findByTask(@RequestParam String taskId,  @CurrentCredential CredentialPrincipal credentialPrincipal);
 
-    @ApiOperation("Получение тасков, в которые есть во вью")
     @GetMapping(value =  ViewUserRoutes.FIND_TASKS_BY_VIEW, produces = MediaType.APPLICATION_JSON_VALUE)
-    SuccessApiResponse<List<TaskInViewResponse>> findTasksByView(@RequestParam String viewId, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    SuccessApiResponse<List<TaskInViewResponse>> findTasksByView(@RequestParam String viewId, @CurrentCredential CredentialPrincipal credentialPrincipal);
 
-    @ApiOperation("Добавить таск во вью")
     @PostMapping(value =  ViewUserRoutes.ADD_TASK_TO_VIEW, produces = MediaType.APPLICATION_JSON_VALUE)
-    SuccessApiResponse<TaskInViewResponse> addTaskToView(@RequestBody CreateTaskInViewRequest request, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    SuccessApiResponse<TaskInViewResponse> addTaskToView(@RequestBody CreateTaskInViewRequest request,  @CurrentCredential CredentialPrincipal credentialPrincipal);
 
-    @ApiOperation("Show")
     @PostMapping(value =  ViewUserRoutes.SHOW, produces = MediaType.APPLICATION_JSON_VALUE)
-    SuccessApiResponse<Boolean> show(@PathVariable String id, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    SuccessApiResponse<Boolean> show(@PathVariable String id,  @CurrentCredential CredentialPrincipal credentialPrincipal);
 
-    @ApiOperation("Hide")
     @PostMapping(value =  ViewUserRoutes.HIDE, produces = MediaType.APPLICATION_JSON_VALUE)
-    SuccessApiResponse<Boolean> hide(@PathVariable String id, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    SuccessApiResponse<Boolean> hide(@PathVariable String id,  @CurrentCredential CredentialPrincipal credentialPrincipal);
 
-    @ApiOperation("Создать View User")
     @PostMapping(value =  ViewUserRoutes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
-    SuccessApiResponse<ViewUserResponse> create(@RequestBody CreateViewUserRequest request, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    SuccessApiResponse<ViewUserResponse> create(@RequestBody CreateViewUserRequest request, @CurrentCredential CredentialPrincipal credentialPrincipal);
 
-    @ApiOperation("Удалить таск во вью")
     @DeleteMapping(value =  ViewUserRoutes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
-    SuccessApiResponse<String> delete(@RequestParam String taskId, @RequestParam String viewId, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    SuccessApiResponse<String> delete(@RequestParam String taskId, @RequestParam String viewId, @CurrentCredential CredentialPrincipal credentialPrincipal);
 
-    @ApiOperation("Обновить view")
     @PatchMapping(value = ViewUserRoutes.SINGLETON)
-    SuccessApiResponse<ViewUserResponse> updateView(@PathVariable String id, @RequestBody UpdateUserViewRequest request, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    SuccessApiResponse<ViewUserResponse> updateView(@PathVariable String id, @RequestBody UpdateUserViewRequest request, @CurrentCredential CredentialPrincipal credentialPrincipal);
 
-    @ApiOperation("Обновить view full")
     @PatchMapping(value = ViewUserRoutes.UPDATE_FULL)
     SuccessApiResponse<ViewUserResponse> updateAllView(
             @PathVariable String id,
             @RequestBody UpdateUserViewFullRequest request,
-            @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+             @CurrentCredential CredentialPrincipal credentialPrincipal);
 
-    @ApiOperation("view param add")
     @PostMapping(value = ViewUserRoutes.PARAM_ADD)
-    SuccessApiResponse<ViewUserResponse> paramAdd(@PathVariable String id, @RequestBody ViewParamRequest request, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    SuccessApiResponse<ViewUserResponse> paramAdd(@PathVariable String id, @RequestBody ViewParamRequest request, @CurrentCredential CredentialPrincipal credentialPrincipal);
 
-    @ApiOperation("view param edit")
     @PostMapping(value = ViewUserRoutes.PARAM_EDIT)
-    SuccessApiResponse<ViewUserResponse> paramEdit(@PathVariable String id,@PathVariable String paramId, @RequestBody ViewParamRequest request, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    SuccessApiResponse<ViewUserResponse> paramEdit(@PathVariable String id,@PathVariable String paramId, @RequestBody ViewParamRequest request,  @CurrentCredential CredentialPrincipal credentialPrincipal);
 
-    @ApiOperation("view param add")
     @DeleteMapping(value = ViewUserRoutes.PARAM_DELETE)
-    SuccessApiResponse<ViewUserResponse> paramDelete(@PathVariable String id, @PathVariable String paramId, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    SuccessApiResponse<ViewUserResponse> paramDelete(@PathVariable String id, @PathVariable String paramId, @CurrentCredential CredentialPrincipal credentialPrincipal);
 
-    @ApiOperation("Change view sort params")
     @PostMapping(value = ViewUserRoutes.CHANGE_SORT)
-    SuccessApiResponse<Boolean> changeSort(@RequestBody ChangeViewSortRequest request, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    SuccessApiResponse<Boolean> changeSort(@RequestBody ChangeViewSortRequest request, @CurrentCredential CredentialPrincipal credentialPrincipal);
 
-    @ApiOperation("View delete")
     @DeleteMapping(value = ViewUserRoutes.SINGLETON)
-    SuccessApiResponse<Boolean> delete(@PathVariable String id, @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal);
+    SuccessApiResponse<Boolean> delete(@PathVariable String id, @CurrentCredential CredentialPrincipal credentialPrincipal);
 }

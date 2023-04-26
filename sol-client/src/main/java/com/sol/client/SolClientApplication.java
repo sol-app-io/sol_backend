@@ -11,12 +11,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-//@EnableGlobalMethodSecurity(securedEnabled = true)
 @SpringBootApplication(
         scanBasePackages = {"com.rcore", "ru.foodtechlab", "com.sol"},
-        exclude = {EmbeddedMongoAutoConfiguration.class, ErrorMvcAutoConfiguration.class})
-@EnableMongoRepositories
-@EnableWebMvc
+        exclude = {ErrorMvcAutoConfiguration.class})
 @EnableScheduling
 @EnableFeignClients(basePackages = {"com.rcore", "ru.foodtechlab", "com.sol"})
 @EnableGlobalMethodSecurity(securedEnabled = true)

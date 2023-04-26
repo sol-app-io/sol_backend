@@ -13,23 +13,18 @@
     <packaging>jar</packaging>
 
     <name>Sol client</name>
-    все собралось, дальше нужно:
-    1. просто запустить(еще не забудь аус либу)
-    2. Обновить зависимости и подключить БОМ
-    3. Опять запустить, убедиться что все работает
-    4. Сделать докер контейнер, что бы работало
-    5. Организовать деплой на сервер
-    6. Запустить фронт
-    7. Мини планирование через ноушен, а что делаем дальше
+<!--    все собралось, дальше нужно:-->
+<!--    1. просто запустить(еще не забудь аус либу)-->
+<!--    2. Обновить зависимости и подключить БОМ-->
+<!--    3. Опять запустить, убедиться что все работает-->
+<!--    4. Сделать докер контейнер, что бы работало-->
+<!--    5. Организовать деплой на сервер-->
+<!--    6. Запустить фронт-->
+<!--    7. Мини планирование через ноушен, а что делаем дальше-->
     <dependencies>
         <dependency>
             <groupId>com.sol</groupId>
             <artifactId>database</artifactId>
-            <version>${revision}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.sol</groupId>
-            <artifactId>infrastructure</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>
@@ -38,31 +33,19 @@
             <version>1.6.2</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
-        <dependency>
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
-            <version>1.13.1</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.jsoup</groupId>-->
+<!--            <artifactId>jsoup</artifactId>-->
+<!--            <version>1.13.1</version>-->
+<!--        </dependency>-->
 
         <!--Содержит базовые модели ответов и запросов, перечисление заголовков и базовые routes-->
         <dependency>
             <groupId>com.github.rostislav-maslov.rcore</groupId>
             <artifactId>rcore-rest-api-spring-commons</artifactId>
-            <version>${rcore.version}</version>
         </dependency>
 
-        <!--Содержит классы необходимые для документации API запросов-->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-boot-starter</artifactId>
-            <version>3.0.0</version>
-        </dependency>
 
-        <dependency>
-            <groupId>com.github.rostislav-maslov.rcore</groupId>
-            <artifactId>rcore-rest-api-commons</artifactId>
-            <version>${rcore.version}</version>
-        </dependency>
 
         <!--        <dependency>-->
         <!--            <groupId>com.github.rostislav-maslov.rcore</groupId>-->
@@ -73,50 +56,123 @@
         <dependency>
             <groupId>com.github.rostislav-maslov.rcore</groupId>
             <artifactId>rcore-rest-api-spring-security</artifactId>
-            <version>${rcore.version}</version>
         </dependency>
         <dependency>
             <groupId>ru.foodtechlab.aeh</groupId>
             <artifactId>spring-api-error-handling</artifactId>
-            <version>${api-error-handling.version}</version>
         </dependency>
         <dependency>
             <groupId>ru.foodtechlab.lib</groupId>
             <artifactId>auth-integration-restapi-feign-role-access</artifactId>
-            <version>${auth-lib.version}</version>
         </dependency>
         <dependency>
             <groupId>ru.foodtechlab.lib</groupId>
             <artifactId>auth-integration-proxy-api</artifactId>
-            <version>${auth-lib.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>de.codecentric</groupId>
-            <artifactId>spring-boot-admin-starter-client</artifactId>
-            <version>2.3.1</version>
-        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.24</version>
-            <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>ru.foodtechlab.lib</groupId>
+            <artifactId>auth-integration-restapi-feign-authorization</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ru.foodtechlab.lib</groupId>
+            <artifactId>auth-integration-restapi-feign-credential</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ru.foodtechlab.lib</groupId>
+            <artifactId>auth-integration-restapi-feign-role</artifactId>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>com.github.rostislav-maslov.rcore</groupId>
+            <artifactId>rcore-rest-api-spring-commons</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.rostislav-maslov.rcore</groupId>
+            <artifactId>rcore-rest-api-commons</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-actuator-autoconfigure</artifactId>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-web</artifactId>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-sleuth</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.github.rostislav-maslov.rcore</groupId>
+            <artifactId>rcore-domain-security</artifactId>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-actuator</artifactId>-->
+<!--        </dependency>-->
+
 
     </dependencies>
 
     <!--    Явно указываем какую версию Spring Boot хотим использовать-->
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+<!--    <dependencyManagement>-->
+<!--        <dependencies>-->
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-dependencies</artifactId>-->
+<!--                <version>${spring-boot.version}</version>-->
+<!--                <type>pom</type>-->
+<!--                <scope>import</scope>-->
+<!--            </dependency>-->
+<!--        </dependencies>-->
+<!--    </dependencyManagement>-->
 
     <profiles>
         <profile>

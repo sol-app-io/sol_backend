@@ -56,4 +56,9 @@ public class MongoUserOnPlanRepository implements UserOnPlanRepository {
     public Long count() {
         return mongoTemplate.count(new Query(), UserOnPlanDoc.class);
     }
+
+    @Override
+    public boolean exist(String s) {
+        throw new RuntimeException();
+    }
 }

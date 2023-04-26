@@ -56,4 +56,9 @@ public class MongoPlanRepository implements PlanRepository {
     public Long count() {
         return mongoTemplate.count(new Query(), PlanDoc.class);
     }
+
+    @Override
+    public boolean exist(String s) {
+        throw new RuntimeException();
+    }
 }

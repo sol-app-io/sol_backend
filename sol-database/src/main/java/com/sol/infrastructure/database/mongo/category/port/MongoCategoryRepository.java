@@ -56,4 +56,9 @@ public class MongoCategoryRepository implements CategoryRepository {
     public Long count() {
         return mongoTemplate.count(new Query(), CategoryDoc.class);
     }
+
+    @Override
+    public boolean exist(String s) {
+        throw new RuntimeException();
+    }
 }

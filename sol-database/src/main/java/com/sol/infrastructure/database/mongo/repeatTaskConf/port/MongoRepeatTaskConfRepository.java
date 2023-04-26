@@ -56,4 +56,10 @@ public class MongoRepeatTaskConfRepository implements RepeatTaskConfRepository {
     public Long count() {
         return mongoTemplate.count(new Query(), RepeatTaskConfDoc.class);
     }
+
+
+    @Override
+    public boolean exist(String s) {
+        throw new RuntimeException();
+    }
 }

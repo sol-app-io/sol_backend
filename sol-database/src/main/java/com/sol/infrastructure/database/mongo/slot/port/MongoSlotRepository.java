@@ -90,4 +90,9 @@ public class MongoSlotRepository implements SlotRepository {
         Query query = new Query(criteria);
         return mongoTemplate.find(query, SlotDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList());
     }
+
+    @Override
+    public boolean exist(String s) {
+        throw new RuntimeException();
+    }
 }

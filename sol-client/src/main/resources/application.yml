@@ -1,7 +1,11 @@
 server:
   port: 9095
 spring:
-  mvc.throw-exception-if-no-handler-found: true
+  mvc:
+    throw-exception-if-no-handler-found: true
+  main:
+    allow-bean-definition-overriding: true
+
   application:
     name: sol-app
   data:
@@ -13,6 +17,20 @@ spring:
       port: 27017
       host: 127.0.0.1
 
+#management:
+#  metrics.mongo:
+#    command.enabled: false
+#    connectionpool.enabled: false
+#  health:
+#    diskspace:
+#      enabled: false
+#  endpoints:
+#    enabled-by-default: false
+#    metrics.enabled: false
+#    prometheus.enabled: false
+
+
+
 
 rcore:
   security:
@@ -20,6 +38,8 @@ rcore:
       key: OcgPpNVoa-yLNxmelnc6ErULJ-O_2m7ezTQqXlca1jU=
 
 foodtechlab:
+  build:
+    version: 1
   security:
     password: root
     username: microservice
@@ -33,17 +53,24 @@ foodtechlab:
   infrastructure:
     microservice:
       auth-service:
-        url: https://service.sol-auth.maslov.tech/
-#        url: http://localhost:9102/
+#        url: https://service.sol-auth.maslov.tech/
+        url: http://localhost:9090
       logging-service:
         enable-logging-for-paths: /api/v1/
-infrastructure:
-  microservice:
-    auth-service: https://service.sol-auth.maslov.tech/
-#    auth-service: http://localhost:9102/
 
 feign.hystrix.enabled: true
 
 java.mail:
   username: data-manager@maslov.tech
   password: PKrU25g*CW2S
+
+
+#Конфигурация документации Swagger
+springdoc:
+  packagesToScan: com.sol
+  pathsToMatch: /api/**, /not-secure/**
+
+#Принудительно отключаем старую версию работы с конфигурацией, что бы избежать конфликтов
+springfox:
+  documentation:
+    enabled: false

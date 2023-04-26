@@ -2,8 +2,6 @@ package com.sol.client.viewUser.v1.response;
 
 import com.sol.domain.view.entity.View;
 import com.sol.domain.viewTemplate.entity.ViewTemplateEntity;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +10,6 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-@ApiModel("View Template: общая модель ответа")
 public class ViewUserResponse {
 
     protected String id;

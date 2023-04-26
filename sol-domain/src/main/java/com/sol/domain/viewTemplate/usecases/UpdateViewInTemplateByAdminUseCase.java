@@ -4,7 +4,6 @@ import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
 import com.sol.domain.base.entity.Icon;
 import com.sol.domain.view.entity.View;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import com.sol.domain.viewTemplate.entity.ViewTemplateEntity;
 import com.sol.domain.viewTemplate.exceptions.ViewTemplateNotFoundException;

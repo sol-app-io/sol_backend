@@ -90,4 +90,9 @@ public class MongoSpaceRepository implements SpaceRepository {
             throw e;
         }
     }
+
+    @Override
+    public boolean exist(String s) {
+        throw new RuntimeException();
+    }
 }

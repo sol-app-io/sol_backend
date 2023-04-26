@@ -56,4 +56,9 @@ public class MongoReminderRepository implements ReminderRepository {
     public Long count() {
         return mongoTemplate.count(new Query(), ReminderDoc.class);
     }
+
+    @Override
+    public boolean exist(String s) {
+        throw new RuntimeException();
+    }
 }

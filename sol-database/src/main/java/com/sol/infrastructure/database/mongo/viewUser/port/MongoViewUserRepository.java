@@ -82,4 +82,9 @@ public class MongoViewUserRepository implements ViewUserRepository {
         Criteria criteria = Criteria.where("ownerId").is(solUserId).and("createdFromTemplateId").is(templateId);
         return Optional.ofNullable(mongoTemplate.findOne(new Query(criteria), ViewUserDoc.class)).map(mapper::inverseMap);
     }
+
+    @Override
+    public boolean exist(String s) {
+        throw new RuntimeException();
+    }
 }

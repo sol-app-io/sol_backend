@@ -26,7 +26,6 @@ import com.sol.domain.task.entity.TaskEntity;
 import com.sol.domain.task.usecases.FindTaskBySpaceIdUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +50,7 @@ public class SpaceController extends BaseApiController {
     @PostMapping(value = SpaceRoute.ROOT)
     public SuccessApiResponse<SpaceResponse> create(
             @RequestBody SpaceRequest spaceRequest,
-            @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal) {
+            @CurrentCredential CredentialPrincipal credentialPrincipal) {
 
         SpaceEntity spaceEntity = spaceConfig.createSpaceUseCase().execute(
                 CreateSpaceUseCase.InputValues.builder()
@@ -67,7 +66,7 @@ public class SpaceController extends BaseApiController {
 
     @GetMapping(value = SpaceRoute.ROOT)
     public SuccessApiResponse<List<SpaceResponse>> mySpaces(
-            @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal) {
+            @CurrentCredential CredentialPrincipal credentialPrincipal) {
 
         List<SpaceEntity> spaceEntities = spaceConfig.findSpaceByOwnerIdUseCase().execute(
                 FindSpaceByOwnerIdUseCase.InputValues.of(this.getCurrentUser(credentialPrincipal).getId())
@@ -79,7 +78,7 @@ public class SpaceController extends BaseApiController {
     @GetMapping(value = SpaceRoute.SINGLETON)
     public SuccessApiResponse<SpaceResponse> singleton(
             @PathVariable String id,
-            @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal) {
+             @CurrentCredential CredentialPrincipal credentialPrincipal) {
 
         SpaceEntity spaceEntity = spaceConfig.findSpaceByIdUseCase().execute(
                 IdInputValues.of(id)
@@ -117,7 +116,7 @@ public class SpaceController extends BaseApiController {
     public SuccessApiResponse<SpaceResponse> singleton(
             @PathVariable String id,
             @RequestBody SpaceEditRequest request,
-            @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal) {
+            @CurrentCredential CredentialPrincipal credentialPrincipal) {
 
         SolUserEntity solUserEntity = solUserConfig
                 .meUseCase().execute(
@@ -142,7 +141,7 @@ public class SpaceController extends BaseApiController {
     @PostMapping(value = SpaceRoute.SORT_CHANGE)
     public SuccessApiResponse<List<SpaceResponse>> changeSort(
             @RequestBody ChangeSortSpaceRequest request,
-            @ApiIgnore @CurrentCredential CredentialPrincipal credentialPrincipal
+            @CurrentCredential CredentialPrincipal credentialPrincipal
     ) {
         SolUserEntity solUserEntity = solUserConfig.meUseCase().execute(
                 MeUseCase.InputValues

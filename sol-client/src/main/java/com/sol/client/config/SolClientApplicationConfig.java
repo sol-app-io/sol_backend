@@ -13,7 +13,6 @@ import com.rcore.rest.api.spring.security.jwt.refresh.JwtRefreshTokenParser;
 import com.sol.domain.backgroundTaskForView.config.BackgroundTaskForViewConfig;
 import com.sol.domain.backgroundTaskForView.port.BackgroundTaskForViewIdGenerator;
 import com.sol.domain.backgroundTaskForView.port.BackgroundTaskForViewRepository;
-import com.sol.domain.backgroundTaskForView.usecases.CreateBackgroundTaskForViewUseCase;
 import com.sol.domain.category.config.CategoryConfig;
 import com.sol.domain.category.port.CategoryIdGenerator;
 import com.sol.domain.category.port.CategoryRepository;
@@ -46,21 +45,39 @@ import com.sol.domain.viewsSort.port.ViewsSortRepository;
 import feign.RequestInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.autoconfigure.endpoint.web.CorsEndpointProperties;
+import org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointProperties;
+import org.springframework.boot.actuate.autoconfigure.web.server.ManagementPortType;
+import org.springframework.boot.actuate.endpoint.ExposableEndpoint;
+import org.springframework.boot.actuate.endpoint.web.*;
+import org.springframework.boot.actuate.endpoint.web.annotation.ControllerEndpointsSupplier;
+import org.springframework.boot.actuate.endpoint.web.annotation.ServletEndpointsSupplier;
+import org.springframework.boot.actuate.endpoint.web.servlet.WebMvcEndpointHandlerMapping;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.util.StringUtils;
 import ru.foodtechlab.lib.auth.integration.core.AccessTokenService;
+import ru.foodtechlab.lib.auth.integration.core.authorizartion.AuthCredentialServiceFacade;
 import ru.foodtechlab.lib.auth.integration.core.authorizartion.impl.AccessCheckerViaAuthService;
 import ru.foodtechlab.lib.auth.integration.core.authorizartion.impl.CredentialIdentityServiceViaAuthService;
 import ru.foodtechlab.lib.auth.integration.core.credential.CredentialServiceFacade;
+import ru.foodtechlab.lib.auth.integration.core.role.RoleServiceFacade;
 import ru.foodtechlab.lib.auth.integration.core.roleAccess.CheckAccessServiceFacade;
 import ru.foodtechlab.lib.auth.integration.core.roleAccess.RoleAccessServiceFacade;
-import ru.foodtechlab.lib.auth.integration.restapi.feign.authorization.impl.FeignHTTPCredentialServiceFacade;
+import ru.foodtechlab.lib.auth.integration.restapi.feign.authorization.FeignCredentialServiceClient;
 import ru.foodtechlab.lib.auth.integration.restapi.feign.commons.AuthorizationRequestInterceptor;
-import ru.foodtechlab.lib.auth.integration.restapi.feign.credential.FeignCredentialServiceClient;
+import ru.foodtechlab.lib.auth.integration.restapi.feign.credential.FeignCredentialAndInitServiceClient;
 import ru.foodtechlab.lib.auth.integration.restapi.feign.credential.impl.FeignHTTPCredentialFacade;
+import ru.foodtechlab.lib.auth.integration.restapi.feign.role.FeignRoleServiceClient;
 import ru.foodtechlab.lib.auth.integration.restapi.feign.role.access.FeignRoleAccessServiceClient;
 import ru.foodtechlab.lib.auth.integration.restapi.feign.role.access.impl.FeignHTTPRoleAccessFacade;
+import ru.foodtechlab.lib.auth.integration.restapi.feign.role.impl.FeignHTTPRoleFacade;
 import ru.foodtechlab.lib.auth.service.domain.token.config.TokenLifeCycleConfig;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Configuration
@@ -76,6 +93,36 @@ public class SolClientApplicationConfig {
 
     private Integer confirmationCodeCodeLength;
 
+    private boolean shouldRegisterLinksMapping(WebEndpointProperties webEndpointProperties,
+                                               Environment environment, String basePath) {
+        return webEndpointProperties.getDiscovery().isEnabled() &&
+                (StringUtils.hasText(basePath) ||
+                        ManagementPortType.get(environment).equals(ManagementPortType.DIFFERENT));
+    }
+
+    @Bean
+    public WebMvcEndpointHandlerMapping webEndpointServletHandlerMapping(
+            WebEndpointsSupplier webEndpointsSupplier,
+            ServletEndpointsSupplier servletEndpointsSupplier,
+            ControllerEndpointsSupplier controllerEndpointsSupplier,
+            EndpointMediaTypes endpointMediaTypes,
+            CorsEndpointProperties corsProperties,
+            WebEndpointProperties webEndpointProperties,
+            Environment environment) {
+        List<ExposableEndpoint<?>> allEndpoints = new ArrayList();
+        Collection<ExposableWebEndpoint> webEndpoints = webEndpointsSupplier.getEndpoints();
+        allEndpoints.addAll(webEndpoints);
+        allEndpoints.addAll(servletEndpointsSupplier.getEndpoints());
+        allEndpoints.addAll(controllerEndpointsSupplier.getEndpoints());
+        String basePath = webEndpointProperties.getBasePath();
+        EndpointMapping endpointMapping = new EndpointMapping(basePath);
+        boolean shouldRegisterLinksMapping = this.shouldRegisterLinksMapping(
+                webEndpointProperties, environment, basePath);
+        return new WebMvcEndpointHandlerMapping(endpointMapping, webEndpoints,
+                endpointMediaTypes, corsProperties.toCorsConfiguration(),
+                new EndpointLinksResolver(allEndpoints, basePath),
+                shouldRegisterLinksMapping, null);
+    }
 
     @Bean
     public UseCaseExecutor useCaseExecutor() {
@@ -83,8 +130,8 @@ public class SolClientApplicationConfig {
     }
 
     @Bean
-    public CredentialIdentityService credentialIdentityService(ru.foodtechlab.lib.auth.integration.restapi.feign.authorization.FeignCredentialServiceClient feignCredentialServiceClient) {
-        return new CredentialIdentityServiceViaAuthService(new FeignHTTPCredentialServiceFacade(feignCredentialServiceClient));
+    public CredentialIdentityService credentialIdentityService(AuthCredentialServiceFacade authCredentialServiceFacade) {
+        return new CredentialIdentityServiceViaAuthService(authCredentialServiceFacade);
     }
 
     @Bean
@@ -117,14 +164,18 @@ public class SolClientApplicationConfig {
         return new JwtAccessTokenGenerator(objectMapper);
     }
 
+    @Bean
+    public RoleServiceFacade roleServiceFacade(FeignRoleServiceClient httpClient) {
+        return new FeignHTTPRoleFacade(httpClient);
+    }
 
     @Bean
     public SolUserConfig solUserConfig(
             SolUserRepository solUserRepository,
             SolUserIdGenerator<?> solUserIdGenerator,
             SpaceConfig spaceConfig,
-            ru.foodtechlab.lib.auth.integration.core.credential.CredentialServiceFacade credentialServiceFacade,
-            ru.foodtechlab.lib.auth.integration.core.role.RoleServiceFacade roleServiceFacade,
+            CredentialServiceFacade credentialServiceFacade,
+            RoleServiceFacade roleServiceFacade,
             ViewUserConfig viewUserConfig
     ) {
         return new SolUserConfig(solUserRepository, solUserIdGenerator, spaceConfig, credentialServiceFacade, roleServiceFacade, viewUserConfig);
@@ -172,9 +223,11 @@ public class SolClientApplicationConfig {
     }
 
     @Bean
-    public CredentialServiceFacade credentialServiceFacade(FeignCredentialServiceClient feignCredentialServiceClient) {
-        return new FeignHTTPCredentialFacade(feignCredentialServiceClient);
+    public CredentialServiceFacade credentialServiceFacade(FeignCredentialAndInitServiceClient httpClient) {
+        return new FeignHTTPCredentialFacade(httpClient);
     }
+
+
 
     @Bean
     public AccessChecker accessChecker(CheckAccessServiceFacade checkAccessServiceFacade) {

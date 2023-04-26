@@ -80,4 +80,9 @@ public class MongoViewTemplateRepository implements ViewTemplateRepository {
                 mongoTemplate.count(query.limit(0).skip(0), ViewTemplateDoc.class)
         );
     }
+
+    @Override
+    public boolean exist(String s) {
+        throw new RuntimeException();
+    }
 }
