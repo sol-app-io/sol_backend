@@ -1,0 +1,67 @@
+version: '3.9'
+
+#name: sol stage infrastructure
+
+services:
+
+  database:
+    image: 'mongo:4.4.6'
+    container_name: 'database'
+    restart: always
+    #    В общем. ты я думаю уже не раз возвращаешься к вопросу доступа к бд из вне и защиты
+    #    Я придумал что нужно
+    #    Образ и докер смотрит на порт 27017
+    #    и пусть себе смотрит полностью открытый
+    #    выйди на уровень выше и сделай всю защиту по айпи на той машине где это запускается и не парь себе мозги
+    #    вот так. и давай доступ только тем кому он нужен
+    #    TODO: после того как развернем, нужно проверить, что на хост нельзя подключиться из вне
+    # ЗАЩИТА порта идет через IPTABLES через jenkins, команда:
+    # iptables -C FORWARD -p tcp -m tcp --dport 27017 -j DROP || iptables -I FORWARD 1 -p tcp -m tcp --dport 27017 -j DROP
+    command: --bind_ip *
+    #    Еще одно важно дополнение, на которое я потратил несколько часов исследования.
+    #    Все приложения идут на порт 27017, тк мы делаем links.
+    #    То есть они работают по внутренней сети.
+    #    Тогда зачем нам вообще делать порты?
+    #    Что бы подлючиться через 3t студию, нам нужно как-то зайти на нужный порт
+    #    И вот как раз порт указывает, что в принципе к докер контейнеру можно подрубить.
+    #    Получается мы делаем следующую схему.
+    #    Все приложения работают только по внутренней схеме, но мы открываем порт, чтобы просто иметь возможность
+    #    посмотреть внутрь базы. При этом на уровне сети машины где мы все это запускаем, через IP tables мы запрещаем любые
+    #    коннекты к этому порту, и так же говорим базе данных что она должна принимать коннекты только с локалхоста
+    #    Если нужно подключиться к базе данных и посмотреть, а что там творится, просто идем через ссш
+    # ports:
+    #   - ${mongo_external_port}:27017
+    volumes:
+      - ${mongodb_container_data}:/data/db
+      - ${mongodb_container_config}:/etc/mongod.conf
+      - ${mongodb_init_js}:/docker-entrypoint-initdb.d/init-mongo.js:ro
+
+  #  ***** SERVICES *****
+  ftl-auth-service:
+    image: 'ftl-toster-registry.docker.nexus.foodtech-lab.ru/ftl-auth-service:${backend_image_tag}'
+    container_name: 'ftl-auth-service'
+    restart: always
+    links:
+      - database:database
+    depends_on:
+      - database
+    volumes:
+      - ${ftl_auth_service_config}:/app/config
+    ports:
+      - ${ftl_auth_service_port}:8080
+
+
+  sol-app-backend:
+    image: 'sol-docker-registry.docker.nexus.foodtech-lab.ru/sol-app-backend:1.0.0-SNAPSHOT'
+    container_name: 'sol-app-backend'
+    restart: always
+    links:
+      - database:database
+      - ftl-auth-service:ftl-auth-service
+    depends_on:
+      - database
+      - ftl-auth-service
+    volumes:
+      - ${sol_app_backend_config}:/app/config
+    ports:
+      - ${sol_app_backend_port}:8080

@@ -1,0 +1,49 @@
+server:
+  port: 8080
+foodtechlab:
+  build:
+    version: '@ftl.auth-lib.version@'
+  security:
+    2fa:
+      sms:
+        code-length: 4
+    jwt:
+      secret: secret01234567890ABCDEFGHIJKLMNO
+      access-token:
+        ttl: 900
+      refresh-token:
+        ttl: 15552000
+    secretWord: secretWord
+spring:
+  profiles:
+    active: '@spring.profiles.active@'
+  application:
+    name: ftl-auth-service
+  #  boot:
+  #    admin:
+  #      client:
+  #        instance:
+  #          name: ftl-auth-service
+  #        auto-registration: true
+  #        url: http://localhost:9099
+  #        username: kozlovva
+  #        password: 4rfVBgt5
+  data:
+    mongodb:
+      database: ftl-auth-service
+      auto-index-creation: true
+      host: database
+      port: 27017
+  mvc:
+    throw-exception-if-no-handler-found: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+logging:
+  file:
+    name: ./logs/log.log
