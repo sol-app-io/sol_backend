@@ -65,3 +65,23 @@ services:
       - ${sol_app_backend_config}:/app/config
     ports:
       - ${sol_app_backend_port}:8080
+
+  frontend:
+    image: 'nginx:alpine'
+    container_name: 'nginx-entry-point'
+    restart: unless-stopped
+    volumes:
+      - ${certbot_conf}:/etc/letsencrypt
+      - ${certbot_www}:/var/www/certbot
+      - ${nginx_conf}:/etc/nginx/nginx.conf:ro
+      - ${nginx_sites_enabled}:/etc/nginx/sites-enabled
+    depends_on:
+      - sol-app-backend
+      - ftl-auth-service
+      - database
+    links:
+      - sol-app-backend:sol-app-backend
+      - ftl-auth-service:ftl-auth-service
+    ports:
+      - 80:80
+      - 443:443
