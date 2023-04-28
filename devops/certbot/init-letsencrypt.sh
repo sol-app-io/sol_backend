@@ -6,14 +6,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
 fi
 
 #  NOTE: замени просто нужные домены
-#tstr-dev-control.ru
-#api.tstr-dev-control.ru
-#tstr-dev-app.ru
-#starbucks.tstr-dev-app.ru
-#app.starbucks.tstr-dev-app.ru
-#api.starbucks.tstr-dev-app.ru
-#pos.starbucks.tstr-dev-app.ru
-domains=(tstr-dev-control.ru api.tstr-dev-control.ru tstr-dev-app.ru starbucks.tstr-dev-app.ru app.starbucks.tstr-dev-app.ru api.starbucks.tstr-dev-app.ru pos.starbucks.tstr-dev-app.ru)
+domains=(sol.maslov.tech sol-api.maslov.tech)
 
 rsa_key_size=4096
 data_path="../docker-volumes/certbot"
