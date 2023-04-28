@@ -66,6 +66,13 @@ services:
     ports:
       - ${sol_app_backend_port}:8080
 
+  sol-app-flutter:
+    image: 'sol-docker-registry.docker.nexus.foodtech-lab.ru/sol-app-flutter:1.0.0-SNAPSHOT'
+    container_name: 'sol-app-flutter'
+    restart: always
+    ports:
+      - ${sol_app_flutter_port}:8080
+
   frontend:
     image: 'nginx:alpine'
     container_name: 'nginx-entry-point'
@@ -78,9 +85,11 @@ services:
     depends_on:
       - sol-app-backend
       - ftl-auth-service
+      - sol-app-flutter
       - database
     links:
       - sol-app-backend:sol-app-backend
+      - sol-app-flutter:sol-app-flutter
       - ftl-auth-service:ftl-auth-service
     ports:
       - 80:80
