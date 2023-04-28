@@ -34,9 +34,9 @@ public class SwaggerConfig {
                         new SecurityScheme().type(SecurityScheme.Type.APIKEY).scheme("apiKey")
                                 .in(SecurityScheme.In.HEADER).name("X-Auth-Token")))
                 .info(new Info()
-                        .title("Supply chain service")
+                        .title("SOL.App")
                         .version(version)
-                        .description("Документация к Supply chain service"))
+                        .description("Документация к SOL.App"))
                 .addServersItem(new Server().url("/"))
                 .addSecurityItem(new SecurityRequirement().addList("apiKeyAuth", Arrays.asList("read", "write")));
     }
