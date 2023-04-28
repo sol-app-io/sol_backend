@@ -1,33 +1,18 @@
 server:
-  port: 9095
+  port: 8080
 spring:
   mvc:
     throw-exception-if-no-handler-found: true
   main:
     allow-bean-definition-overriding: true
-
   application:
-    name: sol-app
+    name: sol-app-backend-stage
   data:
     mongodb:
       auto-index-creation: true
-      database: sol-stage
+      database: sol-app-backend-stage
       port: 27017
       host: database
-
-#management:
-#  metrics.mongo:
-#    command.enabled: false
-#    connectionpool.enabled: false
-#  health:
-#    diskspace:
-#      enabled: false
-#  endpoints:
-#    enabled-by-default: false
-#    metrics.enabled: false
-#    prometheus.enabled: false
-
-
 
 
 rcore:
@@ -52,7 +37,7 @@ foodtechlab:
     microservice:
       auth-service:
         #        url: https://service.sol-auth.maslov.tech/
-        url: http://localhost:9090
+        url: http://ftl-auth-service:9090
       logging-service:
         enable-logging-for-paths: /api/v1/
 
@@ -61,7 +46,6 @@ feign.hystrix.enabled: true
 java.mail:
   username: data-manager@maslov.tech
   password: PKrU25g*CW2S
-
 
 #Конфигурация документации Swagger
 springdoc:

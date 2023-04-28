@@ -1,7 +1,7 @@
-db = db.getSiblingDB('ftl-auth-service');
+db = db.getSiblingDB('ftl-auth-service-stage');
 db.createCollection("firstcollection");
 
-db = db.getSiblingDB('sol-stage');
+db = db.getSiblingDB('sol-app-backend-stage');
 db.createCollection("firstcollection");
 
 
