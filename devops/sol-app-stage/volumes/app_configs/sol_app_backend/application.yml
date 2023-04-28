@@ -37,7 +37,7 @@ foodtechlab:
     microservice:
       auth-service:
         #        url: https://service.sol-auth.maslov.tech/
-        url: http://ftl-auth-service:9090
+        url: http://ftl-auth-service:8080
       logging-service:
         enable-logging-for-paths: /api/v1/
 
